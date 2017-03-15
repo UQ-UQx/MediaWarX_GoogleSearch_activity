@@ -1,8 +1,10 @@
 import React from "react"
 import { connect } from "react-redux"
 
+
 import LoaderButtons from "./LoaderButtons"
 import Tweets from "./Tweets"
+import LtiCallData from "./LtiCallData"
 
 import { fetchUser } from "../store/actions/userActions"
 
@@ -27,6 +29,7 @@ export default class App extends React.Component {
                 <h1>{this.props.user.name}'s  App</h1>
                 <LoaderButtons />
                 <Tweets />
+                <LtiCallData />
             </div>
         )
     }

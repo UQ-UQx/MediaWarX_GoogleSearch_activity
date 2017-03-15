@@ -1,6 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
 import { fetchTweets } from "../store/actions/tweetsActions"
+import { fetchCallData } from "../store/actions/ltiActions"
 import { Icon } from "react-fa"
 
 @connect((store) => {
@@ -11,8 +12,9 @@ import { Icon } from "react-fa"
 })
 export default class LoaderButtons extends React.Component {
 
-    fetchTweets(){
+    fetchTweetsAndCallData(){
         this.props.dispatch(fetchTweets())
+        this.props.dispatch(fetchCallData())
     }
     render(){
         console.log(this.props);
@@ -30,7 +32,7 @@ export default class LoaderButtons extends React.Component {
         if(!tweetsFetched){
             return (
                 <button className="btn btn-primary"
-                        onClick={this.fetchTweets.bind(this)}>
+                        onClick={this.fetchTweetsAndCallData.bind(this)}>
 
                 Load Tweets {icon}
                 </button>

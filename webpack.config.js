@@ -6,22 +6,22 @@ module.exports = {
     devtool: "#cheap-module-eval-source-map",
     entry: "./src/index.js",
     output: {
-        path:"public/assets",
+        path:"public/build",
         filename:"bundle.js",
-        publicPath:"public/assets/"
+        publicPath:"build/"
     },
     plugins: [
 
         new webpack.LoaderOptionsPlugin({
             debug:true,
-        }),ç
+        }),
         // reloads browser when the watched files change
         new BrowserSyncPlugin({
             // use existing Apache virtual host
             proxy: 'http://localhost:80/',
             tunnel: false,
             // watch the built files and the index file
-            files: ['public/assets/*', './index.php', './api/*.php']
+            files: ['public/build/*', './public/index.php', './public/api/*.php']
         }),
 
         new webpack.ProvidePlugin({

@@ -1,0 +1,12 @@
+@import "_constants";
+@import "_mixins";
+
+.lti_valid_message{
+    @include devMessageDefaults();
+    background-color: $valid;
+}
+
+.lti_dev_message{
+    @include devMessageDefaults();
+    background-color: $statement-generic;
+}

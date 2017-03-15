@@ -1,5 +1,7 @@
-import './stylesheets/title.css'
-import './stylesheets/paragraph.scss'
+// import './stylesheets/title.css'
+// import './stylesheets/paragraph.scss'
+import './stylesheets/IndexPage.scss'
+
 import {} from 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap'
 //Clean the above later
