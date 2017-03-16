@@ -21,6 +21,7 @@ export default class LoaderButtons extends React.Component {
 
         const { tweetsFetched, tweetsFetching } = this.props;
 
+        var color = "#ffffff"
         var icon = null;
         if(tweetsFetching){
             icon = <Icon pulse name="spinner" />;
