@@ -13,9 +13,14 @@ export default class SimpleForm extends React.Component {
         this.onSimpleFormItemChange = this.onSimpleFormItemChange.bind(this)
     }
 
-    onSimpleFormItemChange(event){
+    onSimpleFormItemChange(LocationInputData){
 
-        console.log("from simple form component", event.target.value)
+        console.log("-------- from simple form component --------")
+        console.log(LocationInputData.value)
+        console.log(LocationInputData.coordinates.lng)
+        console.log(LocationInputData.coordinates.lat)
+        console.log("-------- ******* --------")
+
 
     }
 
