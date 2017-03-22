@@ -1,63 +1,48 @@
 import React from "react"
-import { connect } from "react-redux"
 
-import Client from "./client/Client"
-import Admin from "./admin/Admin"
+import GoogleSearchUploadForm from "./GoogleSearchUploadForm"
 
-import { fetchUser, setUserAdmin } from "../store/actions/userActions"
-
-@connect((store) => {
-
-    return {
-        user: store.user.user
-    }
-})
 export default class Layout extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            selected_page:"upload", // options: upload | map
+        }
 
+        this.handleFormSubmit = this.handleFormSubmit.bind(this);
+
+    }
     componentWillMount(){
-
         console.log("Layout component will mount");
-
-        this.props.dispatch(fetchUser())
     }
-
     componentDidMount(){
-
         console.log("Layout component did mount")
-
-
     }
-
     componentWillUnmount(){
-
         console.log("Layout component will unmount")
     }
 
-    ChangeUserRole(){
 
-        this.props.dispatch(setUserAdmin(this.props.user.id, true))
+    handleFormSubmit(){
 
+
+        console.log("form submit clicked");
     }
+
+
+
 
     render(){
 
-        var layer = null;
-        if(this.props.user.admin){
-            console.log("is admin")
-            layer = <Admin />;
-        }else{
-            console.log("is student")
-            layer = <Client />;
-        }
 
-        // var layer = this.getLayer.bind(this);
-        // console.log(layer);
-        return (<div className="Layout_component">
-                <button className="btn btn-danger" onClick={this.ChangeUserRole.bind(this)}>Change Role</button>
+        return (
+        <div className="layout-component">
 
-                <div className="layer_continer">
-                    {layer}
-                </div>
+            --- page buttons go here for ---
+
+            <GoogleSearchUploadForm />
+
+
         </div>);
     }
 }
