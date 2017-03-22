@@ -1,12 +1,13 @@
 var webpack = require("webpack");
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
+var path = require('path');
 
 module.exports = {
     devtool: "#cheap-module-eval-source-map",
     entry: "./src/index.js",
     output: {
-        path:"public/build",
+        path: path.join(__dirname,"public/build"),
         filename:"bundle.js",
         publicPath:"build/"
     },
@@ -21,7 +22,7 @@ module.exports = {
             proxy: 'http://localhost:80/',
             tunnel: false,
             // watch the built files and the index file
-            files: ['public/build/*', './public/index.php', './public/api/*.php']
+            files: ['./public/build/*', './public/index.php', './public/api/*.php']
         }),
 
         new webpack.ProvidePlugin({

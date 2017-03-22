@@ -38,6 +38,7 @@
         		//die();
         	}
         ?>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQ7RQL3LDtmQ4ccxW_uBZLflfETkaKE6U&libraries=places"></script>
 
     </head>
     <body>
