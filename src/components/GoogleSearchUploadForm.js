@@ -8,96 +8,64 @@ export default class GoogleSearchUploadForm extends React.Component {
     constructor(props){
         super(props);
 
-        const simpleFormStructure = [
-            {
-                id:uuid.v4(),
-                label:"Location",
-                type:"location",
-                autosuggest:true,
-            },
-            {
-                id:uuid.v4(),
-                label:"Age",
-                type:"textline",
-                content_type:"number"
-
-            },
-            {
-                id:uuid.v4(),
-                label:"Gender",
-                type:"dropdown",
-                options:[
-                    "Male",
-                    "Female",
-                    "Other"
-                ]
-            },
-            {
-                id:uuid.v4(),
-                label:"Ethnicity",
-                type:"textline",
-                content_type:"string"
-            },
-            {
-                id:uuid.v4(),
-                label:"Education",
-                type:"dropdown",
-                options:[
-                    "Primary School",
-                    "Middle School",
-                    "High School",
-                    "Certificate",
-                    "Diploma",
-                    "Undergraduate Degree",
-                    "Masters Degree",
-                    "Doctor of Philsophy",
-                    "Other"
-                ]
-            }
-        ]
-
-        var initalFormState = {};
-
-        simpleFormStructure.map((obj, ind) => {
-            initalFormState[obj.id] = {
-                structure:obj,
-                value:null
-            };
-        })
-
         this.state = {
-            ...initalFormState,
-            image_url:null,
-            tags:[],
-            simpleFormStructure:simpleFormStructure
+
+
+            location_name:'',
+            location_lat:null,
+            location_lng:null,
+
+
+            age:"",
+            gender:null,
+            nationality:null,
+            education:null,
+            imageurl:null,
         }
 
         this.onSimpleFormChange = this.onSimpleFormChange.bind(this)
+
     }
 
-    onSimpleFormChange(values){
+    onSimpleFormChange(formChange){
 
-        console.log(values);
+        //console.log(input);
+        //console.log(formChange);
+
+        switch (formChange.type) {
+            case "location_name":
+                //console.log(input.type,": ",input.value)
+                this.setState({location_name:formChange.value})
+                break;
+            case "location_coordinates":
+                this.setState({
+                    location_lat:formChange.value.lat,
+                    location_lng:formChange.value.lng
+                })
+                break;
+            case "age":
+                this.setState({age:formChange.value})
+                break;
+            case "gender":
+                this.setState({gender:formChange.value})
+                break;
+            case "nationality":
+                this.setState({nationality:formChange.value})
+                break;
+            case "education":
+                this.setState({education:formChange.value})
+                break;
+
+
+            default:
+
+        }
+
     }
 
     render(){
 
-        /*
-
-            label: any text you like, html can be included
-            type:
-
-            location-open (start typing an address)
-            location-countries
-            location-continents
-            input-textline
-            input-textarea
-
-
-
-        */
-
-
+        console.log(this.state);
         return (<div className="google-search-upload-form-component">
             <h3>Google Search Upload Page (component) </h3>
             <p><b>Instructions:</b> Cupcake ipsum dolor sit amet cookie. Cake lollipop muffin sugar plum.
@@ -108,20 +76,20 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
             <p><b>Step 1: Complete Form</b></p>
 
             <SimpleForm
-                onChange={this.onSimpleFormChange}
-                submitButton="false"
-                structure={this.state.simpleFormStructure}
-            />
+
+                 location_name={this.state.location_name}
+                 age={this.state.age}
+                 gender={this.state.gender}
+                 nationality={this.state.nationality}
+                 education={this.state.education}
+
+                 onSimpleFormChange={this.onSimpleFormChange}
+             />
 
             <br/>
             <p><b>Step 2: Upload Google Search Screenshot</b></p>
 
-            <ImageUpload
-                uploadTo="Folder name"
-                handleUploaded=""
-                imageTags="true"
-                preview="true"
-            />
+            <ImageUpload uploadTo="FolderName"/>
 
         </div>)
     }

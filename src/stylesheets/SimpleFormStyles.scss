@@ -1,0 +1,12 @@
+@import "_constants";
+@import "_mixins";
+
+.form-input-label-span{
+    margin-right: 10px;
+}
+
+.age-input-container{
+    input{
+        width:150px;
+    }
+}

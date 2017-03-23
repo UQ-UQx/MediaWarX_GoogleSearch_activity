@@ -9,13 +9,13 @@ export default class LocationInput extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            value:"",
             coordinates:{
                 lng:null,
                 lat:null
             },
             fetchingSuggestion:false,
-            suggestedLocation:null
+            suggestedLocation:null,
+            warning:null
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleSuggestedTextClick = this.handleSuggestedTextClick.bind(this)
@@ -27,60 +27,92 @@ export default class LocationInput extends React.Component {
     handleSuggestedTextClick(event){
         event.preventDefault();
 
-        this.setState({
-            "value":this.state.suggestedLocation,
-            "suggestedLocation":null
+        this.props.onLocationInputChange({
+            type:"location_name",
+            value:this.state.suggestedLocation,
         })
 
-        this.props.onSimpleFormItemChange({
-            "value":this.state.suggestedLocation,
-            "coordinates":this.state.coordinates
-        })
+        this.setState({"suggestedLocation":null})
+
 
     }
 
 
     handleChange(event){
-        console.log("this should fire");
-        this.setState({"value":event.target.value})
-        this.props.onSimpleFormItemChange({
-            "value":this.state.value,
-            "coordinates":this.state.coordinates
+
+        var newInputValue = event.target.value
+        this.props.onLocationInputChange({
+            type:"location_name",
+            value:newInputValue,
         })
 
+        this.props.onLocationInputChange({
+            type:"location_coordinates",
+            value:{
+                "lng":null,
+                "lat":null,
+            }
+        })
 
-        this.setState({"suggestedLocation":null})
-        if(event.target.value.length > 0){
-            clearTimeout(this.check);
-            this.setState({
-                "fetchingSuggestion":true,
-            })
-            this.check = setTimeout(()=>{
+        this.setState({
+            "fetchingSuggestion":null,
+            "suggestedLocation":null,
+            "warning":null
+        })
 
-                axios.get('https://maps.googleapis.com/maps/api/geocode/json?address='+this.state.value+'&key='+this.googleAPIKEY)
+        clearTimeout(this.checkAddressTimeout);
+        this.checkAddressTimeout = setTimeout(()=>{
+
+            if(newInputValue.length > 0){
+
+                this.setState({
+                    "fetchingSuggestion":true
+                })
+
+                axios.get('https://maps.googleapis.com/maps/api/geocode/json?address='+newInputValue+'&key='+this.googleAPIKEY)
                    .then((response)=>{
                        console.log(response.data);
-                       this.setState({
-                           "fetchingSuggestion":false,
-                           "suggestedLocation":response.data.results[0].formatted_address,
-                           "coordinates":{
-                               "lng":response.data.results[0].geometry.location.lng,
-                               "lat":response.data.results[0].geometry.location.lat
-                           }
-                       })
+                       if(response.data.status != "ZERO_RESULTS"){
 
-                       this.props.onSimpleFormItemChange({
-                           "value":this.state.value,
-                           "coordinates":this.state.coordinates
-                       })
+                           this.setState({
+                               "fetchingSuggestion":false,
+                               "suggestedLocation":response.data.results[0].formatted_address,
+                               "warning":null
+
+                           })
+
+                           this.props.onLocationInputChange({
+                               type:"location_coordinates",
+                               value:{
+                                   "lng":response.data.results[0].geometry.location.lng,
+                                   "lat":response.data.results[0].geometry.location.lat
+                               }
+                           })
+
+
+
+                       }else{
+                           this.setState({
+                               "fetchingSuggestion":false,
+                               "suggestedLocation":null,
+                               "warning":"Could not verify location, please try again."
+                           })
+                       }
 
                    })
                    .catch((error)=>{
-
+                       this.setState({
+                           "fetchingSuggestion":false,
+                           "suggestedLocation":null,
+                           "warning":"Oh no! we couldn't varify the location you entered. By default your location will be 'The University of Queensland (default)'"
+                       })
                    })
 
-            }, 2000)
-        }
+
+            }
+
+        }, 2000);
+
     }
 
 
@@ -94,15 +126,17 @@ export default class LocationInput extends React.Component {
         var suggested = ""
         if(this.state.suggestedLocation){
             suggested = (<span className="suggested-location-span">Do you mean?
-
                 <a href="#" onClick={this.handleSuggestedTextClick}> {this.state.suggestedLocation} </a>
-
             </span>)
-
-
         }
 
-        console.log("i'm rendering cause of new value");
+        var warning_text = ""
+        if(this.state.warning){
+            warning_text = (<span className="unknown-location-warning-span">{this.state.warning}
+            </span>)
+        }
+
+
 
 
         return(<div className="location-input-component">
@@ -112,13 +146,13 @@ export default class LocationInput extends React.Component {
                 class="location-input"
                 id="location-input"
                 placeholder="Enter Location"
-                value={this.state.value}
+                value={this.props.value}
                 onChange={this.handleChange}
             />
 
             {suggested}
             {fetchingIcon}
-
+            {warning_text}
         </div>)
 
     }
