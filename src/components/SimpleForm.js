@@ -1,3 +1,10 @@
+import "../stylesheets/SimpleFormStyles.scss"
+import '../../node_modules/react-select/dist/react-select.css';
+import nationalities from "../data/nationalities.json";
+import educationlevels from "../data/educationlevels.json";
+
+import Select from 'react-select';
+
 import React from "react"
 import uuid from "uuid"
 
@@ -8,40 +15,141 @@ export default class SimpleForm extends React.Component {
     constructor(props){
         super(props);
 
-        console.log(this.props)
-
-        this.onSimpleFormItemChange = this.onSimpleFormItemChange.bind(this)
-    }
-
-    onSimpleFormItemChange(LocationInputData){
-
-        console.log("-------- from simple form component --------")
-        console.log(LocationInputData.value)
-        console.log(LocationInputData.coordinates.lng)
-        console.log(LocationInputData.coordinates.lat)
-        console.log("-------- ******* --------")
-
+        this.onFormItemChange = this.onFormItemChange.bind(this)
+        this.onAgeInputChange = this.onAgeInputChange.bind(this)
+        this.onGenderChange = this.onGenderChange.bind(this)
+        this.onNationalityChange = this.onNationalityChange.bind(this)
+        this.onEducationChange = this.onEducationChange.bind(this)
 
     }
 
-    renderFormFromStructure(structure){
+    onFormItemChange(formItemData){
+        this.props.onSimpleFormChange(formItemData)
+    }
+
+    onAgeInputChange(event){
+        this.props.onSimpleFormChange({
+            type:"age",
+            value:event.target.value
+        })
+    }
+
+    onGenderChange(data){
+        var gender = null;
+        if(data){
+            gender = data.value
+        }
+
+        this.props.onSimpleFormChange({
+            type:"gender",
+            value:gender
+        })
+    }
+
+    onNationalityChange(data){
+        var nationality = null;
+        if(data){
+            nationality = data.value
+        }
+
+        this.props.onSimpleFormChange({
+            type:"nationality",
+            value:nationality
+        })
+    }
+
+    onEducationChange(data){
+        var education = null;
+        if(data){
+            education = data.value
+        }
+
+        this.props.onSimpleFormChange({
+            type:"education",
+            value:education
+        })
+    }
+
+
+
+    renderForm(){
+
+        const gender_options = [
+            { value: 'Male', label: 'Male' },
+            { value: 'Female', label: 'Female' },
+            { value: 'Other', label: 'Other' }
+        ]
 
         return (<div className="simple-form-container">
 
-            <LocationInput onSimpleFormItemChange={this.onSimpleFormItemChange} />
-
-            {/*
-            {
-                structure.map((obj, ind) => {
-                    return (<div key={obj.id} className="formItem">
-                        <pre>{JSON.stringify(obj, null, 2)}</pre>
-
-
-
-                    </div>);
-                })
-            } */}
-
+            <table className="form-inputs-table">
+                <tbody>
+                <tr>
+                    <td><span className="form-input-label-span">Location:</span></td>
+                    <td><LocationInput value={this.props.location_name}
+                        onLocationInputChange={this.onFormItemChange} /></td>
+                </tr>
+                <tr>
+                    <td><span className="form-input-label-span">Age:</span></td>
+                    <td>
+                        <div className="age-input-container">
+                            <input
+                                type="number"
+                                class="age-input"
+                                id="age-input"
+                                placeholder="Enter Age"
+                                min="1"
+                                max="122"
+                                value={this.props.age}
+                                onChange={this.onAgeInputChange}
+                            />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span className="form-input-label-span">Gender:</span></td>
+                    <td>
+                        <div className="gender-dropdown-container">
+                            <Select
+                            	name="gender-dropdown"
+                                value={this.props.gender}
+                            	placeholder="Please Select You Gender"
+                            	options={gender_options}
+                            	onChange={this.onGenderChange}
+                            />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span className="form-input-label-span">Nationality:</span></td>
+                    <td>
+                        <div className="nationality-dropdown-container">
+                            <Select
+                            	name="gender-dropdown"
+                                value={this.props.nationality}
+                            	placeholder="Please Select You Nationality"
+                            	options={nationalities}
+                            	onChange={this.onNationalityChange}
+                            />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span className="form-input-label-span">Education:</span></td>
+                    <td>
+                        <div className="education-dropdown-container">
+                            <Select
+                            	name="education-dropdown"
+                                value={this.props.education}
+                            	placeholder="Please Select Your Level of Education"
+                            	options={educationlevels}
+                            	onChange={this.onEducationChange}
+                            />
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
 
 
@@ -53,8 +161,20 @@ export default class SimpleForm extends React.Component {
 
         return(<div className="simple-form-component">
 
-            {this.renderFormFromStructure(this.props.structure)}
+            {this.renderForm()}
 
         </div>)
     }
 }
+
+/*
+{
+    structure.map((obj, ind) => {
+        return (<div key={obj.id} className="formItem">
+            <pre>{JSON.stringify(obj, null, 2)}</pre>
+
+
+
+        </div>);
+    })
+} */
