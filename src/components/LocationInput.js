@@ -8,15 +8,8 @@ import { Icon } from "react-fa"
 export default class LocationInput extends React.Component {
     constructor(props){
         super(props)
-        this.state = {
-            coordinates:{
-                lng:null,
-                lat:null
-            },
-            fetchingSuggestion:false,
-            suggestedLocation:null,
-            warning:null
-        }
+
+
         this.handleChange = this.handleChange.bind(this)
         this.handleSuggestedTextClick = this.handleSuggestedTextClick.bind(this)
 
@@ -29,11 +22,13 @@ export default class LocationInput extends React.Component {
 
         this.props.onLocationInputChange({
             type:"location_name",
-            value:this.state.suggestedLocation,
+            value:this.props.location_suggestion,
         })
 
-        this.setState({"suggestedLocation":null})
-
+        this.props.onLocationInputChange({
+            type:"location_suggestion",
+            value:null,
+        })
 
     }
 
@@ -54,19 +49,30 @@ export default class LocationInput extends React.Component {
             }
         })
 
-        this.setState({
-            "fetchingSuggestion":null,
-            "suggestedLocation":null,
-            "warning":null
+        this.props.onLocationInputChange({
+            type:"location_suggestion_fetching",
+            value:false,
         })
+
+        this.props.onLocationInputChange({
+            type:"location_suggestion",
+            value:null,
+        })
+
+        this.props.onLocationInputChange({
+            type:"location_error",
+            value:null,
+        })
+
 
         clearTimeout(this.checkAddressTimeout);
         this.checkAddressTimeout = setTimeout(()=>{
 
             if(newInputValue.length > 0){
 
-                this.setState({
-                    "fetchingSuggestion":true
+                this.props.onLocationInputChange({
+                    type:"location_suggestion_fetching",
+                    value:true,
                 })
 
                 axios.get('https://maps.googleapis.com/maps/api/geocode/json?address='+newInputValue+'&key='+this.googleAPIKEY)
@@ -74,12 +80,23 @@ export default class LocationInput extends React.Component {
                        console.log(response.data);
                        if(response.data.status != "ZERO_RESULTS"){
 
-                           this.setState({
-                               "fetchingSuggestion":false,
-                               "suggestedLocation":response.data.results[0].formatted_address,
-                               "warning":null
 
+
+                           this.props.onLocationInputChange({
+                               type:"location_suggestion_fetching",
+                               value:false,
                            })
+
+                           this.props.onLocationInputChange({
+                               type:"location_suggestion",
+                               value:response.data.results[0].formatted_address,
+                           })
+
+                           this.props.onLocationInputChange({
+                               type:"location_error",
+                               value:null,
+                           })
+
 
                            this.props.onLocationInputChange({
                                type:"location_coordinates",
@@ -92,20 +109,48 @@ export default class LocationInput extends React.Component {
 
 
                        }else{
-                           this.setState({
-                               "fetchingSuggestion":false,
-                               "suggestedLocation":null,
-                               "warning":"Could not verify location, please try again."
+                           this.props.onLocationInputChange({
+                               type:"location_name",
+                               value:"",
+                           })
+                           this.props.onLocationInputChange({
+                               type:"location_suggestion_fetching",
+                               value:false,
+                           })
+
+                           this.props.onLocationInputChange({
+                               type:"location_suggestion",
+                               value:null,
+                           })
+
+                           this.props.onLocationInputChange({
+                               type:"location_error",
+                               value:"Could not verify location, please try again.",
                            })
                        }
 
                    })
                    .catch((error)=>{
-                       this.setState({
-                           "fetchingSuggestion":false,
-                           "suggestedLocation":null,
-                           "warning":"Oh no! we couldn't varify the location you entered. By default your location will be 'The University of Queensland (default)'"
+                       this.props.onLocationInputChange({
+                           type:"location_name",
+                           value:"",
                        })
+
+                       this.props.onLocationInputChange({
+                           type:"location_suggestion_fetching",
+                           value:false,
+                       })
+
+                       this.props.onLocationInputChange({
+                           type:"location_suggestion",
+                           value:null,
+                       })
+
+                       this.props.onLocationInputChange({
+                           type:"location_error",
+                           value:"Oh no! we couldn't varify the location you entered. By default your location will be 'The University of Queensland (default)'",
+                       })
+
                    })
 
 
@@ -119,20 +164,20 @@ export default class LocationInput extends React.Component {
     render(){
 
         var fetchingIcon = ""
-        if(this.state.fetchingSuggestion){
+        if(this.props.location_suggestion_fetching){
             fetchingIcon = <Icon pulse name="spinner"/>;
         }
 
         var suggested = ""
-        if(this.state.suggestedLocation){
+        if(this.props.location_suggestion){
             suggested = (<span className="suggested-location-span">Do you mean?
-                <a href="#" onClick={this.handleSuggestedTextClick}> {this.state.suggestedLocation} </a>
+                <a href="#" onClick={this.handleSuggestedTextClick}> {this.props.location_suggestion} </a>
             </span>)
         }
 
-        var warning_text = ""
-        if(this.state.warning){
-            warning_text = (<span className="unknown-location-warning-span">{this.state.warning}
+        var error_text = ""
+        if(this.props.location_error){
+            error_text = (<span className="unknown-location-error-span">{this.props.location_error}
             </span>)
         }
 
@@ -152,7 +197,7 @@ export default class LocationInput extends React.Component {
 
             {suggested}
             {fetchingIcon}
-            {warning_text}
+            {error_text}
         </div>)
 
     }
