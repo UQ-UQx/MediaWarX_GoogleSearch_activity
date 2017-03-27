@@ -14,19 +14,39 @@ export default class GoogleSearchUploadForm extends React.Component {
             location_name:'',
             location_lat:null,
             location_lng:null,
+            location_suggestion_fetching:false,
+            location_suggestion:null,
+            location_error:null,
 
 
             age:"",
             gender:null,
             nationality:null,
             education:null,
-            imageurl:null,
+            image_url:null,
+
+            tags:[],
+            suggested_tags:[],
+            suggested_tags_fetching:false,
+            suggested_tags_error:null
+
         }
 
         this.onSimpleFormChange = this.onSimpleFormChange.bind(this)
+        this.onImageUploadChange = this.onImageUploadChange.bind(this)
+
 
     }
 
+    onImageUploadChange(imageUpload){
+        switch (imageUpload.type) {
+            case "image_uploaded":
+                this.setState({image_url:imageUpload.image_url})
+                break;
+            default:
+
+        }
+    }
     onSimpleFormChange(formChange){
 
         //console.log(input);
@@ -42,6 +62,15 @@ export default class GoogleSearchUploadForm extends React.Component {
                     location_lat:formChange.value.lat,
                     location_lng:formChange.value.lng
                 })
+                break;
+            case "location_suggestion_fetching":
+                this.setState({location_suggestion_fetching:formChange.value})
+                break;
+            case "location_suggestion":
+                this.setState({location_suggestion:formChange.value})
+                break;
+            case "location_error":
+                this.setState({location_error:formChange.value})
                 break;
             case "age":
                 this.setState({age:formChange.value})
@@ -78,6 +107,10 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
             <SimpleForm
 
                  location_name={this.state.location_name}
+                 location_suggestion={this.state.location_suggestion}
+                 location_suggestion_fetching={this.state.location_suggestion_fetching}
+                 location_error={this.state.location_error}
+
                  age={this.state.age}
                  gender={this.state.gender}
                  nationality={this.state.nationality}
@@ -89,7 +122,10 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
             <br/>
             <p><b>Step 2: Upload Google Search Screenshot</b></p>
 
-            <ImageUpload uploadTo="FolderName"/>
+            <ImageUpload
+                image_url={this.state.image_url}
+                onImageUploadChange={this.onImageUploadChange}
+                upload_folder="/images/"/>
 
         </div>)
     }

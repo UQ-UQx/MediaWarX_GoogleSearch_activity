@@ -15,7 +15,7 @@ export default class SimpleForm extends React.Component {
     constructor(props){
         super(props);
 
-        this.onFormItemChange = this.onFormItemChange.bind(this)
+        this.onLocationInputChange = this.onLocationInputChange.bind(this)
         this.onAgeInputChange = this.onAgeInputChange.bind(this)
         this.onGenderChange = this.onGenderChange.bind(this)
         this.onNationalityChange = this.onNationalityChange.bind(this)
@@ -23,8 +23,8 @@ export default class SimpleForm extends React.Component {
 
     }
 
-    onFormItemChange(formItemData){
-        this.props.onSimpleFormChange(formItemData)
+    onLocationInputChange(data){
+        this.props.onSimpleFormChange(data)
     }
 
     onAgeInputChange(event){
@@ -86,8 +86,15 @@ export default class SimpleForm extends React.Component {
                 <tbody>
                 <tr>
                     <td><span className="form-input-label-span">Location:</span></td>
-                    <td><LocationInput value={this.props.location_name}
-                        onLocationInputChange={this.onFormItemChange} /></td>
+                    <td>
+                        <LocationInput
+                            value={this.props.location_name}
+                            location_suggestion={this.props.location_suggestion}
+                            location_suggestion_fetching={this.props.location_suggestion_fetching}
+                            location_error={this.props.location_error}
+                            onLocationInputChange={this.onLocationInputChange}
+                        />
+                    </td>
                 </tr>
                 <tr>
                     <td><span className="form-input-label-span">Age:</span></td>

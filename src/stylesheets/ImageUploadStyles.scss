@@ -1,0 +1,20 @@
+@import "_constants";
+@import "_mixins";
+
+$containerHeight:400px;
+
+.image-upload-component{
+    width:100%;
+    height:$containerHeight;
+    background-color: red;
+
+    div{
+        width:50%;
+        float:left;
+        height:$containerHeight;
+    }
+}
+
+.image-tags-input-container{
+    background-color: green;
+}
