@@ -2,6 +2,7 @@ import "../stylesheets/ImageTagsInputStyles.scss"
 
 import React from "react"
 import {Icon} from "react-fa"
+import uuid from "uuid"
 
 
 export default class Imagetagsinput extends React.Component {
@@ -12,6 +13,16 @@ export default class Imagetagsinput extends React.Component {
 
         this.handleKeyUp = this.handleKeyUp.bind(this)
         this.handleChange = this.handleChange.bind(this)
+        this.handleTagRemove = this.handleTagRemove.bind(this)
+    }
+
+    handleTagRemove(event){
+        var id = event.currentTarget.dataset.tagid;
+        this.props.handleTagInputChange({
+            type:"remove_tag",
+            value:id
+        })
+
     }
 
     handleChange(event){
@@ -29,9 +40,15 @@ export default class Imagetagsinput extends React.Component {
             case 13:
                 if(this.props.tag.length > 0){
 
+                    var tag = {
+                        id:uuid.v4(),
+                        tag:event.target.value
+
+                    }
+
                     this.props.handleTagInputChange({
                         type:"add_tag",
-                        value:event.target.value
+                        value:tag
                     })
 
                     this.props.handleTagInputChange({
@@ -61,36 +78,23 @@ export default class Imagetagsinput extends React.Component {
                 {
                     this.props.tags.map((obj, ind)=>{
 
-
-                        return (<div className="tag-container" aria-label="tag" key={ind}>
+                        return (<div className="tag-container" aria-label="tag" key={obj.id}>
                                     <div className="tag">
 
-                                    {obj} 
+                                    {obj.tag}
 
-                                    <button className="btn btn-xs btn-link btn-default remove-tag-button"
-                                        type="remove">
+                                    <button
+                                        className="btn btn-xs btn-link btn-default remove-tag-button"
+                                        data-tagid={obj.id}
+                                        type="remove"
+                                        onClick={this.handleTagRemove}
+                                    >
                                         <Icon name="times"/>
                                     </button>
 
                                     </div>
-                                    {/* <div className="tag-remove-button-container">
-
-                                        <button className="btn btn-xs btn-link btn-default remove-tag-button"
-                                            type="remove">
-                                            <Icon name="times"/>
-                                        </button>
-                                    </div> */}
 
                                 </div>)
-
-                        // return (<div className="tag" aria-label="tag" key={ind}>{obj}
-                        //
-                        //             <button className="btn btn-xs btn-default remove-tag-button"
-                        //                 type="remove">
-                        //                 <Icon name="times"/>
-                        //             </button>
-                        //         </div>)
-
                     })
 
                 }

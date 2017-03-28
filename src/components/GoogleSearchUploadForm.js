@@ -28,9 +28,9 @@ export default class GoogleSearchUploadForm extends React.Component {
 
             tag:"",
             tags:[
-                "blue","green","red"
+
             ],
-            suggested_tags:["orange", "purple", "grey"],
+            suggested_tags:[],
             suggested_tags_fetching:false,
             suggested_tags_error:null
 
@@ -51,6 +51,9 @@ export default class GoogleSearchUploadForm extends React.Component {
                 break;
             case "add_tag":
                 this.setState({tags:[...this.state.tags, imageUpload.value]})
+                break;
+            case "remove_tag":
+                this.setState({tags:this.state.tags.filter(tag => tag.id !== imageUpload.value)})
                 break;
             default:
 
