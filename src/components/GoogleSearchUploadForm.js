@@ -23,10 +23,14 @@ export default class GoogleSearchUploadForm extends React.Component {
             gender:null,
             nationality:null,
             education:null,
-            image_url:null,
 
-            tags:[],
-            suggested_tags:[],
+            image_file:null,
+
+            tag:"",
+            tags:[
+                "blue","green","red"
+            ],
+            suggested_tags:["orange", "purple", "grey"],
             suggested_tags_fetching:false,
             suggested_tags_error:null
 
@@ -35,18 +39,24 @@ export default class GoogleSearchUploadForm extends React.Component {
         this.onSimpleFormChange = this.onSimpleFormChange.bind(this)
         this.onImageUploadChange = this.onImageUploadChange.bind(this)
 
-
     }
 
     onImageUploadChange(imageUpload){
         switch (imageUpload.type) {
-            case "image_uploaded":
-                this.setState({image_url:imageUpload.image_url})
+            case "image_file":
+                this.setState({image_file:imageUpload.value})
+                break;
+            case "tag":
+                this.setState({tag:imageUpload.value})
+                break;
+            case "add_tag":
+                this.setState({tags:[...this.state.tags, imageUpload.value]})
                 break;
             default:
 
         }
     }
+
     onSimpleFormChange(formChange){
 
         //console.log(input);
@@ -96,7 +106,7 @@ export default class GoogleSearchUploadForm extends React.Component {
 
         console.log(this.state);
         return (<div className="google-search-upload-form-component">
-            <h3>Google Search Upload Page (component) </h3>
+            <h3>Google Search Upload</h3>
             <p><b>Instructions:</b> Cupcake ipsum dolor sit amet cookie. Cake lollipop muffin sugar plum.
                 Chupa chups sugar plum powder. Toffee tart carrot cake chocolate cake gummi bears cheesecake.
 Cotton candy pastry cake cotton candy pudding. Pastry powder dragée marshmallow macaroon
@@ -123,9 +133,20 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
             <p><b>Step 2: Upload Google Search Screenshot</b></p>
 
             <ImageUpload
-                image_url={this.state.image_url}
+                image_file={this.state.image_file}
                 onImageUploadChange={this.onImageUploadChange}
-                upload_folder="/images/"/>
+
+                tag={this.state.tag}
+                tags={this.state.tags}
+                suggested_tags={this.state.suggested_tags}
+                suggested_tags_fetching={this.state.suggested_tags_fetching}
+
+            />
+
+            <br/>
+            <button class="btn btn-primary disabled" type="submit">Submit</button>&nbsp;
+            <button class="btn btn-info" type="button">Save as PDF</button>
+
 
         </div>)
     }
