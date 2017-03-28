@@ -11,6 +11,8 @@ export default class ImageUpload extends React.Component {
         super(props)
 
 
+
+
     }
 
 
@@ -18,14 +20,22 @@ export default class ImageUpload extends React.Component {
 
         return(<div className="image-upload-component">
 
-            <Imagedropzone upload_folder={this.props.upload_folder}>
+            <Imagedropzone
 
-                Image upload form. Upload to
+                image_file={this.props.image_file}
+                onImageUploadChange={this.props.onImageUploadChange}
 
+            />
 
-            </Imagedropzone>
+            <Imagetagsinput
 
-            <Imagetagsinput />
+                tag={this.props.tag}
+                handleTagInputChange={this.props.onImageUploadChange}
+                tags={this.props.tags}
+                suggested_tags={this.props.suggested_tags}
+                suggested_tags_fetching={this.props.suggested_tags_fetching}
+
+            />
 
         </div>)
 

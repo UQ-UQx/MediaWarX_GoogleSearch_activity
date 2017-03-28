@@ -1,20 +1,21 @@
 @import "_constants";
 @import "_mixins";
 
-$containerHeight:400px;
 
 .image-upload-component{
     width:100%;
-    height:$containerHeight;
-    background-color: red;
+    height:$image-upload-continer-height;
 
-    div{
-        width:50%;
-        float:left;
-        height:$containerHeight;
-    }
+}
+
+.image-drop-zone-container, .image-tags-input-container{
+    width:50%;
+    float:left;
+    height:$image-upload-continer-height;
 }
 
 .image-tags-input-container{
-    background-color: green;
+    //background-color: green;
+    padding:$image-upload-dropzone-border-width;
+    border:$image-upload-dropzone-border-width solid $grey;
 }
