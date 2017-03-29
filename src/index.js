@@ -4,6 +4,7 @@ import './stylesheets/IndexPage.scss'
 
 import {} from 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap'
+import _ from "lodash"
 //Clean the above later
 
 import React from "react"

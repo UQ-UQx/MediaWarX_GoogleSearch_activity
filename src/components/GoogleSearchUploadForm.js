@@ -32,13 +32,16 @@ export default class GoogleSearchUploadForm extends React.Component {
             ],
             suggested_tags:[],
             suggested_tags_fetching:false,
-            suggested_tags_error:null
+            suggested_tags_error:null,
 
+            base:"https://www.rover.com/blog/wp-content/uploads/2015/05/dog-candy-junk-food-599x340.jpg",
+
+            required_fields_completed:false
         }
 
         this.onSimpleFormChange = this.onSimpleFormChange.bind(this)
         this.onImageUploadChange = this.onImageUploadChange.bind(this)
-
+        this.handleSavePDF = this.handleSavePDF.bind(this)
     }
 
     onImageUploadChange(imageUpload){
@@ -62,8 +65,7 @@ export default class GoogleSearchUploadForm extends React.Component {
 
     onSimpleFormChange(formChange){
 
-        //console.log(input);
-        //console.log(formChange);
+
 
         switch (formChange.type) {
             case "location_name":
@@ -75,6 +77,18 @@ export default class GoogleSearchUploadForm extends React.Component {
                     location_lat:formChange.value.lat,
                     location_lng:formChange.value.lng
                 })
+
+                if(formChange.value.lat && formChange.value.lng){
+                    var locationString = formChange.value.lat+","+formChange.value.lng;
+
+                    this.toDataURL(
+                    "https://maps.googleapis.com/maps/api/staticmap?center="+locationString+"&zoom=5&scale=false&size=600x300&maptype=roadmap&format=jpg&visual_refresh=true&markers=size:mid%7C"+locationString+"&key=AIzaSyBQ7RQL3LDtmQ4ccxW_uBZLflfETkaKE6U"
+                    ,(url)=>{
+                        console.log("stop");
+                        this.setState({base:url})
+                    },
+                    "jpg")
+                }
                 break;
             case "location_suggestion_fetching":
                 this.setState({location_suggestion_fetching:formChange.value})
@@ -105,9 +119,62 @@ export default class GoogleSearchUploadForm extends React.Component {
 
     }
 
+
+
+    toDataURL(src, callback, outputFormat){
+        var img = new Image();
+          img.crossOrigin = 'Anonymous';
+          img.onload = function() {
+            var canvas = document.createElement('CANVAS');
+            var ctx = canvas.getContext('2d');
+            var dataURL;
+            canvas.height = this.height;
+            canvas.width = this.width;
+            ctx.drawImage(this, 0, 0);
+            dataURL = canvas.toDataURL(outputFormat);
+            callback(dataURL);
+          };
+          img.src = src;
+          if (img.complete || img.complete === undefined) {
+            img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+            img.src = src;
+          }
+    }
+
+    handleSavePDF(){
+
+        var required = [
+            "location_name",
+            "location_lat",
+            "location_lng",
+            "age",
+            "gender",
+            "nationality",
+            "education",
+            "tags",
+            "image_file"
+        ]
+
+        var metRequirements = true;
+        _.each(required, (val, key)=>{
+            if(!this.state[val]){
+                //console.log(val);
+                metRequirements = false;
+            }
+        })
+
+        this.setState({required_fields_completed:metRequirements})
+        console.log("all required fields completed: ", metRequirements);
+
+
+    }
+
+
     render(){
 
-        console.log(this.state);
+
+
+        //console.log(this.state);
         return (<div className="google-search-upload-form-component">
             <h3>Google Search Upload</h3>
             <p><b>Instructions:</b> Cupcake ipsum dolor sit amet cookie. Cake lollipop muffin sugar plum.
@@ -148,7 +215,10 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
 
             <br/>
             <button class="btn btn-primary disabled" type="submit">Submit</button>&nbsp;
-            <button class="btn btn-info" type="button">Save as PDF</button>
+            <button class="btn btn-info" type="button" onClick={this.handleSavePDF}>Save as PDF</button>
+            <br/>
+            <br/>
+            <img src={this.state.base}/>
 
 
         </div>)

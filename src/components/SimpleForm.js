@@ -128,7 +128,7 @@ export default class SimpleForm extends React.Component {
                     </td>
                 </tr>
                 <tr>
-                    <td><span className="form-input-label-span">Nationality:</span></td>
+                    <td><span className="form-input-label-span">Ethnicity:</span></td>
                     <td>
                         <div className="nationality-dropdown-container">
                             <Select
