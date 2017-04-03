@@ -34,14 +34,15 @@ export default class GoogleSearchUploadForm extends React.Component {
             suggested_tags_fetching:false,
             suggested_tags_error:null,
 
-            base:"https://www.rover.com/blog/wp-content/uploads/2015/05/dog-candy-junk-food-599x340.jpg",
+            staticmap_image_data:"https://www.rover.com/blog/wp-content/uploads/2015/05/dog-candy-junk-food-599x340.jpg",
 
-            required_fields_completed:false
+            met_form_requirements:false
         }
 
         this.onSimpleFormChange = this.onSimpleFormChange.bind(this)
         this.onImageUploadChange = this.onImageUploadChange.bind(this)
         this.handleSavePDF = this.handleSavePDF.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     onImageUploadChange(imageUpload){
@@ -85,7 +86,7 @@ export default class GoogleSearchUploadForm extends React.Component {
                     "https://maps.googleapis.com/maps/api/staticmap?center="+locationString+"&zoom=5&scale=false&size=600x300&maptype=roadmap&format=jpg&visual_refresh=true&markers=size:mid%7C"+locationString+"&key=AIzaSyBQ7RQL3LDtmQ4ccxW_uBZLflfETkaKE6U"
                     ,(url)=>{
                         console.log("stop");
-                        this.setState({base:url})
+                        this.setState({staticmap_image_data:url})
                     },
                     "jpg")
                 }
@@ -143,6 +144,16 @@ export default class GoogleSearchUploadForm extends React.Component {
 
     handleSavePDF(){
 
+      console.log("handleSavePDF ", this.state)
+
+    }
+
+    handleSubmit(){
+        console.log("handleSubmit ",this.state);
+    }
+
+    render(){
+
         var required = [
             "location_name",
             "location_lat",
@@ -163,14 +174,9 @@ export default class GoogleSearchUploadForm extends React.Component {
             }
         })
 
-        this.setState({required_fields_completed:metRequirements})
-        console.log("all required fields completed: ", metRequirements);
-
-
-    }
-
-
-    render(){
+        if(metRequirements){
+            this.setState({met_form_requirements:metRequirements})
+        }
 
 
 
@@ -203,6 +209,7 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
             <p><b>Step 2: Upload Google Search Screenshot</b></p>
 
             <ImageUpload
+
                 image_file={this.state.image_file}
                 onImageUploadChange={this.onImageUploadChange}
 
@@ -214,11 +221,9 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
             />
 
             <br/>
-            <button class="btn btn-primary disabled" type="submit">Submit</button>&nbsp;
+            <button class="btn btn-primary disabled" type="submit" onClick={this.handleSubmit}>Submit</button>&nbsp;
             <button class="btn btn-info" type="button" onClick={this.handleSavePDF}>Save as PDF</button>
-            <br/>
-            <br/>
-            <img src={this.state.base}/>
+
 
 
         </div>)
