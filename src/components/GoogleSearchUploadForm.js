@@ -4,12 +4,15 @@ import uuid from "uuid"
 import SimpleForm from "./SimpleForm"
 import ImageUpload from "./ImageUpload"
 
+import each from "lodash/each"
+
+import jsPDF from "jsPDF"
+
 export default class GoogleSearchUploadForm extends React.Component {
     constructor(props){
         super(props);
 
         this.state = {
-
 
             location_name:'',
             location_lat:null,
@@ -17,7 +20,6 @@ export default class GoogleSearchUploadForm extends React.Component {
             location_suggestion_fetching:false,
             location_suggestion:null,
             location_error:null,
-
 
             age:"",
             gender:null,
@@ -34,9 +36,8 @@ export default class GoogleSearchUploadForm extends React.Component {
             suggested_tags_fetching:false,
             suggested_tags_error:null,
 
-            staticmap_image_data:"https://www.rover.com/blog/wp-content/uploads/2015/05/dog-candy-junk-food-599x340.jpg",
+            location_static_map:null,
 
-            met_form_requirements:false
         }
 
         this.onSimpleFormChange = this.onSimpleFormChange.bind(this)
@@ -60,8 +61,8 @@ export default class GoogleSearchUploadForm extends React.Component {
                 this.setState({tags:this.state.tags.filter(tag => tag.id !== imageUpload.value)})
                 break;
             default:
-
         }
+
     }
 
     onSimpleFormChange(formChange){
@@ -86,9 +87,11 @@ export default class GoogleSearchUploadForm extends React.Component {
                     "https://maps.googleapis.com/maps/api/staticmap?center="+locationString+"&zoom=5&scale=false&size=600x300&maptype=roadmap&format=jpg&visual_refresh=true&markers=size:mid%7C"+locationString+"&key=**API_KEY**"
                     ,(url)=>{
                         console.log("stop");
-                        this.setState({staticmap_image_data:url})
+                        this.setState({location_static_map:url})
                     },
                     "jpg")
+                }else{
+                    this.setState({location_static_map:null})
                 }
                 break;
             case "location_suggestion_fetching":
@@ -117,7 +120,6 @@ export default class GoogleSearchUploadForm extends React.Component {
             default:
 
         }
-
     }
 
 
@@ -145,6 +147,49 @@ export default class GoogleSearchUploadForm extends React.Component {
     handleSavePDF(){
 
       console.log("handleSavePDF ", this.state)
+      this.toDataURL(this.state.image_file.preview, (search_image_data)=>{
+
+
+          const position = {
+              left: 10,
+              top:15,
+              center:105
+          }
+
+          let doc = new jsPDF("p", "mm", "a4")
+
+          doc.setFont("Arial")
+          doc.setFontSize(20)
+          doc.setFontType("bold")
+          doc.text('MediaWarX: Google Search Activity', position.center, position.top, null, null, 'center')
+
+          doc.setFontSize(13)
+          doc.setFontType("normal")
+          doc.text('Unit 2: Name of the block', position.center, position.top+8, null, null, 'center')
+
+          doc.addImage(this.state.location_static_map, position.left, position.top+30, 190,95)
+
+
+
+
+          doc.addPage("a4", "p")
+
+          doc.addImage(search_image_data, position.left, position.top+30, 190,95)
+
+
+
+
+          doc.save('Test.pdf')
+
+
+
+
+
+      }, "jpeg")
+
+
+
+
 
     }
 
@@ -152,8 +197,7 @@ export default class GoogleSearchUploadForm extends React.Component {
         console.log("handleSubmit ",this.state);
     }
 
-    render(){
-
+    checkRequirementsMet(){
         var required = [
             "location_name",
             "location_lat",
@@ -163,22 +207,41 @@ export default class GoogleSearchUploadForm extends React.Component {
             "nationality",
             "education",
             "tags",
+            "location_static_map",
             "image_file"
         ]
 
         var metRequirements = true;
-        _.each(required, (val, key)=>{
+        console.log("--------------");
+
+        each(required, (val, key)=>{
             if(!this.state[val]){
-                //console.log(val);
+                console.log(val);
                 metRequirements = false;
+            }
+
+            if(val == "tags"){
+                if(this.state[val].length == 0){
+                    console.log(val);
+                    metRequirements = false;
+                }
             }
         })
 
-        if(metRequirements){
-            this.setState({met_form_requirements:metRequirements})
+
+        return metRequirements
+    }
+
+    render(){
+
+        var requirementsMet = this.checkRequirementsMet()
+
+        var disabled_class = "disabled"
+        if(requirementsMet){
+            disabled_class = ""
         }
 
-
+        console.log(this.state)
 
         //console.log(this.state);
         return (<div className="google-search-upload-form-component">
@@ -203,6 +266,7 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
                  education={this.state.education}
 
                  onSimpleFormChange={this.onSimpleFormChange}
+
              />
 
             <br/>
@@ -221,9 +285,9 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
             />
 
             <br/>
-            <button class="btn btn-primary disabled" type="submit" onClick={this.handleSubmit}>Submit</button>&nbsp;
-            <button class="btn btn-info" type="button" onClick={this.handleSavePDF}>Save as PDF</button>
-
+            <button className={"btn btn-primary "+disabled_class} type="submit" onClick={requirementsMet ? this.handleSubmit:null}>Submit</button>&nbsp;
+            {/* <button className={"btn btn-info "+disabled_class} type="button" onClick={requirementsMet ? this.handleSavePDF:null}>Save as PDF</button> */}
+            <button className={"btn btn-info "} type="button" onClick={this.handleSavePDF}>Save as PDF</button>
 
 
         </div>)
