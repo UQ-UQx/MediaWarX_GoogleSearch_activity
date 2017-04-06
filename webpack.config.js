@@ -2,6 +2,7 @@ var webpack = require("webpack");
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 var path = require('path');
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
     devtool: "#cheap-module-eval-source-map",
@@ -10,6 +11,9 @@ module.exports = {
         path: path.join(__dirname,"public/build"),
         filename:"bundle.js",
         publicPath:"build/"
+    },
+    node: {
+        fs: "empty"
     },
     plugins: [
 
@@ -26,11 +30,13 @@ module.exports = {
         }),
 
         new webpack.ProvidePlugin({
-            jQuery : 'jquery',
-            $ : 'jquery',
-            jquery : 'jquery',
-            _ : 'lodash'
-        })
+            //jQuery : 'jquery',
+            //$ : 'jquery',
+            //jquery : 'jquery',
+            //_ : 'lodash'
+        }),
+
+        //new BundleAnalyzerPlugin()
 
     ],
     module:{
