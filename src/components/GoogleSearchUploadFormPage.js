@@ -4,7 +4,6 @@ import uuid from "uuid"
 import SimpleForm from "./SimpleForm"
 import ImageUpload from "./ImageUpload"
 
-import each from "lodash/each"
 
 import jsPDF from "jsPDF"
 
@@ -173,46 +172,15 @@ export default class GoogleSearchUploadForm extends React.Component {
 
     handleSubmit(){
         console.log("handleSubmit ",this.props);
+
+        this.props.handleFormSubmit();
     }
 
-    checkRequirementsMet(){
-        var required = [
-            "location_name",
-            "location_lat",
-            "location_lng",
-            "age",
-            "gender",
-            "nationality",
-            "education",
-            "tags",
-            "location_static_map",
-            "image_file"
-        ]
 
-        var metRequirements = true;
-        console.log("--------------");
-
-        each(required, (val, key)=>{
-            if(!this.props[val]){
-                console.log(val);
-                metRequirements = false;
-            }
-
-            if(val == "tags"){
-                if(this.props[val].length == 0){
-                    console.log(val);
-                    metRequirements = false;
-                }
-            }
-        })
-
-
-        return metRequirements
-    }
 
     render(){
 
-        var requirementsMet = this.checkRequirementsMet()
+        var requirementsMet = this.props.checkFormRequirementsMet()
 
         var disabled_class = "disabled"
         if(requirementsMet){
