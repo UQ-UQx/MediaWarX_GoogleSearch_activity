@@ -12,33 +12,11 @@ export default class GoogleSearchUploadForm extends React.Component {
     constructor(props){
         super(props);
 
-        this.state = {
-
-            location_name:'',
-            location_lat:null,
-            location_lng:null,
-            location_suggestion_fetching:false,
-            location_suggestion:null,
-            location_error:null,
-
-            age:"",
-            gender:null,
-            nationality:null,
-            education:null,
-
-            image_file:null,
-
-            tag:"",
-            tags:[
-
-            ],
-            suggested_tags:[],
-            suggested_tags_fetching:false,
-            suggested_tags_error:null,
-
-            location_static_map:null,
-
-        }
+        // this.props = {
+        //
+        //
+        //
+        // }
 
         this.onSimpleFormChange = this.onSimpleFormChange.bind(this)
         this.onImageUploadChange = this.onImageUploadChange.bind(this)
@@ -49,16 +27,16 @@ export default class GoogleSearchUploadForm extends React.Component {
     onImageUploadChange(imageUpload){
         switch (imageUpload.type) {
             case "image_file":
-                this.setState({image_file:imageUpload.value})
+                this.props.handleUploadFormItemUpdate({image_file:imageUpload.value})
                 break;
             case "tag":
-                this.setState({tag:imageUpload.value})
+                this.props.handleUploadFormItemUpdate({tag:imageUpload.value})
                 break;
             case "add_tag":
-                this.setState({tags:[...this.state.tags, imageUpload.value]})
+                this.props.handleUploadFormItemUpdate({tags:[...this.props.tags, imageUpload.value]})
                 break;
             case "remove_tag":
-                this.setState({tags:this.state.tags.filter(tag => tag.id !== imageUpload.value)})
+                this.props.handleUploadFormItemUpdate({tags:this.props.tags.filter(tag => tag.id !== imageUpload.value)})
                 break;
             default:
         }
@@ -72,10 +50,10 @@ export default class GoogleSearchUploadForm extends React.Component {
         switch (formChange.type) {
             case "location_name":
                 //console.log(input.type,": ",input.value)
-                this.setState({location_name:formChange.value})
+                this.props.handleUploadFormItemUpdate({location_name:formChange.value})
                 break;
             case "location_coordinates":
-                this.setState({
+                this.props.handleUploadFormItemUpdate({
                     location_lat:formChange.value.lat,
                     location_lng:formChange.value.lng
                 })
@@ -87,33 +65,33 @@ export default class GoogleSearchUploadForm extends React.Component {
                     "https://maps.googleapis.com/maps/api/staticmap?center="+locationString+"&zoom=5&scale=false&size=600x300&maptype=roadmap&format=jpg&visual_refresh=true&markers=size:mid%7C"+locationString+"&key=**API_KEY**"
                     ,(url)=>{
                         console.log("stop");
-                        this.setState({location_static_map:url})
+                        this.props.handleUploadFormItemUpdate({location_static_map:url})
                     },
                     "jpg")
                 }else{
-                    this.setState({location_static_map:null})
+                    this.props.handleUploadFormItemUpdate({location_static_map:null})
                 }
                 break;
             case "location_suggestion_fetching":
-                this.setState({location_suggestion_fetching:formChange.value})
+                this.props.handleUploadFormItemUpdate({location_suggestion_fetching:formChange.value})
                 break;
             case "location_suggestion":
-                this.setState({location_suggestion:formChange.value})
+                this.props.handleUploadFormItemUpdate({location_suggestion:formChange.value})
                 break;
             case "location_error":
-                this.setState({location_error:formChange.value})
+                this.props.handleUploadFormItemUpdate({location_error:formChange.value})
                 break;
             case "age":
-                this.setState({age:formChange.value})
+                this.props.handleUploadFormItemUpdate({age:formChange.value})
                 break;
             case "gender":
-                this.setState({gender:formChange.value})
+                this.props.handleUploadFormItemUpdate({gender:formChange.value})
                 break;
             case "nationality":
-                this.setState({nationality:formChange.value})
+                this.props.handleUploadFormItemUpdate({nationality:formChange.value})
                 break;
             case "education":
-                this.setState({education:formChange.value})
+                this.props.handleUploadFormItemUpdate({education:formChange.value})
                 break;
 
 
@@ -146,8 +124,8 @@ export default class GoogleSearchUploadForm extends React.Component {
 
     handleSavePDF(){
 
-      console.log("handleSavePDF ", this.state)
-      this.toDataURL(this.state.image_file.preview, (search_image_data)=>{
+      console.log("handleSavePDF ", this.props)
+      this.toDataURL(this.props.image_file.preview, (search_image_data)=>{
 
 
           const position = {
@@ -167,7 +145,7 @@ export default class GoogleSearchUploadForm extends React.Component {
           doc.setFontType("normal")
           doc.text('Unit 2: Name of the block', position.center, position.top+8, null, null, 'center')
 
-          doc.addImage(this.state.location_static_map, position.left, position.top+30, 190,95)
+          doc.addImage(this.props.location_static_map, position.left, position.top+30, 190,95)
 
 
 
@@ -194,7 +172,7 @@ export default class GoogleSearchUploadForm extends React.Component {
     }
 
     handleSubmit(){
-        console.log("handleSubmit ",this.state);
+        console.log("handleSubmit ",this.props);
     }
 
     checkRequirementsMet(){
@@ -215,13 +193,13 @@ export default class GoogleSearchUploadForm extends React.Component {
         console.log("--------------");
 
         each(required, (val, key)=>{
-            if(!this.state[val]){
+            if(!this.props[val]){
                 console.log(val);
                 metRequirements = false;
             }
 
             if(val == "tags"){
-                if(this.state[val].length == 0){
+                if(this.props[val].length == 0){
                     console.log(val);
                     metRequirements = false;
                 }
@@ -241,9 +219,9 @@ export default class GoogleSearchUploadForm extends React.Component {
             disabled_class = ""
         }
 
-        console.log(this.state)
+        console.log(this.props)
 
-        //console.log(this.state);
+        //console.log(this.props);
         return (<div className="google-search-upload-form-component">
             <h3>Google Search Upload</h3>
             <p><b>Instructions:</b> Cupcake ipsum dolor sit amet cookie. Cake lollipop muffin sugar plum.
@@ -255,15 +233,15 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
 
             <SimpleForm
 
-                 location_name={this.state.location_name}
-                 location_suggestion={this.state.location_suggestion}
-                 location_suggestion_fetching={this.state.location_suggestion_fetching}
-                 location_error={this.state.location_error}
+                 location_name={this.props.location_name}
+                 location_suggestion={this.props.location_suggestion}
+                 location_suggestion_fetching={this.props.location_suggestion_fetching}
+                 location_error={this.props.location_error}
 
-                 age={this.state.age}
-                 gender={this.state.gender}
-                 nationality={this.state.nationality}
-                 education={this.state.education}
+                 age={this.props.age}
+                 gender={this.props.gender}
+                 nationality={this.props.nationality}
+                 education={this.props.education}
 
                  onSimpleFormChange={this.onSimpleFormChange}
 
@@ -274,13 +252,13 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
 
             <ImageUpload
 
-                image_file={this.state.image_file}
+                image_file={this.props.image_file}
                 onImageUploadChange={this.onImageUploadChange}
 
-                tag={this.state.tag}
-                tags={this.state.tags}
-                suggested_tags={this.state.suggested_tags}
-                suggested_tags_fetching={this.state.suggested_tags_fetching}
+                tag={this.props.tag}
+                tags={this.props.tags}
+                suggested_tags={this.props.suggested_tags}
+                suggested_tags_fetching={this.props.suggested_tags_fetching}
 
             />
 
