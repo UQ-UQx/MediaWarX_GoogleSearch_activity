@@ -122,6 +122,7 @@ export default class GoogleSearchUploadForm extends React.Component {
     }
 
     handleSavePDF(){
+        console.log("saving")
 
       console.log("handleSavePDF ", this.props)
       this.toDataURL(this.props.image_file.preview, (search_image_data)=>{
@@ -156,7 +157,9 @@ export default class GoogleSearchUploadForm extends React.Component {
 
 
 
-          doc.save('Test.pdf')
+          doc.save('Test.pdf', (opt)=>{
+              console.log("saved", opt)
+          })
 
 
 
@@ -187,7 +190,7 @@ export default class GoogleSearchUploadForm extends React.Component {
             disabled_class = ""
         }
 
-        console.log(this.props)
+        //console.log(this.props)
 
         //console.log(this.props);
         return (<div className="google-search-upload-form-component">
@@ -198,6 +201,7 @@ Cotton candy pastry cake cotton candy pudding. Pastry powder dragée marshmallow
 wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
  Candy jelly gummi bears tiramisu dragée chocolate cake biscuit.</p>
             <p><b>Step 1: Complete Form</b></p>
+
 
             <SimpleForm
 
@@ -234,7 +238,6 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
             <button className={"btn btn-primary "+disabled_class} type="submit" onClick={requirementsMet ? this.handleSubmit:null}>Submit</button>&nbsp;
             {/* <button className={"btn btn-info "+disabled_class} type="button" onClick={requirementsMet ? this.handleSavePDF:null}>Save as PDF</button> */}
             <button className={"btn btn-info "} type="button" onClick={this.handleSavePDF}>Save as PDF</button>
-
 
         </div>)
     }
