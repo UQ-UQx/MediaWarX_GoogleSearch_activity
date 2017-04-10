@@ -78,17 +78,17 @@ export default class Layout extends React.Component {
         ]
 
         var metRequirements = true;
-        console.log("--------------");
+        //console.log("--------------");
 
         each(required, (val, key)=>{
             if(!this.state[val]){
-                console.log(val);
+                //console.log(val);
                 metRequirements = false;
             }
 
             if(val == "tags"){
                 if(this.state[val].length == 0){
-                    console.log(val);
+                    //console.log(val);
                     metRequirements = false;
                 }
             }
@@ -139,7 +139,7 @@ export default class Layout extends React.Component {
     renderGoogleSearchMapPage(){
         return(<GoogleSearchMapPage
 
-            
+
 
         />)
     }

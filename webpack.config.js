@@ -12,9 +12,6 @@ module.exports = {
         filename:"bundle.js",
         publicPath:"build/"
     },
-    node: {
-        fs: "empty"
-    },
     plugins: [
 
         new webpack.LoaderOptionsPlugin({
