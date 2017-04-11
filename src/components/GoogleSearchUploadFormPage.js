@@ -5,7 +5,7 @@ import SimpleForm from "./SimpleForm"
 import ImageUpload from "./ImageUpload"
 
 
-import jsPDF from "jsPDF"
+import jsPDF from "../libs/jsPDF"
 
 export default class GoogleSearchUploadForm extends React.Component {
     constructor(props){
