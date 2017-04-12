@@ -10,7 +10,7 @@ export default class Layout extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            selected_page:"form_page", // options: upload | map
+            selected_page:"map_page", // options: form_page | map_page
 
             location_name:'',
             location_lat:null,
@@ -139,7 +139,7 @@ export default class Layout extends React.Component {
     renderGoogleSearchMapPage(){
         return(<GoogleSearchMapPage
 
-
+            location={{lat:this.state.location_lat,lng:this.state.location_lng}}
 
         />)
     }
