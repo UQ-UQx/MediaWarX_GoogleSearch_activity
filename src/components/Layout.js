@@ -1,5 +1,7 @@
 import React from "react"
 
+import axios from "axios"
+
 import GoogleSearchUploadFormPage from "./GoogleSearchUploadFormPage"
 import GoogleSearchMapPage from "./GoogleSearchMapPage"
 
@@ -10,7 +12,7 @@ export default class Layout extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            selected_page:"map_page", // options: form_page | map_page
+            selected_page:"form_page", // options: form_page | map_page
 
             location_name:'',
             location_lat:null,
@@ -42,7 +44,7 @@ export default class Layout extends React.Component {
         this.checkFormRequirementsMet = this.checkFormRequirementsMet.bind(this);
 
         this.handlePageButtonClick = this.handlePageButtonClick.bind(this);
-        // this.handleUploadFormPageButtonClick = this.handleUploadFormPageButtonClick.bind(this);
+        // this.handleUploadFormPageButtonClick = this.handleUploadFormPageButtonClick.bind(this); 
         // this.handleMapPageButtonClick = this.handleMapPageButtonClick.bind(this);
     }
     componentWillMount(){
@@ -62,6 +64,30 @@ export default class Layout extends React.Component {
     }
     handleFormSubmit(){
         console.log("form submit clicked");
+
+        //handshake with api here with axios?
+
+        console.log(window.location);
+
+        axios.get('../public/api/api.php', {
+            params: {
+                action: "setState",
+                data:{
+                    state: this.state,
+                    user_id: "user 5",
+                    lti_id: "lti 23"
+                }
+            }
+        })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+
+
     }
     checkFormRequirementsMet(){
         var required = [
@@ -95,7 +121,8 @@ export default class Layout extends React.Component {
         })
 
 
-        return metRequirements
+       // return metRequirements
+       return true
     }
     handlePageButtonClick(page){
 

@@ -44,7 +44,22 @@ class MyApi
 		} else {
 			// call the corresponding method
 			if (method_exists($this, $action)) {
-				$this->$action();
+				// $this->$action();
+
+				switch ($action) {
+					case 'hello':
+						$this->hello();
+						break;
+					
+					case 'setState':
+						//$this->my_log($this->request->data);
+						$this->setState($this->request->data);
+						break;
+					default:
+						break;
+				}
+
+
 			} else {
 				$message = array('error' => 'Method not found.');
 				$this->reply($message, 400);
@@ -90,6 +105,18 @@ class MyApi
 		exit;
 	}
 
+	private function my_log($content, $type = 0){
+
+		
+		date_default_timezone_set("Australia/Brisbane");
+		$log_array = json_decode($content, true);
+		$json_pretty_string = json_encode($log_array, JSON_PRETTY_PRINT);
+		error_log('Log (public/api/api.php):' .date("Y-m-d h:i:sa"). PHP_EOL . $json_pretty_string.PHP_EOL."RAW: ".json_encode($content));
+		
+
+		//error_log(json_encode($content), $type);
+	}
+
 	public function hello()
 	{
 		$this->reply('Hello from the API!');
@@ -107,6 +134,48 @@ class MyApi
 	{
 		$this->reply(true);
 	}
+
+
+	public function setState($data){
+		$data = json_decode($data);
+		$lti_id = $data->lti_id;
+		$user_id = $data->user_id;
+		$state = $data->state;
+
+		global $lti;
+
+
+		error_log($lti_id);
+		error_log($lti);
+
+        // global $lti;
+        // $db = Db::instance();
+        // date_default_timezone_set('Australia/Brisbane');
+        // $modified = date('Y-m-d H:i:s');
+        // $existing = getstate($lti_id);
+        // error_log($lti->user_id());
+        // if(!$existing) {
+        //     $db->create('states', array('lti_id'=>$lti_id,'user_id'=>$lti->user_id(), 'state'=>$state,'created'=>$modified,'updated'=>$modified));
+        // } else {
+        //    // $db->update('states', array('state'=>$state,'updated'=>$modified), 'lti_id', $lti_id);
+        //     $db->query( 'UPDATE states SET state = :state WHERE lti_id = :lti_id AND user_id = :user_id', array( 'state' => $state, 'lti_id' => $lti_id, 'user_id' => $lti->user_id() ) );
+        // }
+    }
+    
+    // public function getState($data){
+
+	// 	$lti_id = $data->lti_id;
+	// 	$user_id = $data->user_id;
+		
+    //     $db = Db::instance();
+    //     $select = $db->query( 'SELECT state FROM states WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id ) );
+    //     while ( $row = $select->fetch() ) {
+    //        $this->reply($row);
+    //     }
+    //     $this->reply(null,400);
+    // }
+
+
 
 }
 
