@@ -12,6 +12,8 @@
 }
 
 #app{
-    margin-left: 10px;
-    margin-right: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    max-width: $lti-width-max;
+    min-width: $lti-width-min;
 }
