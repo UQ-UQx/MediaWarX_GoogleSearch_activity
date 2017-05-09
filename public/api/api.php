@@ -142,11 +142,8 @@ class MyApi
 		$user_id = $data->user_id;
 		$state = $data->state;
 
-		global $lti;
+		error_log(json_encode($state));
 
-
-		error_log($lti_id);
-		error_log($lti);
 
         // global $lti;
         // $db = Db::instance();

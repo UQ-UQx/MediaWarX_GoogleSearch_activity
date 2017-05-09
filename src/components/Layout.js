@@ -12,7 +12,7 @@ export default class Layout extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            selected_page:"form_page", // options: form_page | map_page
+            selected_page:"map_page", // options: form_page | map_page
 
             location_name:'',
             location_lat:null,
@@ -67,13 +67,14 @@ export default class Layout extends React.Component {
 
         //handshake with api here with axios?
 
-        console.log(window.location);
+        console.log(this.state.location_static_map);
+
 
         axios.get('../public/api/api.php', {
             params: {
                 action: "setState",
                 data:{
-                    state: this.state,
+                    state: {...this.state, "location_static_map":""},
                     user_id: "user 5",
                     lti_id: "lti 23"
                 }
@@ -85,8 +86,6 @@ export default class Layout extends React.Component {
         .catch(function (error) {
             console.log(error);
         });
-
-
 
     }
     checkFormRequirementsMet(){
