@@ -32,10 +32,19 @@ export default class LocationInput extends React.Component {
 
     }
 
+    componentDidMount(){
+
+        //handles location related actions if address is already provided through props
+        this.handleChange()
+
+    }
 
     handleChange(event){
-
-        var newInputValue = event.target.value
+        var newInputValue = this.props.value
+        if(event){
+            var newInputValue = event.target.value
+        }
+        
         this.props.onLocationInputChange({
             type:"location_name",
             value:newInputValue,
@@ -67,7 +76,7 @@ export default class LocationInput extends React.Component {
 
         clearTimeout(this.checkAddressTimeout);
         this.checkAddressTimeout = setTimeout(()=>{
-
+            
             if(newInputValue.length > 0){
 
                 this.props.onLocationInputChange({
