@@ -10,9 +10,9 @@
         'db'=>array(
             'driver'=>'mysql',
             'hostname'=>'localhost',
-            'username'=>'YOUR_DB_USERNAME',
-            'password'=>'YOUR_DB_PASSWORD',
-            'dbname'=>'YOUR_DB_NAME',
+            'username'=>'root',
+            'password'=>'root',
+            'dbname'=>'mediawarx_googlesearch_activity',
         )
     );
 ?>

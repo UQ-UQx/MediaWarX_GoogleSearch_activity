@@ -7,11 +7,16 @@ class MyApi
 	 * @var object
 	 */
 	private $request;
+	private $db;
 
 
-	public function __construct()
+	public function __construct($database)
 	{
+
+		$this->db = $database;
+
 		$this->_processRequest();
+
 	}
 
 	/**
@@ -45,15 +50,15 @@ class MyApi
 			// call the corresponding method
 			if (method_exists($this, $action)) {
 				// $this->$action();
-
 				switch ($action) {
 					case 'hello':
 						$this->hello();
 						break;
-					
 					case 'setState':
-						//$this->my_log($this->request->data);
 						$this->setState($this->request->data);
+						break;
+					case 'setUserEntry':
+						$this->setUserEntry($this->request->data);
 						break;
 					default:
 						break;
@@ -96,15 +101,13 @@ class MyApi
 	 * @param  int $status - HTTP status code
 	 * @return JSON
 	 */
-	private function reply($data, $status = 200)
-	{
+	private function reply($data, $status = 200){
         $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.1');
         header($protocol . ' ' . $status);
 		header('Content-Type: application/json');
 		echo json_encode($data);
 		exit;
 	}
-
 	private function my_log($content, $type = 0){
 
 		
@@ -116,9 +119,25 @@ class MyApi
 
 		//error_log(json_encode($content), $type);
 	}
+	public function hello(){
+		error_log(json_encode($this->db));
 
-	public function hello()
-	{
+
+
+        // // $this->db->raw("CREATE TABLE states (
+		// -- 				id INT(11) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+		// -- 				user_id VARCHAR(30) NOT NULL,
+		// -- 				lti_id VARCHAR(30) NOT NULL,
+		// -- 				state MEDIUMTEXT,
+		// -- 				created DATETIME DEFAULT NULL,
+		// -- 				updated DATETIME DEFAULT NULL
+		// -- 				)");
+
+		// date_default_timezone_set('Australia/Brisbane');
+        // $modified = date('Y-m-d H:i:s');
+
+		// $this->db->create('test', array('lti_id'=>"this will be id but in text form "));
+
 		$this->reply('Hello from the API!');
 	}
 
@@ -137,43 +156,98 @@ class MyApi
 
 
 	public function setState($data){
+		
 		$data = json_decode($data);
 		$lti_id = $data->lti_id;
 		$user_id = $data->user_id;
 		$state = $data->state;
 
-		error_log(json_encode($state));
-
-
-        // global $lti;
-        // $db = Db::instance();
-        // date_default_timezone_set('Australia/Brisbane');
-        // $modified = date('Y-m-d H:i:s');
-        // $existing = getstate($lti_id);
-        // error_log($lti->user_id());
-        // if(!$existing) {
-        //     $db->create('states', array('lti_id'=>$lti_id,'user_id'=>$lti->user_id(), 'state'=>$state,'created'=>$modified,'updated'=>$modified));
-        // } else {
-        //    // $db->update('states', array('state'=>$state,'updated'=>$modified), 'lti_id', $lti_id);
-        //     $db->query( 'UPDATE states SET state = :state WHERE lti_id = :lti_id AND user_id = :user_id', array( 'state' => $state, 'lti_id' => $lti_id, 'user_id' => $lti->user_id() ) );
-        // }
+        date_default_timezone_set('Australia/Brisbane');
+        $modified = date('Y-m-d H:i:s');
+        $existing = $this->getstate($data);
+        if(!$existing) {
+			$this->db->raw("CREATE TABLE states (
+					id INT(11) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+					user_id VARCHAR(30) NOT NULL,
+					lti_id VARCHAR(30) NOT NULL,
+					state MEDIUMTEXT,
+					created DATETIME DEFAULT NULL,
+					updated DATETIME DEFAULT NULL
+					)");
+            $this->db->create('states', array('lti_id'=>$lti_id,'user_id'=>$user_id, 'state'=>$state,'created'=>$modified,'updated'=>$modified));
+        } else {
+            $this->db->query('UPDATE states SET state = :state WHERE lti_id = :lti_id AND user_id = :user_id', array( 'state' => $state, 'lti_id' => $lti_id, 'user_id' => $user_id ) );
+        }
     }
+
+	public function setUserEntry($data){
+
+		$data = json_decode($data);
+		$lti_id = $data->lti_id;
+		$user_id = $data->user_id;
+		$entry = $data->entry;
+
+        date_default_timezone_set('Australia/Brisbane');
+        $modified = date('Y-m-d H:i:s');
+        $existing = $this->getEntry($data);
+        if(!$existing) {
+			$this->db->raw("CREATE TABLE entries (
+					id INT(11) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+					user_id VARCHAR(30) NOT NULL,
+					lti_id VARCHAR(30) NOT NULL,
+					entry MEDIUMTEXT,
+					created DATETIME DEFAULT NULL,
+					updated DATETIME DEFAULT NULL
+					)");
+            $this->db->create('entries', array('lti_id'=>$lti_id,'user_id'=>$user_id, 'entry'=>$state,'created'=>$modified,'updated'=>$modified));
+        } else {
+            $this->db->query('UPDATE entries SET entry = :entry WHERE lti_id = :lti_id AND user_id = :user_id', array( 'entry' => $entry, 'lti_id' => $lti_id, 'user_id' => $user_id ) );
+        }
+
+	}
     
-    // public function getState($data){
+    public function getState($data){
 
-	// 	$lti_id = $data->lti_id;
-	// 	$user_id = $data->user_id;
+		//$data = json_decode($data);
+		$lti_id = $data->lti_id;
+		$user_id = $data->user_id;
 		
-    //     $db = Db::instance();
-    //     $select = $db->query( 'SELECT state FROM states WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id ) );
-    //     while ( $row = $select->fetch() ) {
-    //        $this->reply($row);
-    //     }
-    //     $this->reply(null,400);
-    // }
+        $select = $this->db->query( 'SELECT state FROM states WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id ) );
+        while ( $row = $select->fetch() ) {
+           $this->reply($row);
+        }
+        $this->reply(null,400);
 
+    }
 
+  	public function getEntry($data){
 
+		//$data = json_decode($data);
+		$lti_id = $data->lti_id;
+		$user_id = $data->user_id;
+		
+        $select = $this->db->query( 'SELECT entry FROM entries WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id ) );
+        while ( $row = $select->fetch() ) {
+           $this->reply($row);
+        }
+        $this->reply(null,400);
+
+    }
+
+} //MyApi class end
+
+require_once('../lib/db.php');
+require_once('../config.php');
+
+if(isset($config['use_db']) && $config['use_db']) {
+	Db::config( 'driver',   'mysql' );
+	Db::config( 'host',     $config['db']['hostname'] );
+	Db::config( 'database', $config['db']['dbname'] );
+	Db::config( 'user',     $config['db']['username'] );
+	Db::config( 'password', $config['db']['password'] );
 }
 
-$MyApi = new MyApi();
+$db = Db::instance();
+
+
+$MyApi = new MyApi($db);
