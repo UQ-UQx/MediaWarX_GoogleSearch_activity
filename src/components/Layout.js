@@ -12,7 +12,7 @@ export default class Layout extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            selected_page:"map_page", // options: form_page | map_page
+            selected_page:"form_page", // options: form_page | map_page
 
             location_name:'',
             location_lat:null,
