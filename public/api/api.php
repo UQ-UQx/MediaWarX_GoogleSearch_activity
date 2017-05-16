@@ -8,13 +8,13 @@ class MyApi
 	 */
 	private $request;
 	private $db;
+	private $config;
 
-
-	public function __construct($database)
+	public function __construct($database, $config)
 	{
 
 		$this->db = $database;
-
+		$this->config = $config;
 		$this->_processRequest();
 
 	}
@@ -50,15 +50,22 @@ class MyApi
 			// call the corresponding method
 			if (method_exists($this, $action)) {
 				// $this->$action();
+				$requestData = $this->request->data;
 				switch ($action) {
 					case 'hello':
 						$this->hello();
 						break;
-					case 'setState':
-						$this->setState($this->request->data);
+					case 'setUserState':
+						$this->setUserState($requestData);
 						break;
 					case 'setUserEntry':
-						$this->setUserEntry($this->request->data);
+						$this->setUserEntry($requestData);
+						break;
+					case 'getUserState':
+						$this->getUserState($requestData);
+						break;
+					case 'setUserEntry':
+						$this->getUserEntry($requestData);
 						break;
 					default:
 						break;
@@ -155,29 +162,32 @@ class MyApi
 	}
 
 
-	public function setState($data){
+	public function setUserState($data){
 		
 		$data = json_decode($data);
 		$lti_id = $data->lti_id;
 		$user_id = $data->user_id;
-		$state = $data->state;
+		$state = json_encode($data->state);
 
         date_default_timezone_set('Australia/Brisbane');
         $modified = date('Y-m-d H:i:s');
-        $existing = $this->getstate($data);
-        if(!$existing) {
-			$this->db->raw("CREATE TABLE states (
+		if(!$this->checkTableExists("states")){
+				$this->db->raw("CREATE TABLE states (
 					id INT(11) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
 					user_id VARCHAR(30) NOT NULL,
 					lti_id VARCHAR(30) NOT NULL,
 					state MEDIUMTEXT,
 					created DATETIME DEFAULT NULL,
 					updated DATETIME DEFAULT NULL
-					)");
-            $this->db->create('states', array('lti_id'=>$lti_id,'user_id'=>$user_id, 'state'=>$state,'created'=>$modified,'updated'=>$modified));
-        } else {
-            $this->db->query('UPDATE states SET state = :state WHERE lti_id = :lti_id AND user_id = :user_id', array( 'state' => $state, 'lti_id' => $lti_id, 'user_id' => $user_id ) );
-        }
+				)");
+		}
+		$existing = $this->checkStateExists($data);
+		if(!$existing) {
+			$this->db->create('states', array('lti_id'=>$lti_id,'user_id'=>$user_id, 'state'=>$state,'created'=>$modified,'updated'=>$modified));
+		} else {
+			$this->db->query('UPDATE states SET state = :state WHERE lti_id = :lti_id AND user_id = :user_id', array( 'state' => $state, 'lti_id' => $lti_id, 'user_id' => $user_id ) );
+		}
+		
     }
 
 	public function setUserEntry($data){
@@ -189,50 +199,96 @@ class MyApi
 
         date_default_timezone_set('Australia/Brisbane');
         $modified = date('Y-m-d H:i:s');
-        $existing = $this->getEntry($data);
-        if(!$existing) {
-			$this->db->raw("CREATE TABLE entries (
+		if(!$this->checkTableExists("entries")){
+				$this->db->raw("CREATE TABLE entries (
 					id INT(11) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
 					user_id VARCHAR(30) NOT NULL,
 					lti_id VARCHAR(30) NOT NULL,
 					entry MEDIUMTEXT,
 					created DATETIME DEFAULT NULL,
 					updated DATETIME DEFAULT NULL
-					)");
-            $this->db->create('entries', array('lti_id'=>$lti_id,'user_id'=>$user_id, 'entry'=>$state,'created'=>$modified,'updated'=>$modified));
-        } else {
-            $this->db->query('UPDATE entries SET entry = :entry WHERE lti_id = :lti_id AND user_id = :user_id', array( 'entry' => $entry, 'lti_id' => $lti_id, 'user_id' => $user_id ) );
-        }
+				)");
+		}
+		
+		$existing = $this->checkEntryExists($data);
+		if(!$existing) {
+			$this->db->create('entries', array('lti_id'=>$lti_id,'user_id'=>$user_id, 'entry'=>$entry,'created'=>$modified,'updated'=>$modified));
+		} else {
+			$this->db->query('UPDATE entries SET entry = :entry WHERE lti_id = :lti_id AND user_id = :user_id', array( 'entry' => $entry, 'lti_id' => $lti_id, 'user_id' => $user_id ) );
+		}
 
 	}
     
-    public function getState($data){
-
-		//$data = json_decode($data);
+    public function getUserState($data){
+		
+		$data = json_decode($data);
 		$lti_id = $data->lti_id;
 		$user_id = $data->user_id;
-		
+		if(!$this->checkTableExists("states")){
+			$this->reply("Table 'states' for user:".$user_id." in lti:".$lti_id." not found", 404);
+		}
+
         $select = $this->db->query( 'SELECT state FROM states WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id ) );
         while ( $row = $select->fetch() ) {
            $this->reply($row);
         }
-        $this->reply(null,400);
+        $this->reply("State in table 'states' for user:".$user_id." in lti:".$lti_id." not found",404);
 
     }
 
-  	public function getEntry($data){
+  	public function getUserEntry($data){
 
-		//$data = json_decode($data);
+		$data = json_decode($data);
 		$lti_id = $data->lti_id;
 		$user_id = $data->user_id;
+		if(!$this->checkTableExists("entries")){
+			$this->reply("Table 'entries' for user:".$user_id." in lti:".$lti_id." not found", 404);
+		}
+
 		
         $select = $this->db->query( 'SELECT entry FROM entries WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id ) );
         while ( $row = $select->fetch() ) {
            $this->reply($row);
         }
-        $this->reply(null,400);
+        $this->reply("Entry in table 'entries' for user:".$user_id." in lti:".$lti_id." not found",404);
+
 
     }
+
+	private function checkTableExists($tableName){
+		$select = $this->db->query("SELECT * 
+			FROM information_schema.tables
+			WHERE table_schema = :dbname 
+				AND table_name = :tablename
+			LIMIT 1", array("dbname"=>$this->config["db"]["dbname"], "tablename"=>$tableName));
+		if($select->fetch()){
+			return true;
+		}
+		return false;
+	}
+
+	private function checkStateExists($data){
+		$lti_id = $data->lti_id;
+		$user_id = $data->user_id;
+
+        $select = $this->db->query( 'SELECT state FROM states WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id ) );
+        while ( $row = $select->fetch() ) {
+		   return true;
+        }
+		return false;
+	}
+
+	private function checkEntryExists($data){
+
+		$lti_id = $data->lti_id;
+		$user_id = $data->user_id;
+
+        $select = $this->db->query( 'SELECT entry FROM entries WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id ) );
+        while ( $row = $select->fetch() ) {
+		   return true;
+        }
+		return false;
+	}      
 
 } //MyApi class end
 
@@ -250,4 +306,4 @@ if(isset($config['use_db']) && $config['use_db']) {
 $db = Db::instance();
 
 
-$MyApi = new MyApi($db);
+$MyApi = new MyApi($db, $config);

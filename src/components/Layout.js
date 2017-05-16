@@ -11,7 +11,8 @@ import each from "lodash/each"
 export default class Layout extends React.Component {
     constructor(props){
         super(props);
-        this.state = {
+
+        var defaultState = {
             selected_page:"form_page", // options: form_page | map_page
 
             location_name:'',
@@ -38,6 +39,7 @@ export default class Layout extends React.Component {
 
             location_static_map:null,
         }
+        props.appState ? this.state = props.appState : this.state = defaultState
 
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.handleUploadFormItemUpdate = this.handleUploadFormItemUpdate.bind(this);
@@ -48,15 +50,22 @@ export default class Layout extends React.Component {
         // this.handleMapPageButtonClick = this.handleMapPageButtonClick.bind(this);
     }
     componentWillMount(){
-        console.log("Layout component will mount");
+        console.log("Layout component will mount")
+        
     }
     componentDidMount(){
         console.log("Layout component did mount")
+
     }
     componentWillUnmount(){
         console.log("Layout component will unmount")
     }
 
+    updateStateWithServerValues(serverState){
+
+        this.setState(serverState)
+
+    }
     handleUploadFormItemUpdate(item){
 
         this.setState(item);
@@ -72,11 +81,11 @@ export default class Layout extends React.Component {
 
         axios.get('../public/api/api.php', {
             params: {
-                action: "setState",
+                action: "setUserState",
                 data:{
                     state: {...this.state, "location_static_map":""},
-                    user_id: "user 5",
-                    lti_id: "lti 23"
+                    user_id: "user5",
+                    lti_id: "lti23"
                 }
             }
         })
@@ -84,7 +93,7 @@ export default class Layout extends React.Component {
             console.log(response);
         })
         .catch(function (error) {
-            console.log(error);
+            console.log(error.response);
         });
 
     }
@@ -171,7 +180,7 @@ export default class Layout extends React.Component {
     }
 
     render(){
-
+        console.log(this.state)
         var page = this.renderGoogleSearchUploadFormPage();
 
         switch (this.state.selected_page) {

@@ -147,6 +147,20 @@ export default class GoogleSearchUploadForm extends React.Component {
 
           doc.addImage(this.props.location_static_map, position.left, position.top+30, 190,95)
 
+          doc.setFont("Arial")
+          doc.setFontSize(10)
+          doc.setFontType("bold")
+          doc.text('Location: '+this.props.location_name, position.center, position.top+150, null, null, 'center')
+          
+          doc.setFont("Arial")
+          doc.setFontSize(10)
+          doc.setFontType("bold")
+          doc.text('Age: '+this.props.age, position.center, position.top+155, null, null, 'center')
+            
+          doc.setFont("Arial")
+          doc.setFontSize(10)
+          doc.setFontType("bold")
+          doc.text('Education: '+this.props.education, position.center, position.top+160, null, null, 'center')
 
 
 
@@ -182,6 +196,7 @@ export default class GoogleSearchUploadForm extends React.Component {
 
 
     render(){
+
 
         var requirementsMet = this.props.checkFormRequirementsMet()
 
