@@ -11,11 +11,6 @@ export default class GoogleSearchUploadForm extends React.Component {
     constructor(props){
         super(props);
 
-        // this.props = {
-        //
-        //
-        //
-        // }
 
         this.onSimpleFormChange = this.onSimpleFormChange.bind(this)
         this.onImageUploadChange = this.onImageUploadChange.bind(this)
@@ -205,9 +200,7 @@ export default class GoogleSearchUploadForm extends React.Component {
             disabled_class = ""
         }
 
-        //console.log(this.props)
 
-        //console.log(this.props);
         return (<div className="google-search-upload-form-component">
             <h3>Google Search Upload</h3>
             <p><b>Instructions:</b> Cupcake ipsum dolor sit amet cookie. Cake lollipop muffin sugar plum.
