@@ -30,7 +30,7 @@ module.exports = {
             //jQuery : 'jquery',
             //$ : 'jquery',
             //jquery : 'jquery',
-            //_ : 'lodash'
+            _ : 'lodash'
         }),
 
         //new BundleAnalyzerPlugin()
