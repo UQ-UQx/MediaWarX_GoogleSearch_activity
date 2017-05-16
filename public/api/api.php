@@ -30,53 +30,65 @@ class MyApi
 	{
 		// prevent unauthenticated access to API
 		$this->_secureBackend();
+		error_log("REQUEST".json_encode($_REQUEST));
 
-		// get the request
-		if (!empty($_REQUEST)) {
-			// convert to object for consistency
-			$this->request = json_decode(json_encode($_REQUEST));
-		} else {
-			// already object
-			$this->request = json_decode(file_get_contents('php://input'));
-		}
+		error_log("FILE".json_encode($_FILES));
+		//$this->reply("yay", 200);
+		$path = getcwd();
 
-		// get the action
-		$action = $this->request->action;
+		$path_to_dir = dirname($path);//.'/data/'.$_POST["lti_id"]."/".$_POST["user_id"]."/".$_FILES['upl']['name'];
 
-		if (empty($action)) {
-			$message = array('error' => 'No method given.');
-			$this->reply($message, 400);
-		} else {
-			// call the corresponding method
-			if (method_exists($this, $action)) {
-				// $this->$action();
-				$requestData = $this->request->data;
-				switch ($action) {
-					case 'hello':
-						$this->hello();
-						break;
-					case 'setUserState':
-						$this->setUserState($requestData);
-						break;
-					case 'setUserEntry':
-						$this->setUserEntry($requestData);
-						break;
-					case 'getUserState':
-						$this->getUserState($requestData);
-						break;
-					case 'setUserEntry':
-						$this->getUserEntry($requestData);
-						break;
-					default:
-						break;
-				}
+		error_log("path: ".$path_to_dir);
 
 
-			} else {
-				$message = array('error' => 'Method not found.');
-				$this->reply($message, 400);
-			}
-		}
+		move_uploaded_file($_FILES['file']['tmp_name'], $path_to_dir."/test.jpg");
+
+		// // get the request
+		// if (!empty($_REQUEST)) {
+		// 	// convert to object for consistency
+		// 	$this->request = json_decode(json_encode($_REQUEST));
+		// } else {
+		// 	// already object
+		// 	$this->request = json_decode(file_get_contents('php://input'));
+		// }
+
+
+		// if (!isset($this->request->action)) {
+		// 	$message = array('error' => 'No action given.');
+		// 	$this->reply($message, 400);
+		// } else {
+
+		// 	$action = $this->request->action;
+		// 	// call the corresponding method
+		// 	if (method_exists($this, $action)) {
+		// 		// $this->$action();
+		// 		$requestData = $this->request->data;
+		// 		switch ($action) {
+		// 			case 'hello':
+		// 				$this->hello();
+		// 				break;
+		// 			case 'setUserState':
+		// 				$this->setUserState($requestData);
+		// 				break;
+		// 			case 'setUserEntry':
+		// 				$this->setUserEntry($requestData);
+		// 				break;
+		// 			case 'getUserState':
+		// 				$this->getUserState($requestData);
+		// 				break;
+		// 			case 'getUserEntry':
+		// 				$this->getUserEntry($requestData);
+		// 				break;
+		// 			default:
+		// 				break;
+		// 		}
+
+
+		// 	} else {
+		// 		$message = array('error' => 'Method not found.');
+		// 		$this->reply($message, 400);
+		// 	}
+		// }
 	}
 
 	/**
@@ -129,22 +141,6 @@ class MyApi
 	public function hello(){
 		error_log(json_encode($this->db));
 
-
-
-        // // $this->db->raw("CREATE TABLE states (
-		// -- 				id INT(11) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
-		// -- 				user_id VARCHAR(30) NOT NULL,
-		// -- 				lti_id VARCHAR(30) NOT NULL,
-		// -- 				state MEDIUMTEXT,
-		// -- 				created DATETIME DEFAULT NULL,
-		// -- 				updated DATETIME DEFAULT NULL
-		// -- 				)");
-
-		// date_default_timezone_set('Australia/Brisbane');
-        // $modified = date('Y-m-d H:i:s');
-
-		// $this->db->create('test', array('lti_id'=>"this will be id but in text form "));
-
 		$this->reply('Hello from the API!');
 	}
 
@@ -187,6 +183,9 @@ class MyApi
 		} else {
 			$this->db->query('UPDATE states SET state = :state WHERE lti_id = :lti_id AND user_id = :user_id', array( 'state' => $state, 'lti_id' => $lti_id, 'user_id' => $user_id ) );
 		}
+
+		$this->uploadImage($data);
+
 		
     }
 
@@ -216,6 +215,7 @@ class MyApi
 		} else {
 			$this->db->query('UPDATE entries SET entry = :entry WHERE lti_id = :lti_id AND user_id = :user_id', array( 'entry' => $entry, 'lti_id' => $lti_id, 'user_id' => $user_id ) );
 		}
+
 
 	}
     
@@ -288,7 +288,17 @@ class MyApi
 		   return true;
         }
 		return false;
-	}      
+	}   
+
+	private function uploadImage($data){
+
+		$lti_id = $data->lti_id;
+		$user_id = $data->user_id;
+		$state = $data->state;
+
+		error_log("UPLOAD IMAGE:".json_encode($state->image_file));
+
+	}   
 
 } //MyApi class end
 
@@ -307,3 +317,4 @@ $db = Db::instance();
 
 
 $MyApi = new MyApi($db, $config);
+

@@ -76,25 +76,44 @@ export default class Layout extends React.Component {
 
         //handshake with api here with axios?
 
-        console.log(this.state.location_static_map);
+        //console.log(this.state.location_static_map);
+        //console.log("handiling submit:",this.state.image_file)
+       
+        const postData = new FormData();
 
+        postData.append('file', this.state.image_file);
+        postData.append('action', "hello");
+        postData.append('user_id', "user5");
+        postData.append('lti_id',"lti23");
 
-        axios.get('../public/api/api.php', {
-            params: {
-                action: "setUserState",
-                data:{
-                    state: {...this.state, "location_static_map":""},
-                    user_id: "user5",
-                    lti_id: "lti23"
-                }
-            }
-        })
+        axios.post('../public/api/api.php', postData)
         .then(function (response) {
             console.log(response);
         })
         .catch(function (error) {
             console.log(error.response);
         });
+
+        // axios.get('../public/api/api.php', {
+        //     params: {
+        //         action: "setUserState",
+        //         data:{
+        //             state: {...this.state, "location_static_map":""},
+        //             user_id: "user5",
+        //             lti_id: "lti23"
+        //         },
+        //         file:filedata
+        //     }
+        // })
+        // .then(function (response) {
+        //     console.log(response);
+        // })
+        // .catch(function (error) {
+        //     console.log(error.response);
+        // });
+
+
+ 
 
     }
     checkFormRequirementsMet(){
