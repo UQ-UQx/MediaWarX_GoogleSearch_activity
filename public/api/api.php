@@ -30,18 +30,72 @@ class MyApi
 	{
 		// prevent unauthenticated access to API
 		$this->_secureBackend();
-		error_log("REQUEST".json_encode($_REQUEST));
 
-		error_log("FILE".json_encode($_FILES));
-		//$this->reply("yay", 200);
-		$path = getcwd();
+		// get the request
+		if (!empty($_REQUEST)) {
+			// convert to object for consistency
+			$this->request = json_decode(json_encode($_REQUEST));
+		} else {
+			// already object
+			$this->request = json_decode(file_get_contents('php://input'));
+		}
 
-		$path_to_dir = dirname($path);//.'/data/'.$_POST["lti_id"]."/".$_POST["user_id"]."/".$_FILES['upl']['name'];
+		//check if an action is sent through
+		if(!isset($this->request->action)){
+			//if no action is provided then reply with a 400 error with message
+			$this->reply("No Action Provided", 400);
+			//kill script
+			exit();
+		}
 
-		error_log("path: ".$path_to_dir);
+		//check if method for the action exists
+		if(!method_exists($this, $this->request->action)){
+			//if method doesn't exist, send 400 code and message with reply'
+			$this->reply("Action method not found",400);
+			//kill script
+			exit();
+		}
+
+		// $user_id = $this->request->user_id;
+		// $lti_id = $this->request->lti_id;
 
 
-		move_uploaded_file($_FILES['file']['tmp_name'], $path_to_dir."/test.jpg");
+
+		//call appropriate function for the action provided
+		switch($this->request->action){
+			case "hello":
+				error_log("hello has been sent through");
+				break;
+			case "setUserState":
+				error_log("setUserState has been sent through");
+				break;
+			case "formSubmit":
+				error_log("formSubmit has been sent through");
+				//$this->setUserState()
+				$this->formSubmit($this->request);
+				break;
+			default:
+				$this->reply("action switch failed",400);
+			break;
+		}
+
+
+
+
+
+		// error_log("REQUEST".json_encode($_REQUEST));
+
+		// error_log("FILE".json_encode($_FILES));
+		// //$this->reply("yay", 200);
+		// $path = getcwd();
+
+		// $path_to_dir = dirname($path).'/images';//.'/data/'.$_POST["lti_id"]."/".$_POST["user_id"]."/".$_FILES['upl']['name'];
+
+		// error_log("path: ".$path_to_dir);
+
+
+		// move_uploaded_file($_FILES['file']['tmp_name'], $path_to_dir."/test.jpg");
+		
 
 		// // get the request
 		// if (!empty($_REQUEST)) {
@@ -52,6 +106,13 @@ class MyApi
 		// 	$this->request = json_decode(file_get_contents('php://input'));
 		// }
 
+		// if($this->request->action == "hello"){
+		// 	$this->reply("YES I SHOULD FAIL!!", 400);
+		// 	error_log("This line should never show up");
+		// }else{
+		// 	//$this->reply($this->request->action);
+		// 	error_log("This line should never show up");
+		// }
 
 		// if (!isset($this->request->action)) {
 		// 	$message = array('error' => 'No action given.');
@@ -157,6 +218,20 @@ class MyApi
 		$this->reply(true);
 	}
 
+	public function formSubmit($data){
+
+		error_log(json_encode($data),0);
+		//set entry
+		//upload image
+
+
+
+
+
+		//if fail, remove entry and file
+		//reply with error
+
+	}
 
 	public function setUserState($data){
 		

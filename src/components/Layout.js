@@ -71,46 +71,64 @@ export default class Layout extends React.Component {
         this.setState(item);
 
     }
+
+    // uploadImage(){
+    //     const postData = new FormData();
+    //     postData.append('file', this.state.image_file);
+    //     postData.append('action', "uploadFile");
+    //     postData.append('state', {...this.state, "location_static_map":""});
+    //     postData.append('user_id', "user5");
+    //     postData.append('lti_id',"lti23");
+    //     return axios.post('../public/api/api.php', postData);
+    // }
+    
+    
+
+    // uploadFormData(){
+    //     return axios.get('../public/api/api.php', {
+    //         params: {
+    //             action: "setUserState",
+    //             data:{
+    //                 state: {...this.state, "location_static_map":""},
+    //                 user_id: "user5",
+    //                 lti_id: "lti23"
+    //             }
+    //         }
+    //     })
+    // }
     handleFormSubmit(){
         console.log("form submit clicked");
 
-        //handshake with api here with axios?
 
-        //console.log(this.state.location_static_map);
-        //console.log("handiling submit:",this.state.image_file)
-       
         const postData = new FormData();
-
         postData.append('file', this.state.image_file);
-        postData.append('action', "hello");
+        postData.append('action', "formSubmit");
+        postData.append('state', {...this.state, "location_static_map":""});
         postData.append('user_id', "user5");
         postData.append('lti_id',"lti23");
-
         axios.post('../public/api/api.php', postData)
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error.response);
+        .then(function(response){
+
+            console.log("Single Post Success: 😃",response)
+
+        }).catch(function(error){
+
+            console.log("Single Post Fail: 😡",error.response);
+
         });
 
-        // axios.get('../public/api/api.php', {
-        //     params: {
-        //         action: "setUserState",
-        //         data:{
-        //             state: {...this.state, "location_static_map":""},
-        //             user_id: "user5",
-        //             lti_id: "lti23"
-        //         },
-        //         file:filedata
-        //     }
-        // })
-        // .then(function (response) {
-        //     console.log(response);
-        // })
-        // .catch(function (error) {
-        //     console.log(error.response);
-        // });
+    //    axios.all([this.uploadFormData(), this.uploadImage()])
+    //     .then(
+
+    //         axios.spread(function(formDataResponse, imageUploadResponse) {
+    //             console.log("ALL: 😃", formDataResponse, imageUploadResponse)
+    //         })
+
+    //     ).catch(function(error){
+
+    //         console.log("ALL: 😡", error.response);
+
+    //     });
 
 
  
