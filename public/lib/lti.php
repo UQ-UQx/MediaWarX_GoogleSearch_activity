@@ -135,21 +135,25 @@ class Lti {
 
 	function usedummydata() {
 		$this->ltivars = array(
-		    'launch_presentation_return_url'=>'',
-		    'lti_version'=>'LTI-1p0',
-		    'user_id'=>'student',
-		    'roles'=>'Instructor',
-		    'oauth_nonce'=>'60581087546369126111399262942',
-		    'oauth_timestamp'=>'1399262942',
-		    'lis_result_sourcedid'=>'UQx/ceit1001/2014_1:-i4x-UQx-ceit1001-lti-35fd269993224010adbacd8cd05f0043:student',
-		    'context_id'=>'UQx/ceit1001/2014_1',
-		    'oauth_consumer_key'=>'test',
-		    'resource_link_id'=>'-i4x-UQx-ceit1001-lti-35fd269993224010adbacd8cd05f0043',
-		    'oauth_signature_method'=>'HMAC-SHA1',
-		    'oauth_version'=>'1.0',
-		    'oauth_signature'=>'dSffHcwBbfyR01HQloYJIQRu9T0',
-		    'lti_message_type'=>'basic-lti-launch-request',
-		    'oauth_callback'=>'about:blank',
+			'custom_component_display_name' => 'LTI Consumer',
+			'lti_version' => 'LTI-1p0',
+			'oauth_nonce' => '106095563246583917761495495665',
+			'resource_link_id' => 'courses.edx.org-aa766098b5a94a738b54e89caf3a8973',
+			'context_id' => 'course-v1:UQx+COURSECODEx+2T2017',
+			'oauth_signature_method' => 'HMAC-SHA1',
+			'oauth_version' => '1.0',
+			'oauth_signature' => 'iFUDZD4AYMhKKgHLf/LeXpNZcSA=',
+			'lti_message_type' => 'basic-lti-launch-request',
+			'launch_presentation_return_url' => '',
+			'user_id' => 'f770caedc6d860f087297810891526d7',
+			'roles' => 'Instructor',
+			'oauth_consumer_key' => 'uqx',
+			'lis_result_sourcedid' => 'course-v1%3AUQx%2BCOURSECODEx%2B2T2017:courses.edx.org-aa766098b5a94a738b54e89caf3a8973:f770caedc6d860f087297810891526d7',
+			'launch_presentation_locale' => 'en',
+			'oauth_timestamp' => '1495495665',
+			'oauth_callback' => 'about:blank',
+
+			//custom variables will be in the array as follows
             'custom_lti_variable_B'=>'New Value for Variable B',
             'custom_lti_variable_D'=>'8'
 		);
