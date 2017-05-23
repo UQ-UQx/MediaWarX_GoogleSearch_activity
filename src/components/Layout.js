@@ -104,8 +104,8 @@ export default class Layout extends React.Component {
         postData.append('file', this.state.image_file);
         postData.append('action', "formSubmit");
         postData.append('state', {...this.state, "location_static_map":""});
-        postData.append('user_id', "user5");
-        postData.append('lti_id',"lti23");
+        postData.append('user_id', $LTI_userID);
+        postData.append('lti_id',$LTI_resourceID);
         axios.post('../public/api/api.php', postData)
         .then(function(response){
 

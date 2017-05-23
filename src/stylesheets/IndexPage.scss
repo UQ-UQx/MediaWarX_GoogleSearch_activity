@@ -6,6 +6,11 @@
     background-color: $valid;
 }
 
+.lti_invalid_message{
+    @include devMessageDefaults();
+    background-color: $invalid;
+}
+
 .lti_dev_message{
     @include devMessageDefaults();
     background-color: $statement-generic;

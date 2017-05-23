@@ -38,77 +38,59 @@
         		//die();
         	}
 
-			//$lti_id = $lti->
-			
+
+			$lti_id = $lti->lti_id();
+			$user_id = $lti->user_id();
+			$calldata = $lti->calldata();
+
+		
 			$oldmask = umask(0);
-			if (!file_exists('userdata/'.$lti_id)) {
-				mkdir('userdata/'.$lti_id, 0777, true);
+			if (!file_exists('data/'.$lti_id)) {
+				mkdir('data/'.$lti_id, 0777, true);
 				error_log("Creating folder for LTI",0);
 			}
-			if (!file_exists('userdata/'.$lti_id."/".$user_id)) {
-				mkdir('userdata/'.$lti_id."/".$user_id, 0777, true);
+			if (!file_exists('data/'.$lti_id."/".$user_id)) {
+				mkdir('data/'.$lti_id."/".$user_id, 0777, true);
 				error_log("Creating folder for LTI User",0);
 			}
-			if (!file_exists('userdata/'.$lti_id."/".$user_id."/default")) {
-				mkdir('userdata/'.$lti_id."/".$user_id."/default", 0777, true);
-				error_log("Creating folder for LTI User Default files Directory",0);
-			}
-			if (!file_exists('userdata/'.$lti_id."/".$user_id."/user")) {
-				mkdir('userdata/'.$lti_id."/".$user_id."/user", 0777, true);
-				error_log("Creating folder for LTI User Files Directory",0);
-			}
-			if (!file_exists('userdata/'.$lti_id."/".$user_id."/".$user_id.".csv")) {
-				$myfile = fopen('userdata/'.$lti_id."/".$user_id."/".$user_id.".csv", "w");
-				error_log("Creating main CSV file for User",0);
+			if (!file_exists('data/'.$lti_id."/calldata.json")) {
+				$myfile = fopen('data/'.$lti_id."/calldata.json", "w");
+				fwrite($myfile, json_encode($calldata));
+				fclose($myfile);
+				error_log("Creating variables json file for lti",0);
+			} else {
+				$calldataString = file_get_contents("data/".$lti_id."/calldata.json");
+				$calldataDecoded = json_decode($calldataString, true);
+				if(count(array_diff($calldata, $calldataDecoded)) != 0){
+					file_put_contents('data/'.$lti_id."/calldata.json", json_encode($calldata));
+				}
 			}
 			umask($oldmask);
 
+			
+
 
 			//Save user lti vars if none exist
-			echo("BLUEE!!");
-			
-			echo "<pre>";
-			print_r($lti->calldata());
-			echo "</pre>";
-
-			/**
-				$ltivars = $lti->calldata();
-
-				$lti_id = $lti->context_id()."_".$lti->resource_id();
- 				$user_id = $lti->user_id();
-
-				date_default_timezone_set('Australia/Brisbane');
-				$modified = date('Y-m-d H:i:s');
-				if(!$this->checkTableExists("states")){
-						$this->db->raw("CREATE TABLE states (
-							id INT(11) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
-							user_id VARCHAR(30) NOT NULL,
-							lti_id VARCHAR(30) NOT NULL,
-							state MEDIUMTEXT,
-							created DATETIME DEFAULT NULL,
-							updated DATETIME DEFAULT NULL
-						)");
-				}
-				$existing = $this->checkStateExists($data);
-				if(!$existing) {
-					$this->db->create('states', array('lti_id'=>$lti_id,'user_id'=>$user_id, 'state'=>$state,'created'=>$modified,'updated'=>$modified));
-				} else {
-					$this->db->query('UPDATE states SET state = :state WHERE lti_id = :lti_id AND user_id = :user_id', array( 'state' => $state, 'lti_id' => $lti_id, 'user_id' => $user_id ) );
-				}
-
-				$this->uploadImage($data);
-
-				*/
-
+			if($lti->is_dev()){
+				echo "<pre>";
+				print_r($lti->calldata());
+				echo "</pre>";
+			}
 
 
 		
         ?>
+
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=**API_KEY**&libraries=visualization"></script>
 
     </head>
     <body>
+	<script type="text/javascript">
+		$LTI_resourceID = '<?php echo $lti_id ?>';
+		$LTI_userID = '<?php echo $user_id ?>';
+	</script>
     <div id="app"></div>
     <script type="text/javascript" src="./build/bundle.js"></script>
+	
     </body>
 </html>
