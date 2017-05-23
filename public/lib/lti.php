@@ -114,8 +114,8 @@ class Lti {
 	}
 
 	function lti_id() {
-		if(isset($this->ltivars["oauth_consumer_key"])) {
-			return $this->ltivars["oauth_consumer_key"];
+		if(isset($this->ltivars["resource_link_id"])) {
+			return $this->ltivars["resource_link_id"];
 		}
 		return 'Unknown user';
 	}
@@ -135,6 +135,7 @@ class Lti {
 
 	function usedummydata() {
 		$this->ltivars = array(
+
 			'custom_component_display_name' => 'LTI Consumer',
 			'lti_version' => 'LTI-1p0',
 			'oauth_nonce' => '106095563246583917761495495665',
