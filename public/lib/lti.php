@@ -79,6 +79,13 @@ class Lti {
 		return $this->errors;
 	}
 
+	function is_dev(){
+		if($this->testing){
+			return true;
+		}
+		return false;
+	}
+
 	function is_valid() {
 		return $this->valid;
 	}
@@ -117,7 +124,7 @@ class Lti {
 		if(isset($this->ltivars["resource_link_id"])) {
 			return $this->ltivars["resource_link_id"];
 		}
-		return 'Unknown user';
+		return 'Unknown resource link id (lti id)';
 	}
 
 	function requirevalid() {

@@ -225,7 +225,7 @@ class MyApi
 		//upload image
 
 
-
+		error_log(file_get_contents("../data/".$data->lti_id."/calldata.json"));
 
 
 		//if fail, remove entry and file

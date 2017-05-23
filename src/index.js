@@ -15,6 +15,9 @@ import Layout from "./components/Layout"
 
 const app = document.getElementById('app');
 
+console.log($LTI_resourceID);
+console.log($LTI_userID);
+
 // var self = this;
 axios.get('../public/api/api.php', {
     params: {
