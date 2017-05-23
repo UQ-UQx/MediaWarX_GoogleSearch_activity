@@ -38,9 +38,38 @@
         		//die();
         	}
 
+			//$lti_id = $lti->
+			
+			$oldmask = umask(0);
+			if (!file_exists('userdata/'.$lti_id)) {
+				mkdir('userdata/'.$lti_id, 0777, true);
+				error_log("Creating folder for LTI",0);
+			}
+			if (!file_exists('userdata/'.$lti_id."/".$user_id)) {
+				mkdir('userdata/'.$lti_id."/".$user_id, 0777, true);
+				error_log("Creating folder for LTI User",0);
+			}
+			if (!file_exists('userdata/'.$lti_id."/".$user_id."/default")) {
+				mkdir('userdata/'.$lti_id."/".$user_id."/default", 0777, true);
+				error_log("Creating folder for LTI User Default files Directory",0);
+			}
+			if (!file_exists('userdata/'.$lti_id."/".$user_id."/user")) {
+				mkdir('userdata/'.$lti_id."/".$user_id."/user", 0777, true);
+				error_log("Creating folder for LTI User Files Directory",0);
+			}
+			if (!file_exists('userdata/'.$lti_id."/".$user_id."/".$user_id.".csv")) {
+				$myfile = fopen('userdata/'.$lti_id."/".$user_id."/".$user_id.".csv", "w");
+				error_log("Creating main CSV file for User",0);
+			}
+			umask($oldmask);
+
 
 			//Save user lti vars if none exist
-						echo("BLUEE!!");
+			echo("BLUEE!!");
+			
+			echo "<pre>";
+			print_r($lti->calldata());
+			echo "</pre>";
 
 			/**
 				$ltivars = $lti->calldata();
