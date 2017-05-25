@@ -24,16 +24,19 @@ axios.get('../public/api/api.php', {
         action: "getUserState",
         data:{
             //state: {...this.state, "location_static_map":""},
-            user_id: "user5",
-            lti_id: "lti23"
+            user_id: $LTI_userID,
+            lti_id: $LTI_resourceID
         }
     }
 })
 .then(function (response) {
     var serverState = JSON.parse(response.data.state)
+    console.log("This shoudl work")
     loadApp(serverState)
 })
 .catch(function (error) {
+        console.log(error.response)
+
     loadApp(null)
 });
 

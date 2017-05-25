@@ -40,9 +40,18 @@ export default class LocationInput extends React.Component {
     }
 
     handleChange(event){
+
+
         var newInputValue = this.props.value
         if(event){
             var newInputValue = event.target.value
+            if(event.type == "blur"){
+                this.props.onLocationInputChange({
+                    type:"onBlur",
+                    value:null
+                })
+                return;
+            }
         }
         
         this.props.onLocationInputChange({
@@ -202,6 +211,7 @@ export default class LocationInput extends React.Component {
                 placeholder="Enter Location"
                 value={this.props.value}
                 onChange={this.handleChange}
+                onBlur={this.handleChange}
             />
 
             {suggested}

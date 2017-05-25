@@ -56,23 +56,28 @@ class MyApi
 			exit();
 		}
 
-		// $user_id = $this->request->user_id;
-		// $lti_id = $this->request->lti_id;
-
-
-
+		
 		//call appropriate function for the action provided
+		// $lti_id = $this->request->lti_id;
+		// $user_id = $this->request->user_id;
+
 		switch($this->request->action){
 			case "hello":
-				error_log("hello has been sent through");
+				//error_log("hello has been sent through");
+				break;
+			case "getUserState":
+				error_log("getUserState has been sent through");
+
+				$data = json_decode($this->request->data);
+				//error_log($data->lti_id);
+				$this->getUserState($data->lti_id, $data->user_id);
 				break;
 			case "setUserState":
-				error_log("setUserState has been sent through");
+				//error_log("setUserState has been sent through");
 				break;
 			case "formSubmit":
-				error_log("formSubmit has been sent through");
-				//$this->setUserState()
-				$this->formSubmit($this->request);
+				//error_log("formSubmit has been sent through");
+				$this->formSubmit($this->request, $_FILES);
 				break;
 			default:
 				$this->reply("action switch failed",400);
@@ -81,17 +86,17 @@ class MyApi
 
 
 
+		
 
+		// //error_log("REQUEST".json_encode($_REQUEST));
 
-		// error_log("REQUEST".json_encode($_REQUEST));
-
-		// error_log("FILE".json_encode($_FILES));
+		// //error_log("FILE".json_encode($_FILES));
 		// //$this->reply("yay", 200);
 		// $path = getcwd();
 
 		// $path_to_dir = dirname($path).'/images';//.'/data/'.$_POST["lti_id"]."/".$_POST["user_id"]."/".$_FILES['upl']['name'];
 
-		// error_log("path: ".$path_to_dir);
+		// //error_log("path: ".$path_to_dir);
 
 
 		// move_uploaded_file($_FILES['file']['tmp_name'], $path_to_dir."/test.jpg");
@@ -108,10 +113,10 @@ class MyApi
 
 		// if($this->request->action == "hello"){
 		// 	$this->reply("YES I SHOULD FAIL!!", 400);
-		// 	error_log("This line should never show up");
+		// 	//error_log("This line should never show up");
 		// }else{
 		// 	//$this->reply($this->request->action);
-		// 	error_log("This line should never show up");
+		// 	//error_log("This line should never show up");
 		// }
 
 		// if (!isset($this->request->action)) {
@@ -194,13 +199,13 @@ class MyApi
 		date_default_timezone_set("Australia/Brisbane");
 		$log_array = json_decode($content, true);
 		$json_pretty_string = json_encode($log_array, JSON_PRETTY_PRINT);
-		error_log('Log (public/api/api.php):' .date("Y-m-d h:i:sa"). PHP_EOL . $json_pretty_string.PHP_EOL."RAW: ".json_encode($content));
+		//error_log('Log (public/api/api.php):' .date("Y-m-d h:i:sa"). PHP_EOL . $json_pretty_string.PHP_EOL."RAW: ".json_encode($content));
 		
 
-		//error_log(json_encode($content), $type);
+		////error_log(json_encode($content), $type);
 	}
 	public function hello(){
-		error_log(json_encode($this->db));
+		//error_log(json_encode($this->db));
 
 		$this->reply('Hello from the API!');
 	}
@@ -218,73 +223,83 @@ class MyApi
 		$this->reply(true);
 	}
 
-	public function formSubmit($data){
+	public function formSubmit($data, $files){
+		error_log(json_encode($files));
 
-		error_log(json_encode($data),0);
-		//set entry
-		//upload image
+		$state = json_decode($data->state);
+		$user_id = $data->user_id;
+		$lti_id = $data->lti_id;
+		$ltiCallData = json_decode(file_get_contents("../data/".$data->lti_id."/".$data->user_id."/calldata.json"));
 
+		$image_url = $this->uploadImage($lti_id, $user_id, $files);
 
-		error_log(file_get_contents("../data/".$data->lti_id."/calldata.json"));
+		$entry = array(
+			"location_name"=>$state->location_name,
+            "location_lat"=>$state->location_lat,
+            "location_lng"=>$state->location_lng,
+            "age"=>$state->age,
+            "gender"=>$state->gender,
+            "nationality"=>$state->nationality,
+            "education"=>$state->education,
+            "tags"=>$state->tags,
+            "location_static_map"=>$state->location_static_map,
+            "image_filename"=>$image_url
+		);
 
+		//error_log("ENTRY: ".json_encode($state));
 
-		//if fail, remove entry and file
-		//reply with error
+		$state->submitted = true;
+		$state->selected_page = "map_page";
+
+		$this->setUserState($lti_id, $user_id, $state);
+		$this->setUserEntry($lti_id, $user_id, $entry);
+		$this->reply($state, 200);
 
 	}
 
-	public function setUserState($data){
+	public function setUserState($lti_id, $user_id, $state){
 		
-		$data = json_decode($data);
-		$lti_id = $data->lti_id;
-		$user_id = $data->user_id;
-		$state = json_encode($data->state);
+		$state = json_encode($state);
 
         date_default_timezone_set('Australia/Brisbane');
         $modified = date('Y-m-d H:i:s');
 		if(!$this->checkTableExists("states")){
 				$this->db->raw("CREATE TABLE states (
 					id INT(11) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
-					user_id VARCHAR(30) NOT NULL,
-					lti_id VARCHAR(30) NOT NULL,
+					user_id TEXT NOT NULL,
+					lti_id TEXT NOT NULL,
 					state MEDIUMTEXT,
 					created DATETIME DEFAULT NULL,
 					updated DATETIME DEFAULT NULL
 				)");
 		}
-		$existing = $this->checkStateExists($data);
+		$existing = $this->checkStateExists($lti_id, $user_id);
 		if(!$existing) {
 			$this->db->create('states', array('lti_id'=>$lti_id,'user_id'=>$user_id, 'state'=>$state,'created'=>$modified,'updated'=>$modified));
 		} else {
 			$this->db->query('UPDATE states SET state = :state WHERE lti_id = :lti_id AND user_id = :user_id', array( 'state' => $state, 'lti_id' => $lti_id, 'user_id' => $user_id ) );
 		}
 
-		$this->uploadImage($data);
-
-		
     }
 
-	public function setUserEntry($data){
+	public function setUserEntry($lti_id, $user_id, $entry){
 
-		$data = json_decode($data);
-		$lti_id = $data->lti_id;
-		$user_id = $data->user_id;
-		$entry = $data->entry;
+		$entry = json_encode($entry);
 
         date_default_timezone_set('Australia/Brisbane');
         $modified = date('Y-m-d H:i:s');
 		if(!$this->checkTableExists("entries")){
 				$this->db->raw("CREATE TABLE entries (
 					id INT(11) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
-					user_id VARCHAR(30) NOT NULL,
-					lti_id VARCHAR(30) NOT NULL,
+					user_id TEXT NOT NULL,
+					lti_id TEXT NOT NULL,
 					entry MEDIUMTEXT,
 					created DATETIME DEFAULT NULL,
 					updated DATETIME DEFAULT NULL
 				)");
 		}
 		
-		$existing = $this->checkEntryExists($data);
+		$existing = $this->checkEntryExists($lti_id, $user_id);
 		if(!$existing) {
 			$this->db->create('entries', array('lti_id'=>$lti_id,'user_id'=>$user_id, 'entry'=>$entry,'created'=>$modified,'updated'=>$modified));
 		} else {
@@ -294,11 +309,9 @@ class MyApi
 
 	}
     
-    public function getUserState($data){
+    public function getUserState($lti_id, $user_id){
 		
-		$data = json_decode($data);
-		$lti_id = $data->lti_id;
-		$user_id = $data->user_id;
+
 		if(!$this->checkTableExists("states")){
 			$this->reply("Table 'states' for user:".$user_id." in lti:".$lti_id." not found", 404);
 		}
@@ -311,11 +324,9 @@ class MyApi
 
     }
 
-  	public function getUserEntry($data){
+  	public function getUserEntry($lti_id, $user_id){
 
-		$data = json_decode($data);
-		$lti_id = $data->lti_id;
-		$user_id = $data->user_id;
+
 		if(!$this->checkTableExists("entries")){
 			$this->reply("Table 'entries' for user:".$user_id." in lti:".$lti_id." not found", 404);
 		}
@@ -342,21 +353,17 @@ class MyApi
 		return false;
 	}
 
-	private function checkStateExists($data){
-		$lti_id = $data->lti_id;
-		$user_id = $data->user_id;
+	private function checkStateExists($lti_id, $user_id){
 
         $select = $this->db->query( 'SELECT state FROM states WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id ) );
         while ( $row = $select->fetch() ) {
 		   return true;
         }
 		return false;
+
 	}
 
-	private function checkEntryExists($data){
-
-		$lti_id = $data->lti_id;
-		$user_id = $data->user_id;
+	private function checkEntryExists($lti_id, $user_id){
 
         $select = $this->db->query( 'SELECT entry FROM entries WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id ) );
         while ( $row = $select->fetch() ) {
@@ -365,14 +372,13 @@ class MyApi
 		return false;
 	}   
 
-	private function uploadImage($data){
-
-		$lti_id = $data->lti_id;
-		$user_id = $data->user_id;
-		$state = $data->state;
-
-		error_log("UPLOAD IMAGE:".json_encode($state->image_file));
-
+	private function uploadImage($lti_id, $user_id, $files){
+		//error_log(json_encode($files));
+		$fileName = $user_id."_screencapture.jpg";
+		$path = getcwd();
+		$path_to_dir = dirname($path).'/data/'.$lti_id."/".$user_id;//."/".$files['file']['name'];
+		move_uploaded_file($files['file']['tmp_name'], $path_to_dir."/".$fileName);
+		return $fileName;
 	}   
 
 } //MyApi class end
