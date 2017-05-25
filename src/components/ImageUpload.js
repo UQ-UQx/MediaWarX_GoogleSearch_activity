@@ -22,8 +22,11 @@ export default class ImageUpload extends React.Component {
 
             <Imagedropzone
 
+
                 image_file={this.props.image_file}
                 onImageUploadChange={this.props.onImageUploadChange}
+
+                submitted={this.props.submitted}
 
             />
 

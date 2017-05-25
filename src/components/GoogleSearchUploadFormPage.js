@@ -42,6 +42,9 @@ export default class GoogleSearchUploadForm extends React.Component {
 
 
         switch (formChange.type) {
+            case "onBlur":
+                this.props.handleFormInputOnBlur();
+                break;
             case "location_name":
                 //console.log(input.type,": ",input.value)
                 this.props.handleUploadFormItemUpdate({location_name:formChange.value})
@@ -232,6 +235,7 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
 
             <ImageUpload
 
+
                 image_file={this.props.image_file}
                 onImageUploadChange={this.onImageUploadChange}
 
@@ -239,7 +243,7 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
                 tags={this.props.tags}
                 suggested_tags={this.props.suggested_tags}
                 suggested_tags_fetching={this.props.suggested_tags_fetching}
-
+                submitted={this.props.submitted}
             />
 
             <br/>

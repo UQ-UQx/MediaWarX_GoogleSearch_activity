@@ -53,16 +53,16 @@
 				mkdir('data/'.$lti_id."/".$user_id, 0777, true);
 				error_log("Creating folder for LTI User",0);
 			}
-			if (!file_exists('data/'.$lti_id."/calldata.json")) {
-				$myfile = fopen('data/'.$lti_id."/calldata.json", "w");
+			if (!file_exists('data/'.$lti_id."/".$user_id."/calldata.json")) {
+				$myfile = fopen('data/'.$lti_id."/".$user_id."/calldata.json", "w");
 				fwrite($myfile, json_encode($calldata));
 				fclose($myfile);
 				error_log("Creating variables json file for lti",0);
 			} else {
-				$calldataString = file_get_contents("data/".$lti_id."/calldata.json");
+				$calldataString = file_get_contents("data/".$lti_id."/".$user_id."/calldata.json");
 				$calldataDecoded = json_decode($calldataString, true);
 				if(count(array_diff($calldata, $calldataDecoded)) != 0){
-					file_put_contents('data/'.$lti_id."/calldata.json", json_encode($calldata));
+					file_put_contents('data/'.$lti_id."/".$user_id."/calldata.json", json_encode($calldata));
 				}
 			}
 			umask($oldmask);

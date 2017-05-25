@@ -37,7 +37,13 @@ export default class Imagedropzone extends React.Component{
     render(){
 
         var dropzoneContent = null
-        if(this.props.image_file){
+        if(this.props.image_file || this.props.submitted){
+            var url = "data/"+$LTI_resourceID+"/"+$LTI_userID+"/"+$LTI_userID+"_screencapture.jpg";
+            var imgEL = <img src={url}/>
+            
+            if(this.props.image_file){
+                imgEL = <img src={this.props.image_file.preview}/>
+            }
 
             dropzoneContent = (
 
@@ -46,7 +52,7 @@ export default class Imagedropzone extends React.Component{
                         onClick={this.handleRemoveImageClick}><Icon name="times"/> Remove Image
                     </button>
                     <div className="dropzone-content-image-container">
-                        <img src={this.props.image_file.preview}/>
+                        {imgEL}
                     </div>
                 </div>
             )

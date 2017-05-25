@@ -54,7 +54,7 @@
 		$ctx = stream_context_create($options);
 		$fp = @fopen($endpoint, 'rb', FALSE, $ctx);
 		$response = @stream_get_contents($fp);
-
+		return $response;
 	}
 
 ?>

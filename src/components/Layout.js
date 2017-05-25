@@ -9,8 +9,23 @@ import each from "lodash/each"
 
 
 export default class Layout extends React.Component {
+
+
     constructor(props){
         super(props);
+
+         this.required = [
+            "location_name",
+            "location_lat",
+            "location_lng",
+            "age",
+            "gender",
+            "nationality",
+            "education",
+            "tags",
+            "location_static_map",
+            "image_file"
+        ]
 
         var defaultState = {
             selected_page:"form_page", // options: form_page | map_page
@@ -38,6 +53,7 @@ export default class Layout extends React.Component {
             suggested_tags_error:null,
 
             location_static_map:null,
+            submitted:false
         }
         props.appState ? this.state = props.appState : this.state = defaultState
 
@@ -46,6 +62,7 @@ export default class Layout extends React.Component {
         this.checkFormRequirementsMet = this.checkFormRequirementsMet.bind(this);
 
         this.handlePageButtonClick = this.handlePageButtonClick.bind(this);
+        this.handleFormInputOnBlur = this.handleFormInputOnBlur.bind(this);
         // this.handleUploadFormPageButtonClick = this.handleUploadFormPageButtonClick.bind(this); 
         // this.handleMapPageButtonClick = this.handleMapPageButtonClick.bind(this);
     }
@@ -69,6 +86,12 @@ export default class Layout extends React.Component {
     handleUploadFormItemUpdate(item){
 
         this.setState(item);
+
+    }
+
+    handleFormInputOnBlur(){
+
+        console.log("Bluredd");
 
     }
 
@@ -99,17 +122,20 @@ export default class Layout extends React.Component {
     handleFormSubmit(){
         console.log("form submit clicked");
 
-
+        var app = this;
         const postData = new FormData();
         postData.append('file', this.state.image_file);
         postData.append('action', "formSubmit");
-        postData.append('state', {...this.state, "location_static_map":""});
+        postData.append('state', JSON.stringify({...this.state, "location_static_map":""}));
         postData.append('user_id', $LTI_userID);
-        postData.append('lti_id',$LTI_resourceID);
+        postData.append('lti_id', $LTI_resourceID);
         axios.post('../public/api/api.php', postData)
         .then(function(response){
 
             console.log("Single Post Success: 😃",response)
+                    //this.setState({"selected_page":"map_page"})
+            app.setState(response.data);
+            
 
         }).catch(function(error){
 
@@ -117,41 +143,14 @@ export default class Layout extends React.Component {
 
         });
 
-    //    axios.all([this.uploadFormData(), this.uploadImage()])
-    //     .then(
-
-    //         axios.spread(function(formDataResponse, imageUploadResponse) {
-    //             console.log("ALL: 😃", formDataResponse, imageUploadResponse)
-    //         })
-
-    //     ).catch(function(error){
-
-    //         console.log("ALL: 😡", error.response);
-
-    //     });
-
-
- 
-
     }
-    checkFormRequirementsMet(){
-        var required = [
-            "location_name",
-            "location_lat",
-            "location_lng",
-            "age",
-            "gender",
-            "nationality",
-            "education",
-            "tags",
-            "location_static_map",
-            "image_file"
-        ]
 
+    checkFormRequirementsMet(){
+       
         var metRequirements = true;
         //console.log("--------------");
 
-        each(required, (val, key)=>{
+        each(this.required, (val, key)=>{
             if(!this.state[val]){
                 //console.log(val);
                 metRequirements = false;
@@ -205,6 +204,9 @@ export default class Layout extends React.Component {
             checkFormRequirementsMet={this.checkFormRequirementsMet}
             handleUploadFormItemUpdate={this.handleUploadFormItemUpdate}
             handleFormSubmit={this.handleFormSubmit}
+            handleFormInputOnBlur={this.handleFormInputOnBlur}
+
+            submitted={this.state.submitted}
 
         />)
     }
