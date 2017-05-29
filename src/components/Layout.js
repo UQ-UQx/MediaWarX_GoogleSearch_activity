@@ -57,8 +57,9 @@ export default class Layout extends React.Component {
 
             map:null,
             markers:[],
-            markersInBounds:[]
+            markersInBounds:[],
 
+            entries:[]
 
         }
         props.appState ? this.state = props.appState : this.state = defaultState

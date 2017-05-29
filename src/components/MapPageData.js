@@ -23,9 +23,11 @@ export default class MapPageData extends React.Component {
        
         if(this.props.markersInBounds){
             markers = this.props.markersInBounds.map(function(mark, ind){
-                return <li key={ind}>{mark}</li>
+                return <li key={mark.user_id}>{mark.user_id}<img width="100" height="auto" src={"data/"+$LTI_resourceID+"/"+mark.user_id+"/"+mark.image_filename}></img></li>
             });
         }
+
+        
         return (<div className="map-page-data-container">
             
            <ul>{markers}</ul>
