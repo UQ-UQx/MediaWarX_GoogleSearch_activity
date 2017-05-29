@@ -80,8 +80,7 @@
 
 		
         ?>
-   <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
-    </script>
+		
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=**API_KEY**&libraries=visualization"></script>
 
     </head>

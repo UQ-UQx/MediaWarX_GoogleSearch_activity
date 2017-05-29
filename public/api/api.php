@@ -79,6 +79,11 @@ class MyApi
 				//error_log("formSubmit has been sent through");
 				$this->formSubmit($this->request, $_FILES);
 				break;
+			case "getAllEntries":
+				//error_log("formSubmit has been sent through");
+				$data = json_decode($this->request->data);
+				$this->getAllEntries($data->lti_id);
+				break;
 			default:
 				$this->reply("action switch failed",400);
 			break;
@@ -337,6 +342,24 @@ class MyApi
            $this->reply($row);
         }
         $this->reply("Entry in table 'entries' for user:".$user_id." in lti:".$lti_id." not found",404);
+
+
+    }
+
+	public function getAllEntries($lti_id){
+
+
+		if(!$this->checkTableExists("entries")){
+			$this->reply("Table 'entries' for lti:".$lti_id." not found", 404);
+		}
+
+		
+        $select = $this->db->query( 'SELECT * FROM entries WHERE lti_id = :lti_id', array( 'lti_id' => $lti_id) );
+       
+		//if($select->fetch_all()){
+			$this->reply($select->all());
+		//}
+        //$this->reply("Entry in table 'entries' for lti:".$lti_id." not found",404);
 
 
     }

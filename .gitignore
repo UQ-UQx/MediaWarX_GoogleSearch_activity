@@ -5,3 +5,4 @@ public/build
 npm-debug.log
 .vscode/*
 public/data
+public/config.php
