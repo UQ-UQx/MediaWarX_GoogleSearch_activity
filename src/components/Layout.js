@@ -53,7 +53,13 @@ export default class Layout extends React.Component {
             suggested_tags_error:null,
 
             location_static_map:null,
-            submitted:false
+            submitted:false,
+
+            map:null,
+            markers:[],
+            markersInBounds:[]
+
+
         }
         props.appState ? this.state = props.appState : this.state = defaultState
 
@@ -63,6 +69,7 @@ export default class Layout extends React.Component {
 
         this.handlePageButtonClick = this.handlePageButtonClick.bind(this);
         this.handleFormInputOnBlur = this.handleFormInputOnBlur.bind(this);
+        this.handleMapPageStateUpdate = this.handleMapPageStateUpdate.bind(this);
         // this.handleUploadFormPageButtonClick = this.handleUploadFormPageButtonClick.bind(this); 
         // this.handleMapPageButtonClick = this.handleMapPageButtonClick.bind(this);
     }
@@ -71,7 +78,7 @@ export default class Layout extends React.Component {
         
     }
     componentDidMount(){
-        console.log("Layout component did mount")
+        console.log("Layout component did mount");
 
     }
     componentWillUnmount(){
@@ -175,6 +182,11 @@ export default class Layout extends React.Component {
         this.setState({"selected_page":page})
 
     }
+
+    handleMapPageStateUpdate(item){
+        this.setState(item)
+    }
+
     renderGoogleSearchUploadFormPage(){
         return (<GoogleSearchUploadFormPage
 
@@ -214,12 +226,15 @@ export default class Layout extends React.Component {
         return(<GoogleSearchMapPage
 
             location={{lat:this.state.location_lat,lng:this.state.location_lng}}
+            map={this.state.map}
+            markers={this.state.markers}
+            markersInBounds={this.state.markersInBounds}
 
+            handleMapPageStateUpdate={this.handleMapPageStateUpdate}
         />)
     }
 
     render(){
-        console.log(this.state)
         var page = this.renderGoogleSearchUploadFormPage();
 
         switch (this.state.selected_page) {

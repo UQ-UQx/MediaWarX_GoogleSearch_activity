@@ -1,7 +1,7 @@
 import "../stylesheets/GoogleSearchMapPageStyles.scss"
 
 import React from "react"
-import MapPageScreenshots from "./MapPageScreenshots"
+import MapPageData from "./MapPageData"
 import MapPageMap from "./MapPageMap"
 export default class GoogleSearchMapPage extends React.Component {
     constructor(props){
@@ -17,7 +17,6 @@ export default class GoogleSearchMapPage extends React.Component {
 
 
        
-        console.log(this.props)
 
         return (<div className="google-search-map-page-component">
 
@@ -28,16 +27,22 @@ export default class GoogleSearchMapPage extends React.Component {
                 <MapPageMap 
 
                     location={this.props.location}
-                
+                    map={this.props.map}
+                    markers={this.props.markers}
+                    markersInBounds={this.props.markersInBounds}
+
+                    handleMapPageStateUpdate={this.props.handleMapPageStateUpdate}
+
+
                 />
             
             </div>
 
-            <div className="screenshots-container">
+            <div className="map-page-data-container">
 
-                <MapPageScreenshots 
+                <MapPageData
             
-                
+                    markersInBounds={this.props.markersInBounds}
             
             
                 />

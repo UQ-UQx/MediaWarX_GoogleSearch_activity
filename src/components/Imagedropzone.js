@@ -41,7 +41,7 @@ export default class Imagedropzone extends React.Component{
             var url = "data/"+$LTI_resourceID+"/"+$LTI_userID+"/"+$LTI_userID+"_screencapture.jpg";
             var imgEL = <img src={url}/>
             
-            if(this.props.image_file){
+            if(!this.props.submitted){
                 imgEL = <img src={this.props.image_file.preview}/>
             }
 

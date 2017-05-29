@@ -70,17 +70,18 @@
 			
 
 
-			//Save user lti vars if none exist
-			if($lti->is_dev()){
-				echo "<pre>";
-				print_r($lti->calldata());
-				echo "</pre>";
-			}
+			// //Save user lti vars if none exist
+			// if($lti->is_dev()){
+			// 	echo "<pre>";
+			// 	print_r($lti->calldata());
+			// 	echo "</pre>";
+			// }
 
 
 		
         ?>
-
+   <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=**API_KEY**&libraries=visualization"></script>
 
     </head>

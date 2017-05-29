@@ -2,16 +2,10 @@
 @import "_mixins";
 
 .map-page-map-container{
-    width:40%;
-    height:800px;
-    border:1px solid black;
-    float:left;
-}
 
-.map-page-screenshots-container{
-
-    width:70%;
-    height:500px;
-    float:left;
+    width:100%;
+    height:$google-map-height;
 
 }
+
+
