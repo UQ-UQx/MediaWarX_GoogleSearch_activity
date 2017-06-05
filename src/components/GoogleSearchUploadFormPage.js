@@ -238,7 +238,7 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
 
                 image_file={this.props.image_file}
                 onImageUploadChange={this.onImageUploadChange}
-
+                allTags={this.props.allTags}
                 tag={this.props.tag}
                 tags={this.props.tags}
                 suggested_tags={this.props.suggested_tags}

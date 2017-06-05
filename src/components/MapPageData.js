@@ -2,7 +2,8 @@ import "../stylesheets/MapPageDataStyles.scss"
 
 
 import React from "react"
-
+import MapPageScreenshotViewer from "./MapPageScreenshotViewer"
+import MapPageFilterPanel from "./MapPageFilterPanel"
 export default class MapPageData extends React.Component {
     constructor(props){
         super(props)
@@ -19,20 +20,27 @@ export default class MapPageData extends React.Component {
 
     render(){
 
-        var markers = [];
-       
-        if(this.props.markersInBounds){
-            markers = this.props.markersInBounds.map(function(mark, ind){
-                return <li key={mark.user_id}>{mark.user_id}<img width="100" height="auto" src={"data/"+$LTI_resourceID+"/"+mark.user_id+"/"+mark.image_filename}></img></li>
-            });
-        }
 
         
         return (<div className="map-page-data-container">
-            
-           <ul>{markers}</ul>
-            
 
+            <MapPageScreenshotViewer 
+
+                markersInBounds={this.props.markersInBounds}
+                markers={this.props.markers}
+
+            />
+            <MapPageFilterPanel 
+                markersInBounds={this.props.markersInBounds}
+                markers={this.props.markers}
+            
+            />         
+
+            
+           {
+            // <ul>{markers}</ul>
+            // <ul>{tagslis}</ul>
+}
         </div>)
 
     }

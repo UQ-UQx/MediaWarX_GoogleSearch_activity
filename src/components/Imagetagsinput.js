@@ -3,6 +3,7 @@ import "../stylesheets/ImageTagsInputStyles.scss"
 import React from "react"
 import {Icon} from "react-fa"
 import uuid from "uuid"
+import Select from 'react-select';
 
 
 export default class Imagetagsinput extends React.Component {
@@ -11,9 +12,10 @@ export default class Imagetagsinput extends React.Component {
 
 
 
-        this.handleKeyUp = this.handleKeyUp.bind(this)
+        this.handleKeyDown = this.handleKeyDown.bind(this)
         this.handleChange = this.handleChange.bind(this)
         this.handleTagRemove = this.handleTagRemove.bind(this)
+
     }
 
     handleTagRemove(event){
@@ -25,18 +27,27 @@ export default class Imagetagsinput extends React.Component {
 
     }
 
-    handleChange(event){
+    handleChange(data){
+        console.log(data.label)
+       this.props.handleTagInputChange({
+                        type:"add_tag",
+                        value:data.label
+                    })
+
         this.props.handleTagInputChange({
+            type:"tag",
+            value:""
+        })
+        
+    }
+    handleKeyDown(event){
+
+       this.props.handleTagInputChange({
             type:"tag",
             value:event.target.value
         })
-    }
-    handleKeyUp(event){
 
-        console.log(event.keyCode);
-
-
-        switch (event.keyCode) {
+         switch (event.keyCode) {
             case 13:
                 if(this.props.tag.length > 0){
 
@@ -61,20 +72,30 @@ export default class Imagetagsinput extends React.Component {
             default:
 
         }
-
-
-
     }
 
 
     render(){
 
+        var tags = this.props.tags.map(function(tag,ind){
+                        return {label:tag.tag, value:tag.tag};
+                    });
+
+        console.log(tags);
 
 
         return (<div  className="image-tags-input-container">
 
 
             <div className="tags-container">
+             <Select
+                    name="tags-dropdown"
+                    value={this.props.tag}
+                    placeholder="Please type or select a tag"
+                    options={tags}
+                    onInputKeyDown={this.handleKeyDown}
+                    onChange={this.handleChange}
+                />
                 {
                     this.props.tags.map((obj, ind)=>{
 
@@ -99,6 +120,7 @@ export default class Imagetagsinput extends React.Component {
 
                 }
 
+                {/*
                 <input
                     type = "text"
                     class = "tag-input"
@@ -108,7 +130,9 @@ export default class Imagetagsinput extends React.Component {
                     onChange = {this.handleChange}
                     onKeyUp = {this.handleKeyUp}
                 />
+                **/}
 
+               
             </div>
 
 

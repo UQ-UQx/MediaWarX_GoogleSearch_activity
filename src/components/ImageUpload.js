@@ -32,6 +32,7 @@ export default class ImageUpload extends React.Component {
 
             <Imagetagsinput
 
+                allTags={this.props.allTags}
                 tag={this.props.tag}
                 handleTagInputChange={this.props.onImageUploadChange}
                 tags={this.props.tags}
