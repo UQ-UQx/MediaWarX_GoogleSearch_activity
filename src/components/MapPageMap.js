@@ -67,13 +67,13 @@ export default class MapPageMap extends React.Component {
 
        var self = this;
        entriesRAW.forEach(function(entryAll, ind){
-            console.log(entryAll);
+            //console.log(entryAll);
             var parsedEntry = JSON.parse(entryAll.entry);
-            console.log(parsedEntry);
+            //console.log(parsedEntry);
             markers.push(
                 new google.maps.Marker({
-                    user_id:entryAll.user_id,
-                    image_filename:parsedEntry.image_filename,
+                    ...entryAll,
+                    entry:parsedEntry,
                     position:{lat:parsedEntry.location_lat, lng:parsedEntry.location_lng},
                     map:self.props.map
                 })
@@ -123,7 +123,7 @@ export default class MapPageMap extends React.Component {
         var clusters = new MarkerClusterer(this.props.map, markers,options);
         
 
-        this.props.handleMapPageStateUpdate({markers:markers, entries:entriesRAW})
+        this.props.handleMapPageStateUpdate({markers:markers})
 
     }
 
@@ -135,6 +135,7 @@ export default class MapPageMap extends React.Component {
 
         this.props.markers.forEach(function(marker, ind){
             if(map.getBounds().contains(marker.getPosition())){
+                //console.log(marker);
                 markersInBounds.push(marker);
             }
         });

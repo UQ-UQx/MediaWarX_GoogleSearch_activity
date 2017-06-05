@@ -1,0 +1,10 @@
+@import "_constants";
+@import "_mixins";
+
+.map-page-filter-panel-container{
+    width:30%;
+    background-color:blue;
+    height:$map-page-data-container-height;
+    float:left;
+
+}

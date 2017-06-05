@@ -43,7 +43,7 @@ export default class GoogleSearchMapPage extends React.Component {
                 <MapPageData
             
                     markersInBounds={this.props.markersInBounds}
-            
+                    markers={this.props.markers}
             
                 />
             

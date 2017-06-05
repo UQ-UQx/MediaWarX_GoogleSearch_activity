@@ -44,6 +44,9 @@ export default class Layout extends React.Component {
 
             image_file:null,
 
+            allTags:[
+
+            ],
             tag:"",
             tags:[
 
@@ -58,8 +61,6 @@ export default class Layout extends React.Component {
             map:null,
             markers:[],
             markersInBounds:[],
-
-            entries:[]
 
         }
         props.appState ? this.state = props.appState : this.state = defaultState
@@ -205,6 +206,7 @@ export default class Layout extends React.Component {
 
             image_file={this.state.image_file}
 
+            allTags={this.state.allTags}
             tag={this.state.tag}
             tags={this.state.tags}
 

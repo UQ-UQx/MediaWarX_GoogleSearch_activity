@@ -236,7 +236,10 @@ class MyApi
 		$lti_id = $data->lti_id;
 		$ltiCallData = json_decode(file_get_contents("../data/".$data->lti_id."/".$data->user_id."/calldata.json"));
 
-		$image_url = $this->uploadImage($lti_id, $user_id, $files);
+		$fileDetails = $this->uploadImage($lti_id, $user_id, $files);
+		error_log("FILESSS:".json_encode($fileDetails));
+		$image_url = $fileDetails["filename"];
+		$size = $fileDetails["size"];
 
 		$entry = array(
 			"location_name"=>$state->location_name,
@@ -248,7 +251,9 @@ class MyApi
             "education"=>$state->education,
             "tags"=>$state->tags,
             "location_static_map"=>$state->location_static_map,
-            "image_filename"=>$image_url
+            "image_filename"=>$image_url,
+			"image_size"=>$size,
+			
 		);
 
 		//error_log("ENTRY: ".json_encode($state));
@@ -400,8 +405,11 @@ class MyApi
 		$fileName = $user_id."_screencapture.jpg";
 		$path = getcwd();
 		$path_to_dir = dirname($path).'/data/'.$lti_id."/".$user_id;//."/".$files['file']['name'];
+		list($width, $height) = getimagesize($files['file']['tmp_name']);
 		move_uploaded_file($files['file']['tmp_name'], $path_to_dir."/".$fileName);
-		return $fileName;
+
+
+		return array("filename"=>$fileName,"size"=>array("width"=>$width,"height"=>$height));
 	}   
 
 } //MyApi class end
