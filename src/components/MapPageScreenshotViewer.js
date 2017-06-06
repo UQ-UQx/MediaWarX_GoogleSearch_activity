@@ -12,6 +12,8 @@ export default class MapPageScreenshotViewer extends React.Component {
             PHOTO_SET:[]
         }
         this.expandScreenShot = this.expandScreenShot.bind(this)
+        this.onScreenshotPreviewMouseOver = this.onScreenshotPreviewMouseOver.bind(this)
+        this.onScreenshotPreviewMouseOut = this.onScreenshotPreviewMouseOut.bind(this)
     }
 
     expandScreenShot(event){
@@ -20,6 +22,25 @@ export default class MapPageScreenshotViewer extends React.Component {
         
     }
 
+    onScreenshotPreviewMouseOver(screenshotMarkerIndex, event){
+        
+      var icon2 = "lib/images/people35.png";
+
+       // console.log(screenshotMarkerIndex, event, this.props.markersInBounds[screenshotMarkerIndex].entry)
+       console.log(this.props.markersInBounds[screenshotMarkerIndex].entry.location_name, this.props.markersInBounds[screenshotMarkerIndex]);
+    
+        this.props.markersInBounds[screenshotMarkerIndex].setAnimation(google.maps.Animation.BOUNCE);
+        console.log(this.props.clusterer.getClusters())
+    }
+
+    onScreenshotPreviewMouseOut(screenshotMarkerIndex, event){
+
+       // console.log(screenshotMarkerIndex, event, this.props.markersInBounds[screenshotMarkerIndex].entry)
+       console.log(this.props.markersInBounds[screenshotMarkerIndex].entry.location_name, this.props.markersInBounds[screenshotMarkerIndex]);
+    
+       this.props.markersInBounds[screenshotMarkerIndex].setAnimation(null);
+
+    }
 
     componentWillReceiveProps(){
         //console.log("SCREENSHOT PREVIEW VIEW DID MOUNT", this.props)
@@ -63,28 +84,28 @@ export default class MapPageScreenshotViewer extends React.Component {
 
 
         return(<div className="map-page-screenshot-viewer-container">
-        <Gallery photos={this.state.PHOTO_SET} onClickPhoto={this.expandScreenShot} cols={3}
+        <Gallery 
+            photos={this.state.PHOTO_SET} 
+            onClickPhoto={this.expandScreenShot} 
+            cols={3}
         
-            onPhotoMouseOver={(k, e)=>{
-                console.log(k, e, this.props.markersInBounds[k].entry)
-            }}
+            onPhotoMouseOver={this.onScreenshotPreviewMouseOver}
         
-            onPhotoMouseOut={(k, e)=>{
-                console.log(k, e,   this.props.markersInBounds[k].entry)
-            }}
+            onPhotoMouseOut={this.onScreenshotPreviewMouseOut}
         />
+      {  
+        // <div className="testy" 
         
-        <div className="testy" 
-        
-        onMouseOver={(k, e)=>{
-            console.log("OVER",k, e)
-        }}
+        // onMouseOver={(k, e)=>{
+        //     console.log("OVER",k, e)
+        // }}
 
-        onMouseOut={(k, e)=>{
-            console.log("OUT",k, e)
-        }}
+        // onMouseOut={(k, e)=>{
+        //     console.log("OUT",k, e)
+        // }}
         
-        ></div>
+        // ></div>
+    }
         
         </div>)
     }
