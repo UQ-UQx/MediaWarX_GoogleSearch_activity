@@ -1,7 +1,7 @@
 import "../stylesheets/MapPageMapStyles.scss"
 
 import React from "react"
-import 'js-marker-clusterer'
+import MarkerClusterer from 'marker-clusterer-plus'
 import axios from "axios"
 
 
@@ -71,12 +71,25 @@ export default class MapPageMap extends React.Component {
             //console.log(entryAll);
             var parsedEntry = JSON.parse(entryAll.entry);
             //console.log(parsedEntry);
+            var iconWidth=30;
+            var iconHeight=45;
+            var redIconImage = {
+                url: 'lib/images/red_search_map_icon.png',
+                // This marker is 20 pixels wide by 32 pixels high.
+                scaledSize: new google.maps.Size(iconWidth, iconHeight),
+                // The origin for this image is (0, 0).
+                origin: new google.maps.Point(0, 0),
+                // The anchor for this image is the base of the flagpole at (0, 32).
+                anchor: new google.maps.Point(iconWidth/2, iconHeight)
+            };
+
             markers.push(
                 new google.maps.Marker({
                     ...entryAll,
                     entry:parsedEntry,
                     position:{lat:parsedEntry.location_lat, lng:parsedEntry.location_lng},
-                    map:self.props.map
+                    map:self.props.map,
+                    icon:redIconImage
                 })
             );
        });
@@ -85,10 +98,10 @@ export default class MapPageMap extends React.Component {
         var options = {
             imagePath: 'lib/images/m'
         };
-        var clusters = new MarkerClusterer(this.props.map, markers,options);
+        var clusterer = new MarkerClusterer(this.props.map, markers,options);
     
 
-        this.props.handleMapPageStateUpdate({markers:markers, clusters:clusters})
+        this.props.handleMapPageStateUpdate({markers:markers, clusterer:clusterer})
         
 
     }
