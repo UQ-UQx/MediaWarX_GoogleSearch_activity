@@ -61,6 +61,7 @@ export default class Layout extends React.Component {
             map:null,
             markers:[],
             markersInBounds:[],
+            clusters:null
 
         }
         props.appState ? this.state = props.appState : this.state = defaultState
@@ -186,6 +187,7 @@ export default class Layout extends React.Component {
     }
 
     handleMapPageStateUpdate(item){
+       // console.log(this.state);
         this.setState(item)
     }
 
@@ -232,7 +234,7 @@ export default class Layout extends React.Component {
             map={this.state.map}
             markers={this.state.markers}
             markersInBounds={this.state.markersInBounds}
-
+            clusters={this.state.clusters}
             handleMapPageStateUpdate={this.handleMapPageStateUpdate}
         />)
     }

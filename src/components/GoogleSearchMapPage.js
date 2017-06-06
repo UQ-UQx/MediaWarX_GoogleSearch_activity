@@ -31,6 +31,7 @@ export default class GoogleSearchMapPage extends React.Component {
                     markers={this.props.markers}
                     markersInBounds={this.props.markersInBounds}
 
+                    clusters={this.props.clusters}
                     handleMapPageStateUpdate={this.props.handleMapPageStateUpdate}
 
 
@@ -44,7 +45,8 @@ export default class GoogleSearchMapPage extends React.Component {
             
                     markersInBounds={this.props.markersInBounds}
                     markers={this.props.markers}
-            
+                    clusters={this.props.clusters}
+
                 />
             
             </div>
