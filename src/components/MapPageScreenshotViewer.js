@@ -2,16 +2,27 @@ import "../stylesheets/MapPageScreenshotViewerStyles.scss"
 
 
 import React from "react"
-import Gallery from 'react-photo-gallery';
+import Gallery from '../libs/react-photo-gallery';
 
 export default class MapPageScreenshotViewer extends React.Component {
     constructor(props){
         super(props)
 
+        this.state={
+            PHOTO_SET:[]
+        }
+        this.expandScreenShot = this.expandScreenShot.bind(this)
+    }
+
+    expandScreenShot(event){
+
+        console.log("Clicked", event, this.props.markersInBounds[event].entry);
+        
     }
 
 
-    render(){
+    componentWillReceiveProps(){
+        //console.log("SCREENSHOT PREVIEW VIEW DID MOUNT", this.props)
 
         var markers = [];
         var tags = [];
@@ -22,17 +33,14 @@ export default class MapPageScreenshotViewer extends React.Component {
                 return <div className="col-xs-6 col-md-4 screenshot-preview-container" key={mark.user_id}><img src={"data/"+$LTI_resourceID+"/"+mark.user_id+"/"+mark.entry.image_filename}></img></div>
             });
             this.props.markersInBounds.forEach(function(mark, ind){
-                console.log("BLUE",mark);
 
                var img = {
-                      src: "data/"+$LTI_resourceID+"/"+mark.user_id+"/"+mark.entry.image_filename,
+                        src: "data/"+$LTI_resourceID+"/"+mark.user_id+"/"+mark.entry.image_filename,
                         width: mark.entry.image_size.width,
                         height: mark.entry.image_size.height,
                         alt: 'image 1'
                 }
-                console.log(img);
                 PHOTO_SET.push(img);
-
                 mark.entry.tags.forEach(function(tag,ind){
                     tags.push(tag.tag);
                 })
@@ -43,16 +51,40 @@ export default class MapPageScreenshotViewer extends React.Component {
             });
 
 
+            this.setState({PHOTO_SET:PHOTO_SET})
 
         }
 
-      //  var PHOTO_SET = this.props.markersInBounds
-      console.log(PHOTO_SET)
+
+    }
+
+
+    render(){
+
 
         return(<div className="map-page-screenshot-viewer-container">
+        <Gallery photos={this.state.PHOTO_SET} onClickPhoto={this.expandScreenShot} cols={3}
+        
+            onPhotoMouseOver={(k, e)=>{
+                console.log(k, e, this.props.markersInBounds[k].entry)
+            }}
+        
+            onPhotoMouseOut={(k, e)=>{
+                console.log(k, e,   this.props.markersInBounds[k].entry)
+            }}
+        />
+        
+        <div className="testy" 
+        
+        onMouseOver={(k, e)=>{
+            console.log("OVER",k, e)
+        }}
 
-            <Gallery photos={PHOTO_SET} onClickPhoto={this.props.expandScreenShot}/>
-     
+        onMouseOut={(k, e)=>{
+            console.log("OUT",k, e)
+        }}
+        
+        ></div>
         
         </div>)
     }
