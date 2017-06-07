@@ -26,40 +26,57 @@ export default class MapPageScreenshotViewer extends React.Component {
         
       var icon2 = "lib/images/people35.png";
 
-       // console.log(screenshotMarkerIndex, event, this.props.markersInBounds[screenshotMarkerIndex].entry)
-       console.log(this.props.markersInBounds[screenshotMarkerIndex].entry.location_name, this.props.markersInBounds[screenshotMarkerIndex]);
-    
+
         this.props.markersInBounds[screenshotMarkerIndex].setAnimation(google.maps.Animation.BOUNCE);
-        console.log(this.props.clusterer.getClusters())
+        this.props.handleMapPageStateUpdate({"mousedOverMarker":this.props.markersInBounds[screenshotMarkerIndex]})
+
     }
 
     onScreenshotPreviewMouseOut(screenshotMarkerIndex, event){
 
-       // console.log(screenshotMarkerIndex, event, this.props.markersInBounds[screenshotMarkerIndex].entry)
-       console.log(this.props.markersInBounds[screenshotMarkerIndex].entry.location_name, this.props.markersInBounds[screenshotMarkerIndex]);
-    
-       this.props.markersInBounds[screenshotMarkerIndex].setAnimation(null);
+  
+        this.props.markersInBounds[screenshotMarkerIndex].setAnimation(null);
+        this.props.handleMapPageStateUpdate({"mousedOverMarker":null})
 
     }
 
     componentWillReceiveProps(){
         //console.log("SCREENSHOT PREVIEW VIEW DID MOUNT", this.props)
+       
+       //  console.log("moused over marker in screenshot viewer",this.props.mousedOverMarker)
+
+
+    }
+
+
+    render(){
 
         var markers = [];
         var tags = [];
         var tagslis = [];
         var PHOTO_SET = [];
+        var componentThis = this;
         if(this.props.markersInBounds){
             markers = this.props.markersInBounds.map(function(mark, ind){
                 return <div className="col-xs-6 col-md-4 screenshot-preview-container" key={mark.user_id}><img src={"data/"+$LTI_resourceID+"/"+mark.user_id+"/"+mark.entry.image_filename}></img></div>
             });
             this.props.markersInBounds.forEach(function(mark, ind){
 
+               var activeClassName = "";
+               if(componentThis.props.mousedOverMarker){
+                    if(componentThis.props.mousedOverMarker.id == mark.id){
+                        activeClassName = "hovered_marker_screenshot";
+                    }
+               }
+               
+
                var img = {
                         src: "data/"+$LTI_resourceID+"/"+mark.user_id+"/"+mark.entry.image_filename,
                         width: mark.entry.image_size.width,
                         height: mark.entry.image_size.height,
-                        alt: 'image 1'
+                        alt: 'image 1',
+                        activeClassName:activeClassName
+
                 }
                 PHOTO_SET.push(img);
                 mark.entry.tags.forEach(function(tag,ind){
@@ -71,21 +88,34 @@ export default class MapPageScreenshotViewer extends React.Component {
                 return <li key={ind}>{tag}</li>;
             });
 
-
-            this.setState({PHOTO_SET:PHOTO_SET})
-
         }
 
 
-    }
+        var clusterToFocus = null;
+            
+        if(this.props.clusterer && this.props.mousedOverMarker){
+           // console.log(this.props.clusterer.getClusters())
+            console.log(this.props)
+            let allClusters = this.props.clusterer.getClusters();
+            
+            let self = this;
+            allClusters.forEach(function(cluster, ind){
+                var clusterMarkers = cluster.getMarkers()
+                if(clusterMarkers.length > 1){
+                    clusterMarkers.forEach(function(marker, ind){
+                        if(marker == self.props.mousedOverMarker){
+                            clusterToFocus = cluster;
+                        }
+                    });
+                }
+            });
+        }   
 
-
-    render(){
-
+        console.log('clusterToFocus', clusterToFocus);
 
         return(<div className="map-page-screenshot-viewer-container">
         <Gallery 
-            photos={this.state.PHOTO_SET} 
+            photos={PHOTO_SET} 
             onClickPhoto={this.expandScreenShot} 
             cols={3}
         

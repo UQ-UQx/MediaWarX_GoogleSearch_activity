@@ -85,27 +85,33 @@ class Gallery extends React.Component{
                 }
 
 		let src = this.props.photos[k].src, srcset, sizes;
+        let activeClassName = "";
 		if (this.props.photos[k].srcset){
 		    srcset = this.props.photos[k].srcset.join();
 		}
 		if (this.props.photos[k].sizes){
 		    sizes = this.props.photos[k].sizes.join();
 		}
+        if (this.props.photos[k].activeClassName){
+		    activeClassName = this.props.photos[k].activeClassName;
+		}
 
 		style.margin = this.props.margin;
 		photoPreviewNodes.push(
-		    <div key={k} style={style} 
+		    <div className={"react-photo-gallery-photo-container "+activeClassName} key={k} style={style} 
                 onMouseOver={(e) => this.props.onPhotoMouseOver(k,e)}
                 onMouseOut={(e) => this.props.onPhotoMouseOut(k,e)}
+                height={commonHeight} width={commonHeight * this.props.photos[k].aspectRatio}
+                
                 >
 			<a href="#" className={k} 
             
                 onClick={(e) => this.props.onClickPhoto(k, e)}
                 
-
             >
 			    <img src={src} srcSet={srcset} sizes={sizes} style={{display:'block', border:0}} height={commonHeight} width={commonHeight * this.props.photos[k].aspectRatio} alt={this.props.photos[k].alt} />
 			</a>
+
 		    </div>
 		);
             }
@@ -153,7 +159,7 @@ Gallery.defaultProps = {
     onPhotoMouseOut: function(k,e){
 	e.preventDefault();
     },
-    margin: 2
+    margin: 4
 }
 // Gallery image style
 const style = {

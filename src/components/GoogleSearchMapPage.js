@@ -33,8 +33,8 @@ export default class GoogleSearchMapPage extends React.Component {
 
                     clusterer={this.props.clusterer}
                     handleMapPageStateUpdate={this.props.handleMapPageStateUpdate}
-
-
+                    mousedOverMarker={this.props.mousedOverMarker}
+                    
                 />
             
             </div>
@@ -46,6 +46,9 @@ export default class GoogleSearchMapPage extends React.Component {
                     markersInBounds={this.props.markersInBounds}
                     markers={this.props.markers}
                     clusterer={this.props.clusterer}
+                    mousedOverMarker={this.props.mousedOverMarker}
+                    
+                    handleMapPageStateUpdate={this.props.handleMapPageStateUpdate}
 
                 />
             

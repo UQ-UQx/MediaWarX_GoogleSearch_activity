@@ -17,7 +17,18 @@ $padding-val: $map-page-data-border-width+10;
     width:100px;
     height:100px;
     background-color: red
-    
+
+}
+
+.hovered_marker_screenshot{
+
+box-shadow: 0px 0px 0px 8px $mediawarx_red;
+}
+
+
+
+.react-photo-gallery-photo-container{
+   opacity: 1;
 }
 
 // .screenshot-preview-container{

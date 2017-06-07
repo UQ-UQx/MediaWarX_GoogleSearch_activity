@@ -29,6 +29,8 @@ export default class MapPageData extends React.Component {
                 markersInBounds={this.props.markersInBounds}
                 markers={this.props.markers}
                 clusterer={this.props.clusterer}
+                mousedOverMarker={this.props.mousedOverMarker}
+                handleMapPageStateUpdate={this.props.handleMapPageStateUpdate}
 
 
             />

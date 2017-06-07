@@ -61,7 +61,11 @@ export default class Layout extends React.Component {
             map:null,
             markers:[],
             markersInBounds:[],
-            clusterer:null
+            clusterer:null,
+            
+            mousedOverMarker:null,
+
+            activeMarker:null
 
         }
         props.appState ? this.state = props.appState : this.state = defaultState
@@ -104,6 +108,7 @@ export default class Layout extends React.Component {
         console.log("Bluredd");
 
     }
+
 
     // uploadImage(){
     //     const postData = new FormData();
@@ -187,7 +192,7 @@ export default class Layout extends React.Component {
     }
 
     handleMapPageStateUpdate(item){
-       // console.log(this.state);
+        //console.log(item);
         this.setState(item)
     }
 
@@ -235,11 +240,13 @@ export default class Layout extends React.Component {
             markers={this.state.markers}
             markersInBounds={this.state.markersInBounds}
             clusterer={this.state.clusterer}
+            mousedOverMarker={this.state.mousedOverMarker}
             handleMapPageStateUpdate={this.handleMapPageStateUpdate}
         />)
     }
 
     render(){
+
         var page = this.renderGoogleSearchUploadFormPage();
 
         switch (this.state.selected_page) {

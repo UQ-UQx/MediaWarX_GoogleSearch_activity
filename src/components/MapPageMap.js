@@ -12,6 +12,21 @@ export default class MapPageMap extends React.Component {
     
         this.mapBoundsChanged = this.mapBoundsChanged.bind(this);
         this.setMarkersInMapUsingAllEntries = this.setMarkersInMapUsingAllEntries.bind(this)
+        this.handleMarkerMouseOver = this.handleMarkerMouseOver.bind(this);
+        this.haneleMarkerMouseOut = this.handleMarkerMouseOut.bind(this);
+    }
+
+    handleMarkerMouseOver(event, marker){
+
+        //console.log("marker mouse over:", event,marker);
+        this.props.handleMapPageStateUpdate({"mousedOverMarker":marker})
+    }
+
+    handleMarkerMouseOut(event, marker){
+
+        //console.log("marker mouse over:", event,marker);
+        this.props.handleMapPageStateUpdate({"mousedOverMarker":null})
+
     }
 
     componentDidMount(){
@@ -73,8 +88,16 @@ export default class MapPageMap extends React.Component {
             //console.log(parsedEntry);
             var iconWidth=30;
             var iconHeight=45;
+
+            var iconURL = 'lib/images/red_search_map_icon.png';
+
+            //console.log("PARSED ENTRY", entryAll.user_id);
+            if(entryAll.user_id == $LTI_userID){
+                iconURL = "lib/images/red_you_map_icon.png"
+            }
+
             var redIconImage = {
-                url: 'lib/images/red_search_map_icon.png',
+                url: iconURL,
                 // This marker is 20 pixels wide by 32 pixels high.
                 scaledSize: new google.maps.Size(iconWidth, iconHeight),
                 // The origin for this image is (0, 0).
@@ -83,14 +106,19 @@ export default class MapPageMap extends React.Component {
                 anchor: new google.maps.Point(iconWidth/2, iconHeight)
             };
 
-            markers.push(
-                new google.maps.Marker({
+            var marker = new google.maps.Marker({
                     ...entryAll,
                     entry:parsedEntry,
                     position:{lat:parsedEntry.location_lat, lng:parsedEntry.location_lng},
                     map:self.props.map,
                     icon:redIconImage
-                })
+                });
+
+            marker.addListener("mouseover", (e)=>{self.handleMarkerMouseOver(e, marker)});
+            marker.addListener("mouseout", (e)=>{self.handleMarkerMouseOut(e, marker)});
+            
+            markers.push(
+                marker
             );
        });
 
@@ -107,40 +135,39 @@ export default class MapPageMap extends React.Component {
     }
 
     componentWillReceiveProps(){
-       // console.log("CWRP",this.props)
+       
+        
+
     }
 
     mapBoundsChanged(){
 
-        console.log("BOUNDS CHANGED")
+        //console.log("BOUNDS CHANGED")
 
         var map = this.props.map;
 
         var markersInBounds = [];
+        var markersInBoundsIds = [];
+        var prevMarkersInBoundsIds = [];
         var self = this;
         this.props.markers.forEach(function(marker, ind){
             if(map.getBounds().contains(marker.getPosition())){
                 
                 markersInBounds.push(marker);
+                markersInBoundsIds.push(marker.id);
+
             }
         });
 
+        this.props.markersInBounds.forEach(function(marker, ind){
+            prevMarkersInBoundsIds.push(marker.id);
 
 
-       // console.log("markers in bound",this.props.markersInBounds !== markersInBounds,this.props.markersInBounds, markersInBounds)
+        })
 
-        // for (var marker in this.props.markersInBounds) {
-        //     if (this.props.markersInBounds.hasOwnProperty(marker)) {
-        //         var element = this.props.markersInBounds[marker];
-        //     }
-        // }
-             //   console.log("CLUSTERS",this.props.clusters.clusters_)
-
-        if(this.props.markersInBounds !== markersInBounds){
+  
+        if(!_.isEqual(prevMarkersInBoundsIds.sort(),markersInBoundsIds.sort())){
             this.props.handleMapPageStateUpdate({markersInBounds:markersInBounds})
-
-        }else{
-            console.log("still the same")
         }
 
     }
@@ -174,7 +201,6 @@ export default class MapPageMap extends React.Component {
 //         heatmap.setMap(this.props.map);
 
 
-        
         return (<div className="map-component-container">
        
         
