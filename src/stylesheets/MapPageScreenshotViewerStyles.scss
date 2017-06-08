@@ -10,7 +10,7 @@ $padding-val: $map-page-data-border-width+10;
     height:$map-page-data-container-height;
     float:left;
     padding:$padding-val+unquote("px");
-    
+    overflow-y: scroll;
 
 }
 .testy{
