@@ -38,6 +38,7 @@ export default class ImageUpload extends React.Component {
                 tags={this.props.tags}
                 suggested_tags={this.props.suggested_tags}
                 suggested_tags_fetching={this.props.suggested_tags_fetching}
+                submitted={this.props.submitted}
 
             />
 

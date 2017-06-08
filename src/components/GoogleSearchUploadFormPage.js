@@ -90,7 +90,12 @@ export default class GoogleSearchUploadForm extends React.Component {
             case "education":
                 this.props.handleUploadFormItemUpdate({education:formChange.value})
                 break;
-
+            case "dateOfCapture":
+                this.props.handleUploadFormItemUpdate({dateOfCapture:formChange.value})
+                break;
+            case "device":
+                this.props.handleUploadFormItemUpdate({device:formChange.value})
+                break;
 
             default:
 
@@ -203,6 +208,12 @@ export default class GoogleSearchUploadForm extends React.Component {
             disabled_class = ""
         }
 
+        
+        var submitButton = (<button className={"btn btn-primary "+disabled_class} type="submit" onClick={requirementsMet ? this.handleSubmit:null}>Submit</button>);
+
+        if(this.props.submitted){
+            submitButton = ""
+        }
 
         return (<div className="google-search-upload-form-component">
             <h3>Google Search Upload</h3>
@@ -225,8 +236,14 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
                  gender={this.props.gender}
                  nationality={this.props.nationality}
                  education={this.props.education}
+                dateOfCapture={this.props.dateOfCapture}
+                device={this.props.device}
+
 
                  onSimpleFormChange={this.onSimpleFormChange}
+
+                submitted={this.props.submitted}
+
 
              />
 
@@ -247,8 +264,8 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
             />
 
             <br/>
-            <button className={"btn btn-primary "+disabled_class} type="submit" onClick={requirementsMet ? this.handleSubmit:null}>Submit</button>&nbsp;
             {/* <button className={"btn btn-info "+disabled_class} type="button" onClick={requirementsMet ? this.handleSavePDF:null}>Save as PDF</button> */}
+            {submitButton}
             <button className={"btn btn-info "} type="button" onClick={this.handleSavePDF}>Save as PDF</button>
 
         </div>)
