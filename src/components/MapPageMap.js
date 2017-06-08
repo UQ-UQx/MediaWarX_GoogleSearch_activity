@@ -175,7 +175,25 @@ export default class MapPageMap extends React.Component {
     render(){
 
        
+        if(this.props.clusterToFocus){
+            console.log(this.props.clusterToFocus.clusterIcon_);
+            this.props.clusterToFocus.clusterIcon_.div_.className += " cluster-to-highlight";
+            console.log(this.props.clusterToFocus.clusterIcon_.div_.className);
 
+        }
+
+
+        return (<div className="map-component-container">
+       
+        
+            <div className="map-container" ref="map">this should be map</div>
+        
+        
+        </div>)
+
+    }
+
+}
 //  var heatmapData = [
 //   {location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
 //   new google.maps.LatLng(37.782, -122.445),
@@ -199,16 +217,3 @@ export default class MapPageMap extends React.Component {
 //         });
 
 //         heatmap.setMap(this.props.map);
-
-
-        return (<div className="map-component-container">
-       
-        
-            <div className="map-container" ref="map">this should be map</div>
-        
-        
-        </div>)
-
-    }
-
-}

@@ -65,6 +65,8 @@ export default class Layout extends React.Component {
             
             mousedOverMarker:null,
 
+            clusterToFocus:null, //sets the cluster that needs to be animated when user selects a preview image 
+
             activeMarker:null
 
         }
@@ -242,6 +244,8 @@ export default class Layout extends React.Component {
             clusterer={this.state.clusterer}
             mousedOverMarker={this.state.mousedOverMarker}
             handleMapPageStateUpdate={this.handleMapPageStateUpdate}
+
+            clusterToFocus={this.state.clusterToFocus}
         />)
     }
 

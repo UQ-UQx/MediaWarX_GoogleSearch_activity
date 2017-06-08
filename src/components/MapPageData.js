@@ -31,13 +31,15 @@ export default class MapPageData extends React.Component {
                 clusterer={this.props.clusterer}
                 mousedOverMarker={this.props.mousedOverMarker}
                 handleMapPageStateUpdate={this.props.handleMapPageStateUpdate}
+                            clusterToFocus={this.props.clusterToFocus}
 
 
             />
             <MapPageFilterPanel 
                 markersInBounds={this.props.markersInBounds}
                 markers={this.props.markers}
-            
+                clusterToFocus={this.props.clusterToFocus}
+
             />         
 
             
