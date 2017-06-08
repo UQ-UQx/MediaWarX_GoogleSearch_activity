@@ -20,7 +20,8 @@ export default class Layout extends React.Component {
             "location_lng",
             "age",
             "gender",
-            "nationality",
+            "dateOfCapture",
+            "device",
             "education",
             "tags",
             "location_static_map",
@@ -41,7 +42,9 @@ export default class Layout extends React.Component {
             gender:null,
             nationality:null,
             education:null,
-
+            dateOfCapture:null,
+            device:null,
+            
             image_file:null,
 
             allTags:[
@@ -215,6 +218,8 @@ export default class Layout extends React.Component {
             gender={this.state.gender}
             nationality={this.state.nationality}
             education={this.state.education}
+            dateOfCapture={this.state.dateOfCapture}
+            device={this.state.device}
 
             image_file={this.state.image_file}
 
@@ -267,6 +272,7 @@ export default class Layout extends React.Component {
                 break;
             default:
         }
+
 
 
         return (

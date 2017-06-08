@@ -5,6 +5,11 @@ import educationlevels from "../data/educationlevels.json";
 
 import Select from 'react-select';
 
+import DatePicker from 'react-datepicker';
+
+import 'react-datepicker/dist/react-datepicker.css';
+
+
 import React from "react"
 import uuid from "uuid"
 
@@ -20,6 +25,8 @@ export default class SimpleForm extends React.Component {
         this.onGenderChange = this.onGenderChange.bind(this)
         this.onNationalityChange = this.onNationalityChange.bind(this)
         this.onEducationChange = this.onEducationChange.bind(this)
+        this.onDateChange = this.onDateChange.bind(this)
+        this.onDeviceChange = this.onDeviceChange.bind(this)
 
     }
 
@@ -71,6 +78,25 @@ export default class SimpleForm extends React.Component {
     }
 
 
+    onDateChange(date) {
+        this.props.onSimpleFormChange({
+            type:"dateOfCapture",
+            value:date
+        });
+    }
+
+    onDeviceChange(data) {
+        var device = null;
+        if(data){
+            device = data.value
+        }
+
+        this.props.onSimpleFormChange({
+            type:"device",
+            value:device
+        });
+    }
+
 
     renderForm(){
 
@@ -80,27 +106,38 @@ export default class SimpleForm extends React.Component {
             { value: 'Other', label: 'Other' }
         ]
 
-        return (<div className="simple-form-container">
+        const device_options = [
+            { value: 'Windows Desktop', label: 'Windows Desktop' },
+            { value: 'Macintosh Desktop', label: 'Macintosh Desktop' },
+            { value: 'Windows Laptop', label: 'Windows Laptop' },
+            { value: 'Macintosh Laptop', label: 'Macintosh Laptop' },
+            { value: 'Mobile Phone (iOS)', label: 'Mobile Phone (iOS)' },
+            { value: 'Mobile Phone (Andriod)', label: 'Mobile Phone (Andriod)' },
+            { value: 'Mobile Phone (Other)', label: 'Mobile Phone (Other)' },
+            { value: 'Tablet (iOS)', label: 'Tablet (iOS)' },
+            { value: 'Tablet (Andriod)', label: 'Tablet (Andriod)' },
+            { value: 'Tablet (Other)', label: 'Tablet (Other)' },
+        ]
 
-            <table className="form-inputs-table">
-                <tbody>
-                <tr>
-                    <td><span className="form-input-label-span">Location:</span></td>
-                    <td>
-                        <LocationInput
+        console.log(this.props)
+        let locationInput = this.props.location_name, 
+            ageInput = this.props.age, 
+            genderInput = this.props.gender, 
+            educationInput = this.props.education, 
+            dateOfCaptureInput = this.props.dateOfCapture,
+            deviceInput = this.props.device;
+
+            
+        if(!this.props.submitted){
+
+            locationInput = (<LocationInput
                             value={this.props.location_name}
                             location_suggestion={this.props.location_suggestion}
                             location_suggestion_fetching={this.props.location_suggestion_fetching}
                             location_error={this.props.location_error}
                             onLocationInputChange={this.onLocationInputChange}
-                        />
-                    </td>
-                </tr>
-                <tr>
-                    <td><span className="form-input-label-span">Age:</span></td>
-                    <td>
-                        <div className="age-input-container">
-                            <input
+                        />)
+            ageInput = (<input
                                 type="number"
                                 class="age-input"
                                 id="age-input"
@@ -109,7 +146,53 @@ export default class SimpleForm extends React.Component {
                                 max="122"
                                 value={this.props.age}
                                 onChange={this.onAgeInputChange}
-                            />
+                            />)
+            genderInput = (<Select
+                            	name="gender-dropdown"
+                                value={this.props.gender}
+                            	placeholder="Please Select You Gender"
+                            	options={gender_options}
+                            	onChange={this.onGenderChange}
+                            />)
+            educationInput = (<Select
+                            	name="education-dropdown"
+                                value={this.props.education}
+                            	placeholder="Please Select Your Level of Education"
+                            	options={educationlevels}
+                            	onChange={this.onEducationChange}
+                            />)
+            dateOfCaptureInput = (<DatePicker
+                                selected={this.props.dateOfCapture}
+                                onChange={this.onDateChange}
+                                isClearable={true}
+                               // className="date-picker-custom-styles"
+                                calendarClassName="date-picker-calendar-custom-styles"
+                            />)
+            deviceInput = (<Select
+                            	name="education-dropdown"
+                                value={this.props.device}
+                            	placeholder="Please Select Your Device"
+                            	options={device_options}
+                            	onChange={this.onDeviceChange}
+                            />)
+        }
+
+
+        return (<div className="simple-form-container">
+
+            <table className="form-inputs-table">
+                <tbody>
+                <tr>
+                    <td><span className="form-input-label-span">Location:</span></td>
+                    <td>
+                        {locationInput}
+                    </td>
+                </tr>
+                <tr>
+                    <td><span className="form-input-label-span">Age:</span></td>
+                    <td>
+                        <div className="age-input-container">
+                            {ageInput}
                         </div>
                     </td>
                 </tr>
@@ -117,43 +200,58 @@ export default class SimpleForm extends React.Component {
                     <td><span className="form-input-label-span">Gender:</span></td>
                     <td>
                         <div className="gender-dropdown-container">
-                            <Select
-                            	name="gender-dropdown"
-                                value={this.props.gender}
-                            	placeholder="Please Select You Gender"
-                            	options={gender_options}
-                            	onChange={this.onGenderChange}
-                            />
+                            {genderInput}
                         </div>
                     </td>
                 </tr>
                 <tr>
-                    <td><span className="form-input-label-span">Ethnicity:</span></td>
-                    <td>
-                        <div className="nationality-dropdown-container">
-                            <Select
-                            	name="gender-dropdown"
-                                value={this.props.nationality}
-                            	placeholder="Please Select You Nationality"
-                            	options={nationalities}
-                            	onChange={this.onNationalityChange}
-                            />
-                        </div>
-                    </td>
-                </tr>
-                <tr>
+
+                    {
+                        // <td><span className="form-input-label-span">Ethnicity:</span></td>
+                        // <td>
+                        //     <div className="nationality-dropdown-container">
+                        //         <Select
+                        //             name="gender-dropdown"
+                        //             value={this.props.nationality}
+                        //             placeholder="Please Select You Nationality"
+                        //             options={nationalities}
+                        //             onChange={this.onNationalityChange}
+                        //         />
+                        //     </div>
+                        // </td>
+                    }    
+                 
                     <td><span className="form-input-label-span">Education:</span></td>
                     <td>
                         <div className="education-dropdown-container">
-                            <Select
-                            	name="education-dropdown"
-                                value={this.props.education}
-                            	placeholder="Please Select Your Level of Education"
-                            	options={educationlevels}
-                            	onChange={this.onEducationChange}
-                            />
+                            {educationInput}
                         </div>
                     </td>
+                
+                
+                </tr>
+                <tr>
+                   
+                    <td><span className="form-input-label-span">Date of Screencapture:</span></td>
+                    <td>
+                        <div className="date-of-capture-container">
+                             {dateOfCaptureInput}
+                        </div>
+                    </td>
+
+               
+                </tr>
+
+                <tr>
+                   
+                <td><span className="form-input-label-span">Device:</span></td>
+                    <td>
+                        <div className="device-container">
+                             {deviceInput}
+                        </div>
+                    </td>
+
+               
                 </tr>
                 </tbody>
             </table>
