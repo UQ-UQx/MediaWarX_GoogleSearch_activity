@@ -13,25 +13,67 @@ export default class MapPageMap extends React.Component {
         this.mapBoundsChanged = this.mapBoundsChanged.bind(this);
         this.setMarkersInMapUsingAllEntries = this.setMarkersInMapUsingAllEntries.bind(this)
         this.handleMarkerMouseOver = this.handleMarkerMouseOver.bind(this);
-        this.haneleMarkerMouseOut = this.handleMarkerMouseOut.bind(this);
+        this.handleMarkerMouseOut = this.handleMarkerMouseOut.bind(this);
+        this.handleClusterMouseOver = this.handleClusterMouseOver.bind(this);
+        this.handleClusterMouseOut = this.handleClusterMouseOut.bind(this);
+        this.handleClusterClick = this.handleClusterClick.bind(this);
     }
 
     handleMarkerMouseOver(event, marker){
 
-        //console.log("marker mouse over:", event,marker);
-        this.props.handleMapPageStateUpdate({"mousedOverMarker":marker})
+        ////console.log("marker mouse over:", event,marker);
+        if(this.props.mousedOverMarkers.length > 0){
+            this.props.handleMapPageStateUpdate({"mousedOverMarkers":[...this.props.mousedOverMarkers, marker]})
+        }else{
+            this.props.handleMapPageStateUpdate({"mousedOverMarkers":[...this.props.mousedOverMarkers, marker]})
+        }
     }
 
     handleMarkerMouseOut(event, marker){
 
-        //console.log("marker mouse over:", event,marker);
-        this.props.handleMapPageStateUpdate({"mousedOverMarker":null})
+        ////console.log("marker mouse over:", event,marker);
+        this.props.handleMapPageStateUpdate({"mousedOverMarkers":[]})
+
+    }
+
+    handleClusterClick(cluster){
+
+        this.props.handleMapPageStateUpdate({clusterToFocus:null});
+        this.props.handleMapPageStateUpdate({"mousedOverMarkers":[]})
+
+
+    }
+    handleClusterMouseOver(cluster){
+
+        //console.log("moused over cluster", cluster.getMarkers());
+        
+        // cluster.clusterIcon_.div_.className = cluster.clusterIcon_.div_.className
+        //     .replace(new RegExp('(?:^|\\s)'+ 'cluster-to-highlight' + '(?:\\s|$)'), ' ');
+
+        this.props.handleMapPageStateUpdate({clusterToFocus:cluster});
+
+        this.props.handleMapPageStateUpdate({"mousedOverMarkers":[...this.props.mousedOverMarkers, ...cluster.getMarkers()]})
+
+    }
+
+    handleClusterMouseOut(cluster){
+
+       this.props.handleMapPageStateUpdate({mousedOverMarkers:[]})
+
+        if(this.props.clusterToFocus){
+            
+            // this.props.clusterToFocus.clusterIcon_.div_.className = this.props.clusterToFocus.clusterIcon_.div_.className
+            // .replace(new RegExp('(?:^|\\s)'+ 'cluster-to-highlight' + '(?:\\s|$)'), ' ');
+                    
+            this.props.handleMapPageStateUpdate({clusterToFocus:null});
+
+        }
 
     }
 
     componentDidMount(){
 
-        console.log("MapPageMap component did mount", this.props)
+        //console.log("MapPageMap component did mount", this.props)
 
         var lat = 37.774546;
         var lng = -122.433523;
@@ -65,11 +107,11 @@ export default class MapPageMap extends React.Component {
             }
         })
         .then(function (response) {
-            console.log("This shoudl work", self, response.data)
+            //console.log("This shoudl work", self, response.data)
             self.setMarkersInMapUsingAllEntries(response.data)
         })
         .catch(function (error) {
-            console.log("WOOOOOWOW",error)
+            //console.log("WOOOOOWOW",error)
         });
 
 
@@ -83,15 +125,15 @@ export default class MapPageMap extends React.Component {
 
        var self = this;
        entriesRAW.forEach(function(entryAll, ind){
-            //console.log(entryAll);
+            ////console.log(entryAll);
             var parsedEntry = JSON.parse(entryAll.entry);
-            //console.log(parsedEntry);
+            ////console.log(parsedEntry);
             var iconWidth=30;
             var iconHeight=45;
 
             var iconURL = 'lib/images/red_search_map_icon.png';
 
-            //console.log("PARSED ENTRY", entryAll.user_id);
+            ////console.log("PARSED ENTRY", entryAll.user_id);
             if(entryAll.user_id == $LTI_userID){
                 iconURL = "lib/images/red_you_map_icon.png"
             }
@@ -128,6 +170,9 @@ export default class MapPageMap extends React.Component {
         };
         var clusterer = new MarkerClusterer(this.props.map, markers,options);
     
+        clusterer.addListener("mouseover", (cluster)=>{this.handleClusterMouseOver(cluster)});
+        clusterer.addListener("mouseout", (cluster)=>{this.handleClusterMouseOut(cluster)});
+        clusterer.addListener("click", (cluster)=>{this.handleClusterClick(cluster)});
 
         this.props.handleMapPageStateUpdate({markers:markers, clusterer:clusterer})
         
@@ -142,7 +187,7 @@ export default class MapPageMap extends React.Component {
 
     mapBoundsChanged(){
 
-        //console.log("BOUNDS CHANGED")
+        ////console.log("BOUNDS CHANGED")
 
         var map = this.props.map;
 
@@ -174,12 +219,28 @@ export default class MapPageMap extends React.Component {
 
     render(){
 
-       
+    console.log(this.props)
         if(this.props.clusterToFocus){
-            console.log(this.props.clusterToFocus.clusterIcon_);
-            this.props.clusterToFocus.clusterIcon_.div_.className += " cluster-to-highlight";
-            console.log(this.props.clusterToFocus.clusterIcon_.div_.className);
 
+            if(!this.props.clusterToFocus.clusterIcon_.div_.classList.contains("cluster-to-highlight")){
+                this.props.clusterToFocus.clusterIcon_.div_.classList.add("cluster-to-highlight")
+            }
+
+            
+        }else{
+            if(this.props.clusterer){
+                if(this.props.clusterer.getClusters().length > 0){
+                    this.props.clusterer.getClusters().forEach((cluster, ind)=>{
+                        if(cluster.getMarkers().length > 1){
+                            console.log(cluster)
+                            if(cluster.clusterIcon_.div_){
+                                cluster.clusterIcon_.div_.classList.remove("cluster-to-highlight")
+                            }
+                        }
+                    });
+                }
+            }
+                
         }
 
 

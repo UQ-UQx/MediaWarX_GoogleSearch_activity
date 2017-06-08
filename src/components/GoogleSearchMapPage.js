@@ -16,12 +16,11 @@ export default class GoogleSearchMapPage extends React.Component {
     render(){
 
 
-       
+        //console.log("GoogleSearchMapPage",this.props)
+
 
         return (<div className="google-search-map-page-component">
 
-        
-            This is the google search map page component woo!!
 
             <div className="map-page-map-container">
                 <MapPageMap 
@@ -33,7 +32,7 @@ export default class GoogleSearchMapPage extends React.Component {
 
                     clusterer={this.props.clusterer}
                     handleMapPageStateUpdate={this.props.handleMapPageStateUpdate}
-                    mousedOverMarker={this.props.mousedOverMarker}
+                    mousedOverMarkers={this.props.mousedOverMarkers}
                     clusterToFocus={this.props.clusterToFocus}
 
                 />
@@ -43,11 +42,13 @@ export default class GoogleSearchMapPage extends React.Component {
             <div className="map-page-data-container">
 
                 <MapPageData
-            
+                    
+                    map={this.props.map}
+
                     markersInBounds={this.props.markersInBounds}
                     markers={this.props.markers}
                     clusterer={this.props.clusterer}
-                    mousedOverMarker={this.props.mousedOverMarker}
+                    mousedOverMarkers={this.props.mousedOverMarkers}
                     
                     handleMapPageStateUpdate={this.props.handleMapPageStateUpdate}
                     clusterToFocus={this.props.clusterToFocus}

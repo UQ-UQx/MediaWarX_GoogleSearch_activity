@@ -28,7 +28,7 @@ export default class Imagetagsinput extends React.Component {
     }
 
     handleChange(data){
-        console.log(data.label)
+        //console.log(data.label)
        this.props.handleTagInputChange({
                         type:"add_tag",
                         value:data.label
@@ -81,7 +81,7 @@ export default class Imagetagsinput extends React.Component {
                         return {label:tag.tag, value:tag.tag};
                     });
 
-        console.log(tags);
+        //console.log(tags);
 
 
         return (<div  className="image-tags-input-container">

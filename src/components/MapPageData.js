@@ -14,22 +14,24 @@ export default class MapPageData extends React.Component {
 
     componentDidMount(){
 
-        console.log("Data container did mount");
+        //console.log("Data container did mount");
 
     }
 
     render(){
 
 
+        //console.log("Map Page Data", this.props)
         
         return (<div className="map-page-data-container">
 
             <MapPageScreenshotViewer 
+                    map={this.props.map}
 
                 markersInBounds={this.props.markersInBounds}
                 markers={this.props.markers}
                 clusterer={this.props.clusterer}
-                mousedOverMarker={this.props.mousedOverMarker}
+                mousedOverMarkers={this.props.mousedOverMarkers}
                 handleMapPageStateUpdate={this.props.handleMapPageStateUpdate}
                             clusterToFocus={this.props.clusterToFocus}
 

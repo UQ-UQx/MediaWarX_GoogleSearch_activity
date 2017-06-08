@@ -95,7 +95,7 @@ export default class LocationInput extends React.Component {
 
                 axios.get('https://maps.googleapis.com/maps/api/geocode/json?address='+newInputValue+'&key='+this.googleAPIKEY)
                    .then((response)=>{
-                       console.log(response.data);
+                       //console.log(response.data);
                        if(response.data.status != "ZERO_RESULTS"){
 
 
