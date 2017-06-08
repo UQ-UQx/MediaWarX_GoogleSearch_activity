@@ -154,7 +154,11 @@ export default class MapPageScreenshotViewer extends React.Component {
 
         }
 
+        var colNum = 3;
 
+        if(this.props.markersInBounds.length < 3){
+            colNum = this.props.markersInBounds.length
+        }
        
 
         
@@ -162,7 +166,7 @@ export default class MapPageScreenshotViewer extends React.Component {
         <Gallery 
             photos={PHOTO_SET} 
             onClickPhoto={this.expandScreenShot} 
-            cols={3}
+            cols={colNum}
         
             onPhotoMouseOver={this.onScreenshotPreviewMouseOver}
         
