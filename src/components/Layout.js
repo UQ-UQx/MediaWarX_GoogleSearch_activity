@@ -63,13 +63,15 @@ export default class Layout extends React.Component {
             markersInBounds:[],
             clusterer:null,
             
-            mousedOverMarker:null,
 
-            clusterToFocus:null, //sets the cluster that needs to be animated when user selects a preview image 
+            mousedOverMarkers:[],
+
+            clusterToFocus:null, 
 
             activeMarker:null
 
         }
+        //console.log(defaultState)
         props.appState ? this.state = props.appState : this.state = defaultState
 
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -83,15 +85,15 @@ export default class Layout extends React.Component {
         // this.handleMapPageButtonClick = this.handleMapPageButtonClick.bind(this);
     }
     componentWillMount(){
-        console.log("Layout component will mount")
+        //console.log("Layout component will mount")
         
     }
     componentDidMount(){
-        console.log("Layout component did mount");
+        //console.log("Layout component did mount");
 
     }
     componentWillUnmount(){
-        console.log("Layout component will unmount")
+        //console.log("Layout component will unmount")
     }
 
     updateStateWithServerValues(serverState){
@@ -107,7 +109,7 @@ export default class Layout extends React.Component {
 
     handleFormInputOnBlur(){
 
-        console.log("Bluredd");
+        //console.log("Bluredd");
 
     }
 
@@ -137,7 +139,7 @@ export default class Layout extends React.Component {
     //     })
     // }
     handleFormSubmit(){
-        console.log("form submit clicked");
+        //console.log("form submit clicked");
 
         var app = this;
         const postData = new FormData();
@@ -149,14 +151,14 @@ export default class Layout extends React.Component {
         axios.post('../public/api/api.php', postData)
         .then(function(response){
 
-            console.log("Single Post Success: 😃",response)
+            //console.log("Single Post Success: 😃",response)
                     //this.setState({"selected_page":"map_page"})
             app.setState(response.data);
             
 
         }).catch(function(error){
 
-            console.log("Single Post Fail: 😡",error.response);
+            //console.log("Single Post Fail: 😡",error.response);
 
         });
 
@@ -165,17 +167,17 @@ export default class Layout extends React.Component {
     checkFormRequirementsMet(){
        
         var metRequirements = true;
-        //console.log("--------------");
+        ////console.log("--------------");
 
         each(this.required, (val, key)=>{
             if(!this.state[val]){
-                //console.log(val);
+                ////console.log(val);
                 metRequirements = false;
             }
 
             if(val == "tags"){
                 if(this.state[val].length == 0){
-                    //console.log(val);
+                    ////console.log(val);
                     metRequirements = false;
                 }
             }
@@ -187,16 +189,17 @@ export default class Layout extends React.Component {
     }
     handlePageButtonClick(page){
 
-        console.log("Page button clicked", page);
+        //console.log("Page button clicked", page);
 
         this.setState({"selected_page":page})
 
     }
 
     handleMapPageStateUpdate(item){
-        //console.log(item);
+        ////console.log(item);
         this.setState(item)
     }
+    
 
     renderGoogleSearchUploadFormPage(){
         return (<GoogleSearchUploadFormPage
@@ -242,7 +245,7 @@ export default class Layout extends React.Component {
             markers={this.state.markers}
             markersInBounds={this.state.markersInBounds}
             clusterer={this.state.clusterer}
-            mousedOverMarker={this.state.mousedOverMarker}
+            mousedOverMarkers={this.state.mousedOverMarkers}
             handleMapPageStateUpdate={this.handleMapPageStateUpdate}
 
             clusterToFocus={this.state.clusterToFocus}
@@ -250,6 +253,8 @@ export default class Layout extends React.Component {
     }
 
     render(){
+                //console.log("Layout",this.state)
+
 
         var page = this.renderGoogleSearchUploadFormPage();
 

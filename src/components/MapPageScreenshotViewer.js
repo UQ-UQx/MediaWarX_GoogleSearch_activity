@@ -18,23 +18,46 @@ export default class MapPageScreenshotViewer extends React.Component {
 
     expandScreenShot(event){
 
-        console.log("Clicked", event, this.props.markersInBounds[event].entry);
+        //console.log("Clicked", event, this.props.markersInBounds[event].entry);
+
+        this.props.markersInBounds[event].setAnimation(null);
+        this.props.handleMapPageStateUpdate({mousedOverMarkers:[]})
+
+        if(this.props.clusterToFocus){
+            
+            // this.props.clusterToFocus.clusterIcon_.div_.className = this.props.clusterToFocus.clusterIcon_.div_.className
+            // .replace(new RegExp('(?:^|\\s)'+ 'cluster-to-highlight' + '(?:\\s|$)'), ' ');
+                    
+            this.props.handleMapPageStateUpdate({clusterToFocus:null});
+
+        }
+
+        this.props.map.setZoom(17);
+        this.props.map.panTo(this.props.markersInBounds[event].position);
         
     }
 
     onScreenshotPreviewMouseOver(screenshotMarkerIndex, event){
         
-      var icon2 = "lib/images/people35.png";
 
-
+        //console.log(this.props.mousedOverMarkers)
         this.props.markersInBounds[screenshotMarkerIndex].setAnimation(google.maps.Animation.BOUNCE);
-        this.props.handleMapPageStateUpdate({"mousedOverMarker":this.props.markersInBounds[screenshotMarkerIndex]})
+        //this.props.handleMapPageStateUpdate({"mousedOverMarkers":[...this.props.mousedOverMarkers, this.props.markersInBounds[screenshotMarkerIndex]]})
+      
 
+       
+        
+        if(this.props.mousedOverMarkers.length > 0){
+            this.props.handleMapPageStateUpdate({"mousedOverMarkers":[...this.props.mousedOverMarkers, this.props.markersInBounds[screenshotMarkerIndex]]})
+        }else{
+            this.props.handleMapPageStateUpdate({"mousedOverMarkers":[...this.props.mousedOverMarkers, this.props.markersInBounds[screenshotMarkerIndex]]})
+        }
+        
         var clusterToFocus = null;
             
         if(this.props.clusterer){
-           // console.log(this.props.clusterer.getClusters())
-            //console.log(this.props)
+           // //console.log(this.props.clusterer.getClusters())
+            ////console.log(this.props)
             let allClusters = this.props.clusterer.getClusters();
             
             let self = this;
@@ -56,25 +79,27 @@ export default class MapPageScreenshotViewer extends React.Component {
 
     onScreenshotPreviewMouseOut(screenshotMarkerIndex, event){
 
+        this.props.markersInBounds[screenshotMarkerIndex].setAnimation(null);
+        this.props.handleMapPageStateUpdate({mousedOverMarkers:[]})
+
         if(this.props.clusterToFocus){
             
-            this.props.clusterToFocus.clusterIcon_.div_.className = this.props.clusterToFocus.clusterIcon_.div_.className
-            .replace(new RegExp('(?:^|\\s)'+ 'cluster-to-highlight' + '(?:\\s|$)'), ' ');
+            // this.props.clusterToFocus.clusterIcon_.div_.className = this.props.clusterToFocus.clusterIcon_.div_.className
+            // .replace(new RegExp('(?:^|\\s)'+ 'cluster-to-highlight' + '(?:\\s|$)'), ' ');
                     
             this.props.handleMapPageStateUpdate({clusterToFocus:null});
 
         }
        
   
-        this.props.markersInBounds[screenshotMarkerIndex].setAnimation(null);
-        this.props.handleMapPageStateUpdate({mousedOverMarker:null})
+        
 
     }
 
     componentWillReceiveProps(){
-        //console.log("SCREENSHOT PREVIEW VIEW DID MOUNT", this.props)
+        ////console.log("SCREENSHOT PREVIEW VIEW DID MOUNT", this.props)
        
-       //  console.log("moused over marker in screenshot viewer",this.props.mousedOverMarker)
+       //  //console.log("moused over marker in screenshot viewer",this.props.mousedOverMarkers)
 
 
     }
@@ -94,10 +119,18 @@ export default class MapPageScreenshotViewer extends React.Component {
             this.props.markersInBounds.forEach(function(mark, ind){
 
                var activeClassName = "";
-               if(componentThis.props.mousedOverMarker){
-                    if(componentThis.props.mousedOverMarker.id == mark.id){
-                        activeClassName = "hovered_marker_screenshot";
-                    }
+
+
+               if(componentThis.props.mousedOverMarkers){
+
+                   componentThis.props.mousedOverMarkers.forEach(function(mousedOverMarker, ind){
+
+                        if(mousedOverMarker.id == mark.id){
+                            activeClassName = "hovered_marker_screenshot";
+                        }
+
+                   })
+                    
                }
                
 
@@ -139,11 +172,11 @@ export default class MapPageScreenshotViewer extends React.Component {
         // <div className="testy" 
         
         // onMouseOver={(k, e)=>{
-        //     console.log("OVER",k, e)
+        //     //console.log("OVER",k, e)
         // }}
 
         // onMouseOut={(k, e)=>{
-        //     console.log("OUT",k, e)
+        //     //console.log("OUT",k, e)
         // }}
         
         // ></div>
