@@ -30,13 +30,44 @@ export default class MapPageScreenshotViewer extends React.Component {
         this.props.markersInBounds[screenshotMarkerIndex].setAnimation(google.maps.Animation.BOUNCE);
         this.props.handleMapPageStateUpdate({"mousedOverMarker":this.props.markersInBounds[screenshotMarkerIndex]})
 
+        var clusterToFocus = null;
+            
+        if(this.props.clusterer){
+           // console.log(this.props.clusterer.getClusters())
+            //console.log(this.props)
+            let allClusters = this.props.clusterer.getClusters();
+            
+            let self = this;
+            allClusters.forEach(function(cluster, ind){
+                var clusterMarkers = cluster.getMarkers()
+                if(clusterMarkers.length > 1){
+                    clusterMarkers.forEach(function(marker, ind){
+                        if(marker == self.props.markersInBounds[screenshotMarkerIndex]){
+                            clusterToFocus = cluster;
+                            self.props.handleMapPageStateUpdate({clusterToFocus:clusterToFocus});
+                        }
+                    });
+                }
+            });
+        }  
+
+
     }
 
     onScreenshotPreviewMouseOut(screenshotMarkerIndex, event){
 
+        if(this.props.clusterToFocus){
+            
+            this.props.clusterToFocus.clusterIcon_.div_.className = this.props.clusterToFocus.clusterIcon_.div_.className
+            .replace(new RegExp('(?:^|\\s)'+ 'cluster-to-highlight' + '(?:\\s|$)'), ' ');
+                    
+            this.props.handleMapPageStateUpdate({clusterToFocus:null});
+
+        }
+       
   
         this.props.markersInBounds[screenshotMarkerIndex].setAnimation(null);
-        this.props.handleMapPageStateUpdate({"mousedOverMarker":null})
+        this.props.handleMapPageStateUpdate({mousedOverMarker:null})
 
     }
 
@@ -91,28 +122,9 @@ export default class MapPageScreenshotViewer extends React.Component {
         }
 
 
-        var clusterToFocus = null;
-            
-        if(this.props.clusterer && this.props.mousedOverMarker){
-           // console.log(this.props.clusterer.getClusters())
-            console.log(this.props)
-            let allClusters = this.props.clusterer.getClusters();
-            
-            let self = this;
-            allClusters.forEach(function(cluster, ind){
-                var clusterMarkers = cluster.getMarkers()
-                if(clusterMarkers.length > 1){
-                    clusterMarkers.forEach(function(marker, ind){
-                        if(marker == self.props.mousedOverMarker){
-                            clusterToFocus = cluster;
-                        }
-                    });
-                }
-            });
-        }   
+       
 
-        console.log('clusterToFocus', clusterToFocus);
-
+        
         return(<div className="map-page-screenshot-viewer-container">
         <Gallery 
             photos={PHOTO_SET} 
