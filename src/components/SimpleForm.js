@@ -6,6 +6,7 @@ import educationlevels from "../data/educationlevels.json";
 import Select from 'react-select';
 
 import DatePicker from 'react-datepicker';
+import moment from "moment";
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -124,10 +125,10 @@ export default class SimpleForm extends React.Component {
             ageInput = this.props.age, 
             genderInput = this.props.gender, 
             educationInput = this.props.education, 
-            dateOfCaptureInput = this.props.dateOfCapture,
+            dateOfCaptureInput = moment(this.props.dateOfCapture).format("Do MMM YYYY"),
             deviceInput = this.props.device;
 
-            
+
         if(!this.props.submitted){
 
             locationInput = (<LocationInput
