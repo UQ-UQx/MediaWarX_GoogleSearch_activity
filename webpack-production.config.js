@@ -3,7 +3,7 @@ var webpack = require("webpack");
 
 var webpackConfig = require('./webpack.config.js');
 
-webpackConfig.devtool = "";
+//webpackConfig.devtool = "";
 // strip out console.log statements
 webpackConfig.module.loaders.push({
 	test: /\.js$/,

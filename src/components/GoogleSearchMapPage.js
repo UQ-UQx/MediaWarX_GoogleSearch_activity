@@ -35,6 +35,10 @@ export default class GoogleSearchMapPage extends React.Component {
                     mousedOverMarkers={this.props.mousedOverMarkers}
                     clusterToFocus={this.props.clusterToFocus}
 
+                    filter_genders={this.props.filter_genders}
+                    filter_educations={this.props.filter_educations}
+                    filter_devices={this.props.filter_devices}
+
                 />
             
             </div>
@@ -52,6 +56,10 @@ export default class GoogleSearchMapPage extends React.Component {
                     
                     handleMapPageStateUpdate={this.props.handleMapPageStateUpdate}
                     clusterToFocus={this.props.clusterToFocus}
+
+                    filter_genders={this.props.filter_genders}
+                    filter_educations={this.props.filter_educations}
+                    filter_devices={this.props.filter_devices}
 
                 />
             

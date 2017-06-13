@@ -3,8 +3,35 @@
 
 .map-page-filter-panel-container{
     width:30%;
-    background-color:blue;
+ 
     height:$map-page-data-container-height;
     float:left;
+
+    box-shadow: inset 0px 0px 0px 2px black;
+   // padding:5px;
+
+}
+
+.filter-panel-title-container{
+    width:100%;
+    height:auto;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    background-color:black;
+    color:white;
+}
+.filter-options{
+    padding:5px
+}
+
+.filter-option-checkbox{
+    font-size:16px;
+   
+//     -ms-transform: scale(2); /* IE */
+//  -moz-transform: scale(2); /* FF */
+//  -webkit-transform: scale(2); /* Safari and Chrome */
+//  -o-transform: scale(2); /* Opera */
+//   padding: 10px !important;
 
 }

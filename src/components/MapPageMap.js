@@ -49,9 +49,9 @@ export default class MapPageMap extends React.Component {
         
         // cluster.clusterIcon_.div_.className = cluster.clusterIcon_.div_.className
         //     .replace(new RegExp('(?:^|\\s)'+ 'cluster-to-highlight' + '(?:\\s|$)'), ' ');
-
-        this.props.handleMapPageStateUpdate({clusterToFocus:cluster});
-
+            this.props.handleMapPageStateUpdate({clusterToFocus:cluster});
+        
+       
         this.props.handleMapPageStateUpdate({"mousedOverMarkers":[...this.props.mousedOverMarkers, ...cluster.getMarkers()]})
 
     }
@@ -125,6 +125,7 @@ export default class MapPageMap extends React.Component {
 
        var self = this;
        entriesRAW.forEach(function(entryAll, ind){
+
             ////console.log(entryAll);
             var parsedEntry = JSON.parse(entryAll.entry);
             ////console.log(parsedEntry);
@@ -179,9 +180,8 @@ export default class MapPageMap extends React.Component {
 
     }
 
-    componentWillReceiveProps(){
+    componentDidReceiveProps(){
        
-        
 
     }
 
@@ -219,7 +219,6 @@ export default class MapPageMap extends React.Component {
 
     render(){
 
-    console.log(this.props)
         if(this.props.clusterToFocus){
 
             if(!this.props.clusterToFocus.clusterIcon_.div_.classList.contains("cluster-to-highlight")){
@@ -232,7 +231,7 @@ export default class MapPageMap extends React.Component {
                 if(this.props.clusterer.getClusters().length > 0){
                     this.props.clusterer.getClusters().forEach((cluster, ind)=>{
                         if(cluster.getMarkers().length > 1){
-                            console.log(cluster)
+                            //console.log(cluster)
                             if(cluster.clusterIcon_.div_){
                                 cluster.clusterIcon_.div_.classList.remove("cluster-to-highlight")
                             }
@@ -242,6 +241,64 @@ export default class MapPageMap extends React.Component {
             }
                 
         }
+
+
+            
+        console.log('render!!')
+
+
+        // let filter_genders = []
+        // let filter_educations = []
+        // let filter_devices = []
+
+        // if(this.props.filter_genders && filter_genders.length == 0){
+        //     filter_genders = [...this.props.filter_genders]
+        // }
+        // if(this.props.filter_educations && filter_educations.length == 0){
+        //     filter_educations = [...this.props.filter_educations]
+        // }
+        // if(this.props.filter_devices && filter_devices.length == 0){
+        //     filter_devices = [...this.props.filter_devices]
+        // }
+
+        // var filters = [
+        //     ...filter_genders,
+        //     ...filter_educations,
+        //     ...filter_devices
+        // ]
+
+        
+        // this.props.markers.forEach(function(marker, ind){
+        //     if(filters.length > 0){
+        //         marker.setVisible(false)
+        //     }else{
+        //         marker.setVisible(true)
+        //     }
+        //     let details = [
+        //                     marker.entry.gender, 
+        //                     marker.entry.education,
+        //                     marker.entry.device
+        //                 ]
+
+            
+        //     filters.some(function (v) {
+        //         if(details.indexOf(v) >= 0){
+        //             console.log(marker.entry)
+        //             marker.setVisible(true);
+        //             return true
+        //         }
+        //     });
+            
+        // })  
+        // if(this.props.clusterer){
+        //     if(this.props.clusterer.getClusters().length > 0){
+        //         console.log(this.props)
+        //         this.props.clusterer.setIgnoreHidden(true)
+        //         this.props.clusterer.repaint()
+        //     }
+        // }
+         
+        
 
 
         return (<div className="map-component-container">

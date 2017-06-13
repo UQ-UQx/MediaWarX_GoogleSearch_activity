@@ -71,7 +71,11 @@ export default class Layout extends React.Component {
 
             clusterToFocus:null, 
 
-            activeMarker:null
+            activeMarker:null,
+
+            filter_genders:[],
+            filter_educations:[],
+            filter_devices:[]
 
         }
         //console.log(defaultState)
@@ -254,6 +258,11 @@ export default class Layout extends React.Component {
             handleMapPageStateUpdate={this.handleMapPageStateUpdate}
 
             clusterToFocus={this.state.clusterToFocus}
+
+            filter_genders={this.state.filter_genders}
+            filter_educations={this.state.filter_educations}
+            filter_devices={this.state.filter_devices}
+
         />)
     }
 
