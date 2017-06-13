@@ -142,7 +142,11 @@ export default class MapPageScreenshotViewer extends React.Component {
                         activeClassName:activeClassName
 
                 }
-                PHOTO_SET.push(img);
+
+                if(mark.getVisible()){
+                    PHOTO_SET.push(img);
+                }
+
                 mark.entry.tags.forEach(function(tag,ind){
                     tags.push(tag.tag);
                 })
@@ -156,35 +160,24 @@ export default class MapPageScreenshotViewer extends React.Component {
 
         var colNum = 3;
 
-        if(this.props.markersInBounds.length < 3){
-            colNum = this.props.markersInBounds.length
+        if(PHOTO_SET.length < 3){
+            colNum = PHOTO_SET.length
         }
        
 
         
         return(<div className="map-page-screenshot-viewer-container">
-        <Gallery 
-            photos={PHOTO_SET} 
-            onClickPhoto={this.expandScreenShot} 
-            cols={colNum}
-        
-            onPhotoMouseOver={this.onScreenshotPreviewMouseOver}
-        
-            onPhotoMouseOut={this.onScreenshotPreviewMouseOut}
-        />
-      {  
-        // <div className="testy" 
-        
-        // onMouseOver={(k, e)=>{
-        //     //console.log("OVER",k, e)
-        // }}
+            
+            <Gallery 
+                photos={PHOTO_SET} 
+                onClickPhoto={this.expandScreenShot} 
+                cols={colNum}
+            
+                onPhotoMouseOver={this.onScreenshotPreviewMouseOver}
+            
+                onPhotoMouseOut={this.onScreenshotPreviewMouseOut}
+            />
 
-        // onMouseOut={(k, e)=>{
-        //     //console.log("OUT",k, e)
-        // }}
-        
-        // ></div>
-    }
         
         </div>)
     }

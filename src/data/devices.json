@@ -1,0 +1,12 @@
+[
+    { "value": "Macintosh Desktop", "label": "Macintosh Desktop" },
+    { "value": "Windows Desktop", "label": "Windows Desktop" },
+    { "value": "Windows Laptop", "label": "Windows Laptop" },
+    { "value": "Macintosh Laptop", "label": "Macintosh Laptop" },
+    { "value": "Mobile Phone (iOS)", "label": "Mobile Phone (iOS)" },
+    { "value": "Mobile Phone (Andriod)", "label": "Mobile Phone (Andriod)" },
+    { "value": "Mobile Phone (Other)", "label": "Mobile Phone (Other)" },
+    { "value": "Tablet (iOS)", "label": "Tablet (iOS)" },
+    { "value": "Tablet (Andriod)", "label": "Tablet (Andriod)" },
+    { "value": "Tablet (Other)", "label": "Tablet (Other)" }
+]

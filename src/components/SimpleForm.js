@@ -2,6 +2,8 @@ import "../stylesheets/SimpleFormStyles.scss"
 import '../../node_modules/react-select/dist/react-select.css';
 import nationalities from "../data/nationalities.json";
 import educationlevels from "../data/educationlevels.json";
+import genders from "../data/genders.json"
+import devices from "../data/devices.json"
 
 import Select from 'react-select';
 
@@ -101,25 +103,8 @@ export default class SimpleForm extends React.Component {
 
     renderForm(){
 
-        const gender_options = [
-            { value: 'Male', label: 'Male' },
-            { value: 'Female', label: 'Female' },
-            { value: 'Other', label: 'Other' }
-        ]
 
-        const device_options = [
-            { value: 'Windows Desktop', label: 'Windows Desktop' },
-            { value: 'Macintosh Desktop', label: 'Macintosh Desktop' },
-            { value: 'Windows Laptop', label: 'Windows Laptop' },
-            { value: 'Macintosh Laptop', label: 'Macintosh Laptop' },
-            { value: 'Mobile Phone (iOS)', label: 'Mobile Phone (iOS)' },
-            { value: 'Mobile Phone (Andriod)', label: 'Mobile Phone (Andriod)' },
-            { value: 'Mobile Phone (Other)', label: 'Mobile Phone (Other)' },
-            { value: 'Tablet (iOS)', label: 'Tablet (iOS)' },
-            { value: 'Tablet (Andriod)', label: 'Tablet (Andriod)' },
-            { value: 'Tablet (Other)', label: 'Tablet (Other)' },
-        ]
-
+       
         console.log(this.props)
         let locationInput = this.props.location_name, 
             ageInput = this.props.age, 
@@ -152,7 +137,7 @@ export default class SimpleForm extends React.Component {
                             	name="gender-dropdown"
                                 value={this.props.gender}
                             	placeholder="Please Select You Gender"
-                            	options={gender_options}
+                            	options={genders}
                             	onChange={this.onGenderChange}
                             />)
             educationInput = (<Select
@@ -173,7 +158,7 @@ export default class SimpleForm extends React.Component {
                             	name="education-dropdown"
                                 value={this.props.device}
                             	placeholder="Please Select Your Device"
-                            	options={device_options}
+                            	options={devices}
                             	onChange={this.onDeviceChange}
                             />)
         }

@@ -253,7 +253,8 @@ class MyApi
             "location_static_map"=>$state->location_static_map,
             "image_filename"=>$image_url,
 			"image_size"=>$size,
-			
+			"device"=>$state->device,
+			"date_of_capture"=>$state->dateOfCapture
 		);
 
 		//error_log("ENTRY: ".json_encode($state));

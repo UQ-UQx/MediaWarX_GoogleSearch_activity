@@ -43,6 +43,7 @@
 			$user_id = $lti->user_id();
 			$calldata = $lti->calldata();
 
+
 		
 			$oldmask = umask(0);
 			if (!file_exists('data/'.$lti_id)) {
@@ -69,15 +70,10 @@
 
 			
 
-
-			// //Save user lti vars if none exist
-			// if($lti->is_dev()){
-			// 	echo "<pre>";
-			// 	print_r($lti->calldata());
-			// 	echo "</pre>";
-			// }
-
-
+			$calldata_custom_tags = false;
+			if(isset($calldata{'custom_tags'})){
+				$calldata_custom_tags = json_decode($calldata{'custom_tags'});
+			}
 		
         ?>
 		
@@ -88,9 +84,13 @@
 	<script type="text/javascript">
 		$LTI_resourceID = '<?php echo $lti_id ?>';
 		$LTI_userID = '<?php echo $user_id ?>';
+		$LTI_CUSTOM_tags = JSON.parse('<?php echo json_encode($calldata_custom_tags) ?>');
+
 	</script>
     <div id="app"></div>
     <script type="text/javascript" src="./build/bundle.js"></script>
 	
+	
+
     </body>
 </html>
