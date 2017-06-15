@@ -19,40 +19,29 @@ export default class MapPageFilterPanel extends React.Component {
     onResetClicked(event){
 
         console.log("clicked reset")
+        //remove all filter selections
         this.refs.gender_checkboxgroup.resetSelections();
         this.refs.education_checkboxgroup.resetSelections();
         this.refs.device_checkboxgroup.resetSelections();
+
+        //enable all markers as nothing is being filtered
+        let bounds = new google.maps.LatLngBounds();
+        this.props.markers.forEach((marker, ind)=>{
+            marker.setVisible(true)
+            bounds.extend(marker.getPosition());
+        })
+        this.props.map.fitBounds(bounds);
+ 
+        if(this.props.clusterer){
+            this.props.clusterer.setIgnoreHidden(true)
+            this.props.clusterer.repaint()
+        }
 
     }
 
     handleCheckBoxChange(name, selected_options){
          
-
-
-        switch (name) {
-            case "gender":
-                this.props.handleMapPageStateUpdate({
-                    filter_genders:selected_options
-                })
-                break;
-            case "education":
-                this.props.handleMapPageStateUpdate({
-                    filter_educations:selected_options
-                })
-                break;
-            case "device":
-                this.props.handleMapPageStateUpdate({
-                    filter_devices:selected_options
-                })
-                break;
-            default:
-                break;
-        }
-
-    }
-
-    render(){
-
+        console.log(name, selected_options)
 
         let filter_genders = []
         let filter_educations = []
@@ -68,14 +57,96 @@ export default class MapPageFilterPanel extends React.Component {
             filter_devices = [...this.props.filter_devices]
         }
 
+        switch (name) {
+            case "gender":
+                this.props.handleMapPageStateUpdate({
+                    filter_genders:selected_options
+                })
+                filter_genders = []
+                filter_genders = [...selected_options]
+                break;
+            case "education":
+                this.props.handleMapPageStateUpdate({
+                    filter_educations:selected_options
+                })
+                filter_educations = []
+                filter_educations = [...selected_options]
+                break;
+            case "device":
+                this.props.handleMapPageStateUpdate({
+                    filter_devices:selected_options
+                })
+                filter_devices = []
+                filter_devices = [...selected_options]
+                break;
+            default:
+                break;
+        }
+
+
+
+
         var filters = [
             ...filter_genders,
             ...filter_educations,
             ...filter_devices
         ]
 
+        let checkDetails = [
+            "gender",
+            "education",
+            "device"
+        ]
+
+        let bounds = new google.maps.LatLngBounds();
+        let numInvisibleMarkers = 0;
+
+        this.props.markers.forEach((marker, ind)=>{
+            let weight = 0;
+           // marker.setVisible(true)
+
+            checkDetails.forEach((detailKey, ind)=>{
+
+                if(_.indexOf(filters, marker.entry[detailKey]) != -1){
+                    weight ++;
+                }
+
+            })
+
+            if(weight != filters.length){
+                console.log("matching marker: ", marker)
+                marker.setVisible(false)
+                numInvisibleMarkers++;
+            }else{
+                marker.setVisible(true)
+                bounds.extend(marker.getPosition());
+            }
+
+
+        })
+
+        console.log(filters);
+       
+ 
+        if(this.props.clusterer){
+            this.props.clusterer.setIgnoreHidden(true)
+            this.props.clusterer.repaint()
+        }
+
+        if(numInvisibleMarkers > 0){
+            this.props.map.fitBounds(bounds);
+        }else{
+
+        }
        
 
+
+    }
+
+    render(){
+
+
+        
 
 
 
