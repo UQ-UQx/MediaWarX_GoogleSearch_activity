@@ -51,6 +51,8 @@ export default class GoogleSearchMapPage extends React.Component {
 
                     markersInBounds={this.props.markersInBounds}
                     markers={this.props.markers}
+                    hiddenMarkers={this.props.hiddenMarkers}
+
                     clusterer={this.props.clusterer}
                     mousedOverMarkers={this.props.mousedOverMarkers}
                     

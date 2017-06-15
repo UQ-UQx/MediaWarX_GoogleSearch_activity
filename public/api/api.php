@@ -231,7 +231,7 @@ class MyApi
 	public function formSubmit($data, $files){
 		error_log(json_encode($files));
 
-		$state = json_decode($data->state);
+		$state = json_decode($data->app_state);
 		$user_id = $data->user_id;
 		$lti_id = $data->lti_id;
 		$ltiCallData = json_decode(file_get_contents("../data/".$data->lti_id."/".$data->user_id."/calldata.json"));

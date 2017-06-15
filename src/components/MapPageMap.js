@@ -11,6 +11,7 @@ export default class MapPageMap extends React.Component {
 
     
         this.mapBoundsChanged = this.mapBoundsChanged.bind(this);
+        this.updateMarkersInBounds = this.updateMarkersInBounds.bind(this);
         this.setMarkersInMapUsingAllEntries = this.setMarkersInMapUsingAllEntries.bind(this)
         this.handleMarkerMouseOver = this.handleMarkerMouseOver.bind(this);
         this.handleMarkerMouseOut = this.handleMarkerMouseOut.bind(this);
@@ -180,12 +181,13 @@ export default class MapPageMap extends React.Component {
 
     }
 
-    componentDidReceiveProps(){
+    componentWillReceiveProps(){
        
-
+       console.log("WOOOAHH",this.props)
+       this.updateMarkersInBounds();
     }
 
-    mapBoundsChanged(){
+    updateMarkersInBounds(){
 
         ////console.log("BOUNDS CHANGED")
 
@@ -197,9 +199,10 @@ export default class MapPageMap extends React.Component {
         var self = this;
         this.props.markers.forEach(function(marker, ind){
             if(map.getBounds().contains(marker.getPosition())){
-                
-                markersInBounds.push(marker);
-                markersInBoundsIds.push(marker.id);
+                if(marker.getVisible()){
+                    markersInBounds.push(marker);
+                    markersInBoundsIds.push(marker.id);
+                }
 
             }
         });
@@ -210,10 +213,15 @@ export default class MapPageMap extends React.Component {
 
         })
 
-  
+        console.log("markers in bounds:", markersInBounds)
         if(!_.isEqual(prevMarkersInBoundsIds.sort(),markersInBoundsIds.sort())){
             this.props.handleMapPageStateUpdate({markersInBounds:markersInBounds})
         }
+    }
+
+    mapBoundsChanged(){
+
+        this.updateMarkersInBounds()
 
     }
 

@@ -64,6 +64,7 @@ export default class Layout extends React.Component {
             map:null,
             markers:[],
             markersInBounds:[],
+            hiddenMarkers:[],
             clusterer:null,
             
 
@@ -147,12 +148,12 @@ export default class Layout extends React.Component {
     // }
     handleFormSubmit(){
         //console.log("form submit clicked");
-
+        console.log(this.state);
         var app = this;
         const postData = new FormData();
         postData.append('file', this.state.image_file);
         postData.append('action', "formSubmit");
-        postData.append('state', JSON.stringify({...this.state, "location_static_map":""}));
+        postData.append('app_state', JSON.stringify({...this.state, "location_static_map":""}));
         postData.append('user_id', $LTI_userID);
         postData.append('lti_id', $LTI_resourceID);
         axios.post('../public/api/api.php', postData)
@@ -253,6 +254,8 @@ export default class Layout extends React.Component {
             map={this.state.map}
             markers={this.state.markers}
             markersInBounds={this.state.markersInBounds}
+            hiddenMarkers={this.state.hiddenMarkers}
+
             clusterer={this.state.clusterer}
             mousedOverMarkers={this.state.mousedOverMarkers}
             handleMapPageStateUpdate={this.handleMapPageStateUpdate}

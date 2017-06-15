@@ -36,17 +36,20 @@ export default class MapPageData extends React.Component {
                 clusterToFocus={this.props.clusterToFocus}
 
                 filter_genders={this.props.filter_genders}
-                    filter_educations={this.props.filter_educations}
-                    filter_devices={this.props.filter_devices}
+                filter_educations={this.props.filter_educations}
+                filter_devices={this.props.filter_devices}
 
             />
             <MapPageFilterPanel 
                 markersInBounds={this.props.markersInBounds}
                 markers={this.props.markers}
+                                    hiddenMarkers={this.props.hiddenMarkers}
+
                 clusterToFocus={this.props.clusterToFocus}
                 clusterer={this.props.clusterer}
 
                 handleMapPageStateUpdate={this.props.handleMapPageStateUpdate}
+                    map={this.props.map}
 
 
                 filter_genders={this.props.filter_genders}
