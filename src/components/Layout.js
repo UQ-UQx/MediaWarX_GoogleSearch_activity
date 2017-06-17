@@ -39,6 +39,7 @@ export default class Layout extends React.Component {
             location_error:null,
 
             age:"",
+            agerange:null,
             gender:null,
             nationality:null,
             education:null,
@@ -76,7 +77,12 @@ export default class Layout extends React.Component {
 
             filter_genders:[],
             filter_educations:[],
-            filter_devices:[]
+            filter_devices:[],
+            filter_ageranges:[],
+            filter_age_min:null,
+            filter_age_max:null,
+            filter_date_min:null,
+            filter_date_max:null
 
         }
         //console.log(defaultState)
@@ -220,6 +226,7 @@ export default class Layout extends React.Component {
             location_error={this.state.location_error}
 
             age={this.state.age}
+            agerange={this.state.agerange}
             gender={this.state.gender}
             nationality={this.state.nationality}
             education={this.state.education}
@@ -265,7 +272,7 @@ export default class Layout extends React.Component {
             filter_genders={this.state.filter_genders}
             filter_educations={this.state.filter_educations}
             filter_devices={this.state.filter_devices}
-
+            filter_ageranges={this.state.filter_ageranges}
         />)
     }
 

@@ -4,6 +4,7 @@ import nationalities from "../data/nationalities.json";
 import educationlevels from "../data/educationlevels.json";
 import genders from "../data/genders.json"
 import devices from "../data/devices.json"
+import ageranges from "../data/ageranges.json"
 
 import Select from 'react-select';
 
@@ -30,7 +31,7 @@ export default class SimpleForm extends React.Component {
         this.onEducationChange = this.onEducationChange.bind(this)
         this.onDateChange = this.onDateChange.bind(this)
         this.onDeviceChange = this.onDeviceChange.bind(this)
-
+        this.onAgeRangeChange = this.onAgeRangeChange.bind(this)
     }
 
     onLocationInputChange(data){
@@ -100,6 +101,18 @@ export default class SimpleForm extends React.Component {
         });
     }
 
+    onAgeRangeChange(data) {
+        var ageRange = null;
+        if(data){
+            ageRange = data.value
+        }
+
+        this.props.onSimpleFormChange({
+            type:"agerange",
+            value:ageRange
+        });
+    }
+
 
     renderForm(){
 
@@ -110,6 +123,7 @@ export default class SimpleForm extends React.Component {
             ageInput = this.props.age, 
             genderInput = this.props.gender, 
             educationInput = this.props.education, 
+            agerange = this.props.agerange,
             dateOfCaptureInput = moment(this.props.dateOfCapture).format("Do MMM YYYY"),
             deviceInput = this.props.device;
 
@@ -123,15 +137,22 @@ export default class SimpleForm extends React.Component {
                             location_error={this.props.location_error}
                             onLocationInputChange={this.onLocationInputChange}
                         />)
-            ageInput = (<input
-                                type="number"
-                                class="age-input"
-                                id="age-input"
-                                placeholder="Enter Age"
-                                min="1"
-                                max="122"
-                                value={this.props.age}
-                                onChange={this.onAgeInputChange}
+            // ageInput = (<input
+            //                     type="number"
+            //                     class="age-input"
+            //                     id="age-input"
+            //                     placeholder="Enter Age"
+            //                     min="1"
+            //                     max="122"
+            //                     value={this.props.age}
+            //                     onChange={this.onAgeInputChange}
+            //                 />)
+            agerange = (<Select
+                            	name="agerange-dropdown"
+                                value={this.props.agerange}
+                            	placeholder="Please Select Your Age Range"
+                            	options={ageranges}
+                            	onChange={this.onAgeRangeChange}
                             />)
             genderInput = (<Select
                             	name="gender-dropdown"
@@ -178,7 +199,7 @@ export default class SimpleForm extends React.Component {
                     <td><span className="form-input-label-span">Age:</span></td>
                     <td>
                         <div className="age-input-container">
-                            {ageInput}
+                            {agerange}
                         </div>
                     </td>
                 </tr>

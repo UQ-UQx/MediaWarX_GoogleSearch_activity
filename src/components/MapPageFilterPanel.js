@@ -4,7 +4,12 @@ import React from "react"
 import educationlevels from "../data/educationlevels.json"
 import devices from "../data/devices.json"
 import genders from "../data/genders.json"
+import agesranges from "../data/ageranges.json"
+
 import {Icon} from 'react-fa'
+
+import ReactBootstrapSlider from 'react-bootstrap-slider';
+
 
 import CheckBoxGroup from "./CheckBoxGroup"
 
@@ -14,13 +19,21 @@ export default class MapPageFilterPanel extends React.Component {
         super(props)
 
         this.state = {
-            shouldScroll:false
+            shouldScroll:false,
         }
 
         this.onResetClicked = this.onResetClicked.bind(this)
         this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this)
         this.handleFilterOptionsOnScroll = this.handleFilterOptionsOnScroll.bind(this)
         this.updateShouldScroll = this.updateShouldScroll.bind(this)
+
+        this.updateSliderValue = this.updateSliderValue.bind(this)
+    }
+
+    updateSliderValue(event){
+
+        console.log(event)
+
     }
 
     handleFilterOptionsOnScroll(event){
@@ -35,6 +48,8 @@ export default class MapPageFilterPanel extends React.Component {
         this.refs.gender_checkboxgroup.resetSelections();
         this.refs.education_checkboxgroup.resetSelections();
         this.refs.device_checkboxgroup.resetSelections();
+        this.refs.ageranges_checkboxgroup.resetSelections();
+
 
         //enable all markers as nothing is being filtered
         let bounds = new google.maps.LatLngBounds();
@@ -58,6 +73,8 @@ export default class MapPageFilterPanel extends React.Component {
         let filter_genders = []
         let filter_educations = []
         let filter_devices = []
+        let filter_ageranges = []
+
 
         if(this.props.filter_genders && filter_genders.length == 0){
             filter_genders = [...this.props.filter_genders]
@@ -67,6 +84,9 @@ export default class MapPageFilterPanel extends React.Component {
         }
         if(this.props.filter_devices && filter_devices.length == 0){
             filter_devices = [...this.props.filter_devices]
+        }
+        if(this.props.filter_ageranges && filter_ageranges.length == 0){
+            filter_ageranges = [...this.props.filter_ageranges]
         }
 
         switch (name) {
@@ -91,6 +111,13 @@ export default class MapPageFilterPanel extends React.Component {
                 filter_devices = []
                 filter_devices = [...selected_options]
                 break;
+            case "ageranges":
+                this.props.handleMapPageStateUpdate({
+                    filter_ageranges:selected_options
+                })
+                filter_ageranges = []
+                filter_ageranges = [...selected_options]
+                break;
             default:
                 break;
         }
@@ -101,13 +128,15 @@ export default class MapPageFilterPanel extends React.Component {
         var filters = [
             ...filter_genders,
             ...filter_educations,
-            ...filter_devices
+            ...filter_devices,
+            ...filter_ageranges
         ]
 
         let checkDetails = [
             "gender",
             "education",
-            "device"
+            "device",
+            "agerange"
         ]
 
         let bounds = new google.maps.LatLngBounds();
@@ -222,6 +251,13 @@ export default class MapPageFilterPanel extends React.Component {
             })
         });
 
+        let ageOptions = [];
+        agesranges.forEach(function(agerange, ind){
+            ageOptions.push({
+                value:agerange.value,
+            })
+        });
+
 
 
         var scrollForMore = (<div className="filter-panel-scroll-for-more">
@@ -245,7 +281,16 @@ export default class MapPageFilterPanel extends React.Component {
             
             <div className="filter-options" ref="filterOptionsContainer" onScroll={this.handleFilterOptionsOnScroll}>
                 <div className="filter-container age-filter">
-                    <div className="filter-container-title">Age</div>
+                    <div className="filter-container-title">Age Ranges</div>
+                    <div className="age-filter-container clearfix">
+
+                        <CheckBoxGroup
+                    ref="ageranges_checkboxgroup"
+                    name="ageranges" 
+                    options={ageOptions} 
+                    onCheckBoxChange={this.handleCheckBoxChange} />
+                                            
+                    </div>
                 </div>
                 <div className="filter-container gender-filter">
                     <div className="filter-container-title">Gender</div>
