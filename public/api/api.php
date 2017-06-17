@@ -246,6 +246,7 @@ class MyApi
             "location_lat"=>$state->location_lat,
             "location_lng"=>$state->location_lng,
             "age"=>$state->age,
+			"agerange"=>$state->agerange,
             "gender"=>$state->gender,
             "nationality"=>$state->nationality,
             "education"=>$state->education,
@@ -254,7 +255,7 @@ class MyApi
             "image_filename"=>$image_url,
 			"image_size"=>$size,
 			"device"=>$state->device,
-			"date_of_capture"=>$state->dateOfCapture
+			"date_of_capture"=>$state->dateOfCapture,
 		);
 
 		//error_log("ENTRY: ".json_encode($state));

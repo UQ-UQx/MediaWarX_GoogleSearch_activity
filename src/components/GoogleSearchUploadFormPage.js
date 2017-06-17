@@ -96,6 +96,9 @@ export default class GoogleSearchUploadForm extends React.Component {
             case "device":
                 this.props.handleUploadFormItemUpdate({device:formChange.value})
                 break;
+            case "agerange":
+                this.props.handleUploadFormItemUpdate({agerange:formChange.value})
+                break;
 
             default:
 
@@ -238,6 +241,7 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
                  education={this.props.education}
                 dateOfCapture={this.props.dateOfCapture}
                 device={this.props.device}
+                agerange={this.props.agerange}
 
 
                  onSimpleFormChange={this.onSimpleFormChange}

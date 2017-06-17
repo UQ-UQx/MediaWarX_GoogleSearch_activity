@@ -38,6 +38,7 @@ export default class GoogleSearchMapPage extends React.Component {
                     filter_genders={this.props.filter_genders}
                     filter_educations={this.props.filter_educations}
                     filter_devices={this.props.filter_devices}
+                    filter_ageranges={this.props.filter_ageranges}
 
                 />
             
@@ -62,6 +63,7 @@ export default class GoogleSearchMapPage extends React.Component {
                     filter_genders={this.props.filter_genders}
                     filter_educations={this.props.filter_educations}
                     filter_devices={this.props.filter_devices}
+                    filter_ageranges={this.props.filter_ageranges}
 
                 />
             
