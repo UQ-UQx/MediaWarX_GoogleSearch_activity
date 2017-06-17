@@ -1,5 +1,75 @@
+
+.check-box-group-component{
+    width:100%;
+}
 .checkbox-option{
     font-size:16px;
-   
+    &div{
+        float:left;
+    }
+}
 
+.checkbox-option-container{
+    padding-left:5px;
+    margin-left:2px;
+}
+
+.checkbox-option{
+
+    background-color:darkgray;
+    padding:4px;
+    margin:4px;
+    float:left;
+    -webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+border-radius: 5px;
+    color:white;
+
+    &:hover{
+        background-color: grey;
+        cursor: pointer; cursor: hand;
+    }
+
+}
+
+.checkbox-option-input-container{
+    float:left;
+  
+}
+
+.checkbox-option-label{
+    margin-left:5px;
+    margin-right:2px;
+    float:left;
+}
+
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+.clearfix { display: inline-block; }
+/* start commented backslash hack \*/
+* html .clearfix { height: 1%; }
+.clearfix { display: block; }
+
+
+.option-selected{
+
+    background-color:darkorange !important;
+    color:white !important;
+
+}
+
+.option-button-container{
+    padding-left:5px;
+    margin-left:2px;
+}
+
+.option-button{
+    margin:3px;
+    float:left;
 }

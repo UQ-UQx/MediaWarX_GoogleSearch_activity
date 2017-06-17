@@ -101,6 +101,8 @@ class Gallery extends React.Component{
 		    <div className={"react-photo-gallery-photo-container "+activeClassName} key={k} style={style} 
                 onMouseOver={(e) => this.props.onPhotoMouseOver(k,e)}
                 onMouseOut={(e) => this.props.onPhotoMouseOut(k,e)}
+                onFocus={(e) => this.props.onPhotoMouseOver(k,e)}
+                onBlur={(e) => this.props.onPhotoMouseOut(k,e)}
                 height={commonHeight} width={commonHeight * this.props.photos[k].aspectRatio}
                 
                 >

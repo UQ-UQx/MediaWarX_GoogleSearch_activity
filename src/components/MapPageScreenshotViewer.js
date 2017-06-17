@@ -174,7 +174,6 @@ export default class MapPageScreenshotViewer extends React.Component {
                 cols={colNum}
             
                 onPhotoMouseOver={this.onScreenshotPreviewMouseOver}
-            
                 onPhotoMouseOut={this.onScreenshotPreviewMouseOut}
             />
 
