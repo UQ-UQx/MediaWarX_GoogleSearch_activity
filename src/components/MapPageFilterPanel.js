@@ -4,6 +4,7 @@ import React from "react"
 import educationlevels from "../data/educationlevels.json"
 import devices from "../data/devices.json"
 import genders from "../data/genders.json"
+import {Icon} from 'react-fa'
 
 import CheckBoxGroup from "./CheckBoxGroup"
 
@@ -12,8 +13,19 @@ export default class MapPageFilterPanel extends React.Component {
      constructor(props){
         super(props)
 
+        this.state = {
+            shouldScroll:false
+        }
+
         this.onResetClicked = this.onResetClicked.bind(this)
         this.handleCheckBoxChange = this.handleCheckBoxChange.bind(this)
+        this.handleFilterOptionsOnScroll = this.handleFilterOptionsOnScroll.bind(this)
+        this.updateShouldScroll = this.updateShouldScroll.bind(this)
+    }
+
+    handleFilterOptionsOnScroll(event){
+
+        this.updateShouldScroll();
     }
 
     onResetClicked(event){
@@ -103,7 +115,6 @@ export default class MapPageFilterPanel extends React.Component {
 
         this.props.markers.forEach((marker, ind)=>{
             let weight = 0;
-           // marker.setVisible(true)
 
             checkDetails.forEach((detailKey, ind)=>{
 
@@ -124,8 +135,6 @@ export default class MapPageFilterPanel extends React.Component {
 
 
         })
-
-        console.log(filters);
        
  
         if(this.props.clusterer){
@@ -143,6 +152,37 @@ export default class MapPageFilterPanel extends React.Component {
 
     }
 
+    componentDidMount(){
+
+        
+        this.updateShouldScroll()
+        
+        
+    }
+
+    updateShouldScroll(){
+
+        let cHeight = this.refs.filterOptionsContainer.clientHeight;
+        let sHeight = this.refs.filterOptionsContainer.scrollHeight;
+        let scrollTop = this.refs.filterOptionsContainer.scrollTop;
+
+        if((sHeight > cHeight) && !this.state.shouldScroll){
+            this.setState({
+                shouldScroll:true
+            })
+        }
+
+        if(((sHeight-cHeight) == scrollTop) && this.state.shouldScroll){
+            this.setState({
+                shouldScroll:false
+            })
+        }
+
+        console.log(cHeight, sHeight, scrollTop, sHeight-cHeight)
+
+    }
+
+
     render(){
 
 
@@ -150,9 +190,10 @@ export default class MapPageFilterPanel extends React.Component {
 
 
 
+        console.log("should not be rendering")
 
 
-
+        
 
 
 
@@ -183,22 +224,31 @@ export default class MapPageFilterPanel extends React.Component {
 
 
 
+        var scrollForMore = (<div className="filter-panel-scroll-for-more">
+            <Icon name="arrow-down" /> Scroll Down for More
 
+        </div>)
+        
 
+        if(!this.state.shouldScroll){
+            scrollForMore = ""
+        }
 
         return(<div className="map-page-filter-panel-container">
 
-            <div className="filter-panel-title-container">
-                Filter Options
+            <div className="filter-panel-title-container clearfix">
+                Filter Options <button className="resetFilterButton btn btn-sm btn-danger" onClick={this.onResetClicked}>Clear</button>
+
             </div>
             
-            <button className="btn btn-small btn-danger" onClick={this.onResetClicked}>Reset</button>
 
             
-            <div className="filter-options">
-                <div className="filter-container age-filter"></div>
+            <div className="filter-options" ref="filterOptionsContainer" onScroll={this.handleFilterOptionsOnScroll}>
+                <div className="filter-container age-filter">
+                    <div className="filter-container-title">Age</div>
+                </div>
                 <div className="filter-container gender-filter">
-                    <h4>Gender</h4>
+                    <div className="filter-container-title">Gender</div>
                     <CheckBoxGroup
                     ref="gender_checkboxgroup"
                     name="gender" 
@@ -206,7 +256,7 @@ export default class MapPageFilterPanel extends React.Component {
                     onCheckBoxChange={this.handleCheckBoxChange} />
                 </div>
                 <div className="filter-container education-filter">
-                    <h4>Education</h4>
+                    <div className="filter-container-title">Education</div>
                     <CheckBoxGroup
                     ref="education_checkboxgroup"
                     name="education" 
@@ -215,7 +265,7 @@ export default class MapPageFilterPanel extends React.Component {
                 </div>
                 <div className="filter-container dateofcapture-filter"></div>
                 <div className="filter-container device-filter">
-                    <h4>Device</h4>
+                    <div className="filter-container-title">Device</div>
                     <CheckBoxGroup
                     ref="device_checkboxgroup"
                     name="device" 
@@ -224,6 +274,8 @@ export default class MapPageFilterPanel extends React.Component {
                 </div>
             </div>
 
+            {scrollForMore}
+            
         </div>)
     }
 }
