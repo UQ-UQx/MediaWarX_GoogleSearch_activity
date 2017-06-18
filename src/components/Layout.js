@@ -68,7 +68,7 @@ export default class Layout extends React.Component {
             hiddenMarkers:[],
             clusterer:null,
             
-
+            
             mousedOverMarkers:[],
 
             clusterToFocus:null, 

@@ -38,6 +38,7 @@ export default class MapPageData extends React.Component {
                 filter_genders={this.props.filter_genders}
                 filter_educations={this.props.filter_educations}
                 filter_devices={this.props.filter_devices}
+                filter_ageranges={this.props.filter_ageranges}
 
             />
             <MapPageFilterPanel 
@@ -49,12 +50,13 @@ export default class MapPageData extends React.Component {
                 clusterer={this.props.clusterer}
 
                 handleMapPageStateUpdate={this.props.handleMapPageStateUpdate}
-                    map={this.props.map}
+                map={this.props.map}
 
 
                 filter_genders={this.props.filter_genders}
                 filter_educations={this.props.filter_educations}
                 filter_devices={this.props.filter_devices}
+                filter_ageranges={this.props.filter_ageranges}
 
             />         
 
