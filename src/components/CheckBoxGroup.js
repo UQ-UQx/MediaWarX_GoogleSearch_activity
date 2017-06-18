@@ -156,6 +156,11 @@ export default class CheckBoxGroup extends React.Component {
         let self = this
         let inputs = this.props.options.map((option, ind)=>{
 
+            let count = ""
+            if(this.props.counts){
+                count = <span class="badge">{option.count}</span>
+            }
+
             let selectedOptionClassName = "option-selected";
             if(!this.state[option.value]){
                 selectedOptionClassName = ""
@@ -170,7 +175,7 @@ export default class CheckBoxGroup extends React.Component {
                     data-name={self.props.name}
                     aria-pressed={this.state[option.value]}
                 >
-                    {option.value}
+                    {option.value} {count}
                 </button>
             
             </div>)
@@ -192,6 +197,7 @@ CheckBoxGroup.PropTypes = {
   options: PropTypes.arrayOf(PropTypes.shape({
         value: PropTypes.string,
         checked: false,
+        count: PropTypes.number
   })),
   onCheckboxChange: PropTypes.func,
   type: PropTypes.string
@@ -206,12 +212,15 @@ CheckBoxGroup.defaultProps = {
     { 
         value: "Option 1",
         checked: false,
+        count: 1
     },{ 
         value: "Option 2",
         checked: false,
+        count: 1
     },{ 
         value: "Option 3",
         checked: false,
+        count: 1
     },
   ],
   onCheckboxChange: (name, selected_options)=>{
@@ -219,5 +228,6 @@ CheckBoxGroup.defaultProps = {
     console.log(selected_options)
     
   },
-  type: "checkbox"
+  type: "checkbox",
+  counts: false
 }

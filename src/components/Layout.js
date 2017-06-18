@@ -68,7 +68,7 @@ export default class Layout extends React.Component {
             hiddenMarkers:[],
             clusterer:null,
             
-            
+
             mousedOverMarkers:[],
 
             clusterToFocus:null, 
@@ -81,8 +81,9 @@ export default class Layout extends React.Component {
             filter_ageranges:[],
             filter_age_min:null,
             filter_age_max:null,
-            filter_date_min:null,
-            filter_date_max:null
+
+            filter_date_start:null,
+            filter_date_end:null
 
         }
         //console.log(defaultState)
@@ -273,6 +274,10 @@ export default class Layout extends React.Component {
             filter_educations={this.state.filter_educations}
             filter_devices={this.state.filter_devices}
             filter_ageranges={this.state.filter_ageranges}
+            filter_date_start={this.state.filter_date_start}
+            filter_date_end={this.state.filter_date_end}
+            allTags={this.state.allTags}
+
         />)
     }
 

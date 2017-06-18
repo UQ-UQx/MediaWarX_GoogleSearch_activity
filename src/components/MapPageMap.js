@@ -123,6 +123,7 @@ export default class MapPageMap extends React.Component {
 
        var entries = [];
        var markers = [];
+       var allTags = [];
 
        var self = this;
        entriesRAW.forEach(function(entryAll, ind){
@@ -130,6 +131,13 @@ export default class MapPageMap extends React.Component {
             
             var parsedEntry = JSON.parse(entryAll.entry);
             
+            //console.log(parsedEntry.tags)
+            
+            parsedEntry.tags.forEach((tag, ind)=>{
+
+                allTags.push(tag)
+            })
+
             var iconWidth=30;
             var iconHeight=45;
 
@@ -176,7 +184,7 @@ export default class MapPageMap extends React.Component {
         clusterer.addListener("mouseout", (cluster)=>{this.handleClusterMouseOut(cluster)});
         clusterer.addListener("click", (cluster)=>{this.handleClusterClick(cluster)});
 
-        this.props.handleMapPageStateUpdate({markers:markers, clusterer:clusterer})
+        this.props.handleMapPageStateUpdate({markers:markers, clusterer:clusterer, allTags:allTags})
         
 
     }
