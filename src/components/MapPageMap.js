@@ -22,7 +22,7 @@ export default class MapPageMap extends React.Component {
 
     handleMarkerMouseOver(event, marker){
 
-        ////console.log("marker mouse over:", event,marker);
+        
         if(this.props.mousedOverMarkers.length > 0){
             this.props.handleMapPageStateUpdate({"mousedOverMarkers":[...this.props.mousedOverMarkers, marker]})
         }else{
@@ -32,7 +32,7 @@ export default class MapPageMap extends React.Component {
 
     handleMarkerMouseOut(event, marker){
 
-        ////console.log("marker mouse over:", event,marker);
+        
         this.props.handleMapPageStateUpdate({"mousedOverMarkers":[]})
 
     }
@@ -46,7 +46,7 @@ export default class MapPageMap extends React.Component {
     }
     handleClusterMouseOver(cluster){
 
-        //console.log("moused over cluster", cluster.getMarkers());
+        
         
         // cluster.clusterIcon_.div_.className = cluster.clusterIcon_.div_.className
         //     .replace(new RegExp('(?:^|\\s)'+ 'cluster-to-highlight' + '(?:\\s|$)'), ' ');
@@ -74,7 +74,7 @@ export default class MapPageMap extends React.Component {
 
     componentDidMount(){
 
-        //console.log("MapPageMap component did mount", this.props)
+        
 
         var lat = 37.774546;
         var lng = -122.433523;
@@ -108,11 +108,11 @@ export default class MapPageMap extends React.Component {
             }
         })
         .then(function (response) {
-            //console.log("This shoudl work", self, response.data)
+            
             self.setMarkersInMapUsingAllEntries(response.data)
         })
         .catch(function (error) {
-            //console.log("WOOOOOWOW",error)
+            
         });
 
 
@@ -127,15 +127,15 @@ export default class MapPageMap extends React.Component {
        var self = this;
        entriesRAW.forEach(function(entryAll, ind){
 
-            ////console.log(entryAll);
+            
             var parsedEntry = JSON.parse(entryAll.entry);
-            ////console.log(parsedEntry);
+            
             var iconWidth=30;
             var iconHeight=45;
 
             var iconURL = 'lib/images/red_search_map_icon.png';
 
-            ////console.log("PARSED ENTRY", entryAll.user_id);
+            
             if(entryAll.user_id == $LTI_userID){
                 iconURL = "lib/images/red_you_map_icon.png"
             }
@@ -183,13 +183,13 @@ export default class MapPageMap extends React.Component {
 
     componentWillReceiveProps(){
        
-       console.log("WOOOAHH",this.props)
+      
        this.updateMarkersInBounds();
     }
 
     updateMarkersInBounds(){
 
-        ////console.log("BOUNDS CHANGED")
+        
 
         var map = this.props.map;
 
@@ -213,7 +213,7 @@ export default class MapPageMap extends React.Component {
 
         })
 
-        console.log("markers in bounds:", markersInBounds)
+       
         if(!_.isEqual(prevMarkersInBoundsIds.sort(),markersInBoundsIds.sort())){
             this.props.handleMapPageStateUpdate({markersInBounds:markersInBounds})
         }
@@ -239,7 +239,7 @@ export default class MapPageMap extends React.Component {
                 if(this.props.clusterer.getClusters().length > 0){
                     this.props.clusterer.getClusters().forEach((cluster, ind)=>{
                         if(cluster.getMarkers().length > 1){
-                            //console.log(cluster)
+                            
                             if(cluster.clusterIcon_.div_){
                                 cluster.clusterIcon_.div_.classList.remove("cluster-to-highlight")
                             }
@@ -252,7 +252,7 @@ export default class MapPageMap extends React.Component {
 
 
             
-        console.log('render!!')
+       
 
 
         // let filter_genders = []
@@ -291,7 +291,7 @@ export default class MapPageMap extends React.Component {
             
         //     filters.some(function (v) {
         //         if(details.indexOf(v) >= 0){
-        //             console.log(marker.entry)
+        
         //             marker.setVisible(true);
         //             return true
         //         }
@@ -300,7 +300,7 @@ export default class MapPageMap extends React.Component {
         // })  
         // if(this.props.clusterer){
         //     if(this.props.clusterer.getClusters().length > 0){
-        //         console.log(this.props)
+        
         //         this.props.clusterer.setIgnoreHidden(true)
         //         this.props.clusterer.repaint()
         //     }

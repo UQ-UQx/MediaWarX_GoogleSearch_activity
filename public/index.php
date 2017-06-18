@@ -74,6 +74,12 @@
 			if(isset($calldata{'custom_tags'})){
 				$calldata_custom_tags = json_decode($calldata{'custom_tags'});
 			}
+
+			$calldata_custom_filter_strict = false;
+			if(isset($calldata{'custom_filter_strict'})){
+				$calldata_custom_filter_strict = json_decode($calldata{'custom_filter_strict'});
+			}
+
 		
         ?>
 		
@@ -85,6 +91,8 @@
 		$LTI_resourceID = '<?php echo $lti_id ?>';
 		$LTI_userID = '<?php echo $user_id ?>';
 		$LTI_CUSTOM_tags = JSON.parse('<?php echo json_encode($calldata_custom_tags) ?>');
+		$LTI_CUSTOM_filter_strict = JSON.parse('<?php echo json_encode($calldata_custom_filter_strict) ?>');
+
 
 	</script>
     <div id="app"></div>

@@ -46,6 +46,7 @@ export default class CheckBoxGroup extends React.Component {
     }
     onCheckBoxChange(event){
 
+        
         const target = event.target
         this.setState({[target.value]:target.checked});
         console.log("WOAOOOSOOS", this.state)
@@ -79,19 +80,33 @@ export default class CheckBoxGroup extends React.Component {
         }else{
             flag = true;
         }
-        this.setState({
-            [target.dataset.value]:flag
-        })
-
-   
-
-        
-        //console.log(flag, target.classList)
-        
-
-
 
         let stateOfOptions = {...this.state, [target.dataset.value]:flag};
+
+        if(this.props.type == "radio"){
+
+            let defaultOptionsState = {}
+            this.props.options.forEach(function(obj, ind){
+                defaultOptionsState[obj.value] = obj.checked    
+            })
+
+            this.setState({
+                ...defaultOptionsState, [target.dataset.value]:flag
+            })
+            stateOfOptions = {...defaultOptionsState, [target.dataset.value]:flag}
+
+        }else{
+
+            this.setState({
+                [target.dataset.value]:flag
+            })
+
+
+        }
+
+
+
+
 
         let selected_options = []
         this.props.options.forEach(function(obj, ind){
@@ -179,6 +194,7 @@ CheckBoxGroup.PropTypes = {
         checked: false,
   })),
   onCheckboxChange: PropTypes.func,
+  type: PropTypes.string
   
 };
 
@@ -202,5 +218,6 @@ CheckBoxGroup.defaultProps = {
 
     console.log(selected_options)
     
-  }
+  },
+  type: "checkbox"
 }
