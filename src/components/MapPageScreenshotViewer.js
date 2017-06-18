@@ -45,7 +45,7 @@ export default class MapPageScreenshotViewer extends React.Component {
         //this.props.handleMapPageStateUpdate({"mousedOverMarkers":[...this.props.mousedOverMarkers, this.props.markersInBounds[screenshotMarkerIndex]]})
       
 
-       
+       console.log("moused over marker", this.props.markersInBounds[screenshotMarkerIndex])
         
         if(this.props.mousedOverMarkers.length > 0){
             this.props.handleMapPageStateUpdate({"mousedOverMarkers":[...this.props.mousedOverMarkers, this.props.markersInBounds[screenshotMarkerIndex]]})
