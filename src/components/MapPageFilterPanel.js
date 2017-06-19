@@ -7,6 +7,7 @@ import genders from "../data/genders.json"
 import agesranges from "../data/ageranges.json"
 import DatePicker from 'react-datepicker';
 import { TagCloud } from "react-tagcloud";
+import moment from "moment"
 
 import {Icon} from 'react-fa'
 
@@ -60,15 +61,18 @@ export default class MapPageFilterPanel extends React.Component {
 
 
     handleDatePickerStartChange(date){
+        console.log("HANDLE CHAMHE", date)
         this.props.handleMapPageStateUpdate({
             filter_date_start:date
         })
+        this.handleCheckBoxChange();
     }
 
     handleDatePickerEndChange(date){
         this.props.handleMapPageStateUpdate({
             filter_date_end:date
         })
+        this.handleCheckBoxChange();
     }
 
     handleFilterOptionsOnScroll(event){
@@ -78,7 +82,7 @@ export default class MapPageFilterPanel extends React.Component {
 
     onResetClicked(event){
 
-        console.log("clicked reset")
+        //console.log("clicked reset")
         //remove all filter selections
         this.refs.gender_checkboxgroup.resetSelections();
         this.refs.education_checkboxgroup.resetSelections();
@@ -102,9 +106,7 @@ export default class MapPageFilterPanel extends React.Component {
     }
 
     handleCheckBoxChange(name, selected_options){
-         
         console.log(name, selected_options)
-
         let filter_genders = []
         let filter_educations = []
         let filter_devices = []
@@ -178,8 +180,7 @@ export default class MapPageFilterPanel extends React.Component {
 
        
 
-
-        if(filters.length > 0){
+        if(filters.length > 0 || this.props.filter_date_start || this.props.filter_date_end){
             if(this.state.filter_strict){
                 bounds =  this.strictFilter(bounds, checkDetails, filters);
             }else{
@@ -217,9 +218,14 @@ export default class MapPageFilterPanel extends React.Component {
 
             })
 
+
+
             if(weight != filters.length){
                 marker.setVisible(false)
             }else{
+
+               
+
                 marker.setVisible(true)
                 bounds.extend(marker.getPosition());
             }
@@ -234,8 +240,18 @@ export default class MapPageFilterPanel extends React.Component {
         this.props.markers.forEach((marker, ind)=>{
 
             checkDetails.forEach((detailKey, ind)=>{
+                //console.log("CHECK!!!")
+                var compareDate = moment(marker.entry.date_of_capture);
+                var startDate   = moment(this.props.filter_date_start);
+                var endDate     = moment(this.props.filter_date_end);
 
-                if(_.indexOf(filters, marker.entry[detailKey]) != -1){
+                console.log("woah", startDate, this.props.filter_date_start)
+                var fitsWithDate = false; 
+
+                if(
+                    (_.indexOf(filters, marker.entry[detailKey]) != -1) ||
+                    compareDate.isBetween(startDate, endDate)
+                ){
                     if(!marker.getVisible()){
                         marker.setVisible(true)
                     }
@@ -277,7 +293,7 @@ export default class MapPageFilterPanel extends React.Component {
             })
         }
 
-        console.log(cHeight, sHeight, scrollTop, sHeight-cHeight)
+        //console.log(cHeight, sHeight, scrollTop, sHeight-cHeight)
 
     }
 
@@ -289,7 +305,7 @@ export default class MapPageFilterPanel extends React.Component {
 
 
 
-        console.log("should not be rendering")
+        //console.log("should not be rendering")
 
 
         
@@ -329,7 +345,7 @@ export default class MapPageFilterPanel extends React.Component {
         });
 
         let tagOptions = [];
-        console.log(this.props)
+        //console.log(this.props)
         this.props.allTags.forEach(function(tag, ind){
             let count = 1
             if(tag.tag == "woah"){
@@ -406,7 +422,8 @@ export default class MapPageFilterPanel extends React.Component {
                             popoverAttachment="top right"
                             popoverTargetAttachment="bottom right"
                             popoverTargetOffset="10px 0px"
-                            
+                            isClearable={true}
+
                         />
 
                         <DatePicker
@@ -419,6 +436,8 @@ export default class MapPageFilterPanel extends React.Component {
                             popoverAttachment="top right"
                             popoverTargetAttachment="bottom right"
                             popoverTargetOffset="10px 0px"
+                            isClearable={true}
+
                         />
                                             
                     </div>
