@@ -161,7 +161,7 @@ export default class CheckBoxGroup extends React.Component {
                 count = <span class="badge">{option.count}</span>
             }
 
-            let selectedOptionClassName = "option-selected";
+            let selectedOptionClassName = "option-selected active";
             if(!this.state[option.value]){
                 selectedOptionClassName = ""
             }

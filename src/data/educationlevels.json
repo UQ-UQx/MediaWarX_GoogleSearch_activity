@@ -35,11 +35,6 @@
 
     },
     {
-        "label":"No formal education",
-        "value":"No formal education"
-
-    },
-    {
         "label":"Other education",
         "value":"Other education"
     }
