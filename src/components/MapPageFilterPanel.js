@@ -62,17 +62,14 @@ export default class MapPageFilterPanel extends React.Component {
 
     handleDatePickerStartChange(date){
         console.log("HANDLE CHAMHE", date)
-        this.props.handleMapPageStateUpdate({
-            filter_date_start:date
-        })
-        this.handleCheckBoxChange();
+        
+        this.handleCheckBoxChange("date_start_changed", date);
     }
 
     handleDatePickerEndChange(date){
-        this.props.handleMapPageStateUpdate({
-            filter_date_end:date
-        })
-        this.handleCheckBoxChange();
+       
+        this.handleCheckBoxChange("date_end_changed", date);
+
     }
 
     handleFilterOptionsOnScroll(event){
@@ -112,6 +109,8 @@ export default class MapPageFilterPanel extends React.Component {
         let filter_devices = []
         let filter_ageranges = []
         let filter_tags = []
+        let date_start = null
+        let date_end = null
 
         if(this.props.filter_genders && filter_genders.length == 0){
             filter_genders = [...this.props.filter_genders]
@@ -127,6 +126,12 @@ export default class MapPageFilterPanel extends React.Component {
         }
         if(this.props.filter_tags && filter_tags.length == 0){
             filter_tags = [...this.props.filter_tags]
+        }
+        if(this.props.filter_date_start && !date_start){
+            date_start = this.props.filter_date_start
+        }
+        if(this.props.filter_date_end && !date_end){
+            date_end = this.props.filter_date_end
         }
 
         switch (name) {
@@ -165,6 +170,17 @@ export default class MapPageFilterPanel extends React.Component {
                 filter_tags = []
                 filter_tags = [...selected_options]
                 break;
+            case "date_start_changed":
+                this.props.handleMapPageStateUpdate({
+                    filter_date_start:selected_options
+                })
+                date_start = selected_options
+                break;
+            case "date_end_changed":
+                this.props.handleMapPageStateUpdate({
+                    filter_date_end:selected_options
+                })
+                date_end = selected_options
             default:
                 break;
         }
@@ -180,6 +196,8 @@ export default class MapPageFilterPanel extends React.Component {
             ...filter_tags
         ]
 
+        console.log("filers",filters);
+
         let checkDetails = [
             "gender",
             "education",
@@ -192,15 +210,16 @@ export default class MapPageFilterPanel extends React.Component {
 
        
 
-        if(filters.length > 0 || this.props.filter_date_start || this.props.filter_date_end){
+        if(filters.length > 0 || date_start || date_end){
             if(this.state.filter_strict){
+                //!!!IMPORTANT!!! TAGS and DATES filtering isn't supported in strict filtering yet, once implimented remove this comment.
                 bounds =  this.strictFilter(bounds, checkDetails, filters);
             }else{
                 this.props.markers.forEach((marker, ind)=>{
                     marker.setVisible(false)
                 })
                 
-                bounds = this.looseFilter(bounds, checkDetails, filters);
+                bounds = this.looseFilter(bounds, checkDetails, filters, date_start, date_end);
             }
         }else{
            this.props.markers.forEach((marker, ind)=>{
@@ -248,23 +267,52 @@ export default class MapPageFilterPanel extends React.Component {
 
     }
 
-    looseFilter(bounds, checkDetails, filters){
+    looseFilter(bounds, checkDetails, filters, date_start, date_end){
         this.props.markers.forEach((marker, ind)=>{
 
             checkDetails.forEach((detailKey, ind)=>{
-                console.log("CHECK!!!")
-                var compareDate = moment(marker.entry.date_of_capture);
-                var startDate   = moment(this.props.filter_date_start);
-                var endDate     = moment(this.props.filter_date_end);
+                //console.log("CHECK!!!")
+                let compareDate = moment(marker.entry.date_of_capture)
+                let start_date = moment(date_start)
+                let end_date = moment(date_end)
+                let fitsWithDate = false
 
-                //console.log("woah", startDate, this.props.filter_date_start)
-                var fitsWithDate = false; 
-                                    //console.log(detailKey, filters, marker.entry.tags)
+                 //console.log("start date", date_start)
+                // console.log("end date", date_end)
+                // console.log("compare: ", compareDate, compareDate.isBetween(date_start, date_end, 'days', '[]'))
 
-                var tagMatched = false;
+                if(date_start && date_end){
+
+                    if(compareDate.isBetween(date_start, date_end, 'days', '[]')){
+                        if(!fitsWithDate){
+                            fitsWithDate = true;
+                        }
+                    }
+
+                }else if(date_start){
+
+                    if(compareDate.isSameOrAfter(date_start, 'days')){
+                        if(!fitsWithDate){
+                            fitsWithDate = true;
+                        }
+                    }
+
+                }else if(date_end){
+                    
+                    if(compareDate.isSameOrBefore(date_end, 'days')){
+                        if(!fitsWithDate){
+                            fitsWithDate = true;
+                        }
+                    }
+
+                }else{
+                    console.log("No date provided for filerting")
+                }
+
+
+
+                let tagMatched = false;
                 if(detailKey == "tags"){
-                                    console.log(detailKey,"w", filters, marker.entry.tags)
-
                     marker.entry.tags.forEach((tag, ind)=>{
                         if(_.indexOf(filters, tag) != -1){
                             if(!tagMatched){
@@ -274,10 +322,7 @@ export default class MapPageFilterPanel extends React.Component {
                     })
                 }
 
-                if(
-                    (_.indexOf(filters, marker.entry[detailKey]) != -1) ||
-                    compareDate.isBetween(startDate, endDate) || tagMatched
-                ){
+                if((_.indexOf(filters, marker.entry[detailKey]) != -1) || tagMatched || fitsWithDate){
                     if(!marker.getVisible()){
                         marker.setVisible(true)
                     }
@@ -291,6 +336,10 @@ export default class MapPageFilterPanel extends React.Component {
 
         return bounds
 
+    }
+
+    componentWillReceiveProps(){
+        //console.log(this.props.filter_date_start)
     }
 
     componentDidMount(){

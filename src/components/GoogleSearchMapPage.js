@@ -9,35 +9,8 @@ export default class GoogleSearchMapPage extends React.Component {
         super(props)
 
        
-        this.handleButtonClick = this.handleButtonClick.bind(this)
     }
 
-    handleButtonClick(event){
-
-        console.log("woah");
-
-        const postData = new FormData();
-        postData.append('page', 1);
-        postData.append('tab', "leaderboard");
-        postData.append('game_id', "star-trek-bridge-crew-ps4");
-
-
-       
-        axios.post('http://psntrophyleaders.com/game/getGameLeaders', postData)
-        .then(function(response){
-
-           console.log(response)
-            
-
-        }).catch(function(error){
-
-            //console.log("Single Post Fail: 😡",error.response);
-
-        });
-
-
-
-    }
 
     render(){
 
@@ -47,7 +20,6 @@ export default class GoogleSearchMapPage extends React.Component {
 
         return (<div className="google-search-map-page-component">
 
-            <button onClick={this.handleButtonClick}>calculate</button>
             <div className="map-page-map-container">
                 <MapPageMap 
 
