@@ -49,15 +49,11 @@ export default class Layout extends React.Component {
             image_file:null,
 
             allTags:[
-
+                
             ],
-            tag:"",
             tags:[
-
+                
             ],
-            suggested_tags:[],
-            suggested_tags_fetching:false,
-            suggested_tags_error:null,
 
             location_static_map:null,
             submitted:false,
@@ -81,7 +77,7 @@ export default class Layout extends React.Component {
             filter_ageranges:[],
             filter_age_min:null,
             filter_age_max:null,
-
+            filter_tags:[],
             filter_date_start:null,
             filter_date_end:null
 
@@ -177,6 +173,7 @@ export default class Layout extends React.Component {
 
         });
 
+
     }
 
     checkFormRequirementsMet(){
@@ -237,12 +234,9 @@ export default class Layout extends React.Component {
             image_file={this.state.image_file}
 
             allTags={this.state.allTags}
-            tag={this.state.tag}
+
             tags={this.state.tags}
 
-            suggested_tags={this.state.suggested_tags}
-            suggested_tags_fetching={this.state.suggested_tags_fetching}
-            suggested_tags_error={this.state.suggested_tags_error}
 
             location_static_map={this.state.location_static_map}
 
@@ -273,6 +267,7 @@ export default class Layout extends React.Component {
             filter_genders={this.state.filter_genders}
             filter_educations={this.state.filter_educations}
             filter_devices={this.state.filter_devices}
+            filter_tags={this.state.filter_tags}
             filter_ageranges={this.state.filter_ageranges}
             filter_date_start={this.state.filter_date_start}
             filter_date_end={this.state.filter_date_end}

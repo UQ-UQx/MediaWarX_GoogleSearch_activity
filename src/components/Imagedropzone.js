@@ -75,7 +75,6 @@ export default class Imagedropzone extends React.Component{
                 </div>
             )
 
-
         }
 
 

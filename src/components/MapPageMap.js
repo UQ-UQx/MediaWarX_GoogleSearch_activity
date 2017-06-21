@@ -134,7 +134,7 @@ export default class MapPageMap extends React.Component {
             //console.log(parsedEntry.tags)
             
             parsedEntry.tags.forEach((tag, ind)=>{
-
+                console.log(tag)
                 allTags.push(tag)
             })
 

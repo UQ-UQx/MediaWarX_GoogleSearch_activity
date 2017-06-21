@@ -111,7 +111,7 @@ export default class MapPageFilterPanel extends React.Component {
         let filter_educations = []
         let filter_devices = []
         let filter_ageranges = []
-
+        let filter_tags = []
 
         if(this.props.filter_genders && filter_genders.length == 0){
             filter_genders = [...this.props.filter_genders]
@@ -124,6 +124,9 @@ export default class MapPageFilterPanel extends React.Component {
         }
         if(this.props.filter_ageranges && filter_ageranges.length == 0){
             filter_ageranges = [...this.props.filter_ageranges]
+        }
+        if(this.props.filter_tags && filter_tags.length == 0){
+            filter_tags = [...this.props.filter_tags]
         }
 
         switch (name) {
@@ -155,6 +158,13 @@ export default class MapPageFilterPanel extends React.Component {
                 filter_ageranges = []
                 filter_ageranges = [...selected_options]
                 break;
+            case "tags":
+                this.props.handleMapPageStateUpdate({
+                    filter_tags:selected_options
+                })
+                filter_tags = []
+                filter_tags = [...selected_options]
+                break;
             default:
                 break;
         }
@@ -166,14 +176,16 @@ export default class MapPageFilterPanel extends React.Component {
             ...filter_genders,
             ...filter_educations,
             ...filter_devices,
-            ...filter_ageranges
+            ...filter_ageranges,
+            ...filter_tags
         ]
 
         let checkDetails = [
             "gender",
             "education",
             "device",
-            "agerange"
+            "agerange",
+            "tags"
         ]
 
         let bounds = new google.maps.LatLngBounds();
@@ -240,17 +252,31 @@ export default class MapPageFilterPanel extends React.Component {
         this.props.markers.forEach((marker, ind)=>{
 
             checkDetails.forEach((detailKey, ind)=>{
-                //console.log("CHECK!!!")
+                console.log("CHECK!!!")
                 var compareDate = moment(marker.entry.date_of_capture);
                 var startDate   = moment(this.props.filter_date_start);
                 var endDate     = moment(this.props.filter_date_end);
 
-                console.log("woah", startDate, this.props.filter_date_start)
+                //console.log("woah", startDate, this.props.filter_date_start)
                 var fitsWithDate = false; 
+                                    //console.log(detailKey, filters, marker.entry.tags)
+
+                var tagMatched = false;
+                if(detailKey == "tags"){
+                                    console.log(detailKey,"w", filters, marker.entry.tags)
+
+                    marker.entry.tags.forEach((tag, ind)=>{
+                        if(_.indexOf(filters, tag) != -1){
+                            if(!tagMatched){
+                                tagMatched = true
+                            }
+                        }
+                    })
+                }
 
                 if(
                     (_.indexOf(filters, marker.entry[detailKey]) != -1) ||
-                    compareDate.isBetween(startDate, endDate)
+                    compareDate.isBetween(startDate, endDate) || tagMatched
                 ){
                     if(!marker.getVisible()){
                         marker.setVisible(true)
@@ -346,16 +372,16 @@ export default class MapPageFilterPanel extends React.Component {
 
         let tagOptions = [];
         //console.log(this.props)
-        this.props.allTags.forEach(function(tag, ind){
-            let count = 1
-            if(tag.tag == "woah"){
-                count = 3
+        let counts = _.countBy(this.props.allTags);
+
+        for (var tag in counts) {
+            if (counts.hasOwnProperty(tag)) {
+                tagOptions.push({
+                    value:tag,
+                    count:counts[tag]
+                })
             }
-            tagOptions.push({
-                value:tag.tag,
-                count:count
-            })
-        });
+        }
 
 
 
@@ -383,8 +409,6 @@ export default class MapPageFilterPanel extends React.Component {
             </div>
             
 
-           
-
             <div className="filter-options" ref="filterOptionsContainer" onScroll={this.handleFilterOptionsOnScroll}>
                 <div className="filter-container tag-filter">
                     <div className="filter-container-title">Tags</div>
@@ -398,12 +422,12 @@ export default class MapPageFilterPanel extends React.Component {
                         //         onClick={tag => alert(`'${tag.value}' was selected!`)} />
                                     
                         <CheckBoxGroup
-                        ref="tags_checkboxgroup"
-                        name="tags" 
-                        options={tagOptions} 
-                        onCheckBoxChange={this.handleCheckBoxChange} 
-                        type={groupType}
-                        counts={true}
+                            ref="tags_checkboxgroup"
+                            name="tags" 
+                            options={tagOptions} 
+                            onOptionChange={this.handleCheckBoxChange} 
+                            type={groupType}
+                            counts={true}
                         />
                     }                    
                     </div>
@@ -450,7 +474,7 @@ export default class MapPageFilterPanel extends React.Component {
                     ref="ageranges_checkboxgroup"
                     name="ageranges" 
                     options={ageOptions} 
-                    onCheckBoxChange={this.handleCheckBoxChange} 
+                    onOptionChange={this.handleCheckBoxChange} 
                     type={groupType}
                     />
                                             
@@ -462,7 +486,7 @@ export default class MapPageFilterPanel extends React.Component {
                     ref="gender_checkboxgroup"
                     name="gender" 
                     options={genderOptions} 
-                    onCheckBoxChange={this.handleCheckBoxChange} 
+                    onOptionChange={this.handleCheckBoxChange} 
                     type={groupType}
                     />
                 </div>
@@ -472,7 +496,7 @@ export default class MapPageFilterPanel extends React.Component {
                     ref="education_checkboxgroup"
                     name="education" 
                     options={educationOptions} 
-                    onCheckBoxChange={this.handleCheckBoxChange} 
+                    onOptionChange={this.handleCheckBoxChange} 
                     type={groupType}
                     />
                 </div>
@@ -483,7 +507,7 @@ export default class MapPageFilterPanel extends React.Component {
                     ref="device_checkboxgroup"
                     name="device" 
                     options={deviceOptions} 
-                    onCheckBoxChange={this.handleCheckBoxChange} 
+                    onOptionChange={this.handleCheckBoxChange} 
                     type={groupType}
                     />
                 </div>

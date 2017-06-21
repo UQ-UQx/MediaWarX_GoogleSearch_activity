@@ -23,12 +23,11 @@ export default class ImageUpload extends React.Component {
 
         let imaTagsInput = (<Imagetagsinput
 
-                allTags={this.props.allTags}
-                tag={this.props.tag}
+               
                 handleTagInputChange={this.props.onImageUploadChange}
                 tags={this.props.tags}
-                suggested_tags={this.props.suggested_tags}
-                suggested_tags_fetching={this.props.suggested_tags_fetching}
+               
+               
                 submitted={this.props.submitted}
 
             />);
