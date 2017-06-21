@@ -23,14 +23,8 @@ export default class GoogleSearchUploadForm extends React.Component {
             case "image_file":
                 this.props.handleUploadFormItemUpdate({image_file:imageUpload.value})
                 break;
-            case "tag":
-                this.props.handleUploadFormItemUpdate({tag:imageUpload.value})
-                break;
-            case "add_tag":
-                this.props.handleUploadFormItemUpdate({tags:[...this.props.tags, imageUpload.value]})
-                break;
-            case "remove_tag":
-                this.props.handleUploadFormItemUpdate({tags:this.props.tags.filter(tag => tag.id !== imageUpload.value)})
+            case "update_tags":
+                this.props.handleUploadFormItemUpdate({tags:imageUpload.value})
                 break;
             default:
         }
@@ -259,11 +253,10 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
 
                 image_file={this.props.image_file}
                 onImageUploadChange={this.onImageUploadChange}
-                allTags={this.props.allTags}
-                tag={this.props.tag}
+                
+
                 tags={this.props.tags}
-                suggested_tags={this.props.suggested_tags}
-                suggested_tags_fetching={this.props.suggested_tags_fetching}
+                
                 submitted={this.props.submitted}
             />
 

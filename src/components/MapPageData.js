@@ -38,6 +38,8 @@ export default class MapPageData extends React.Component {
                 filter_genders={this.props.filter_genders}
                 filter_educations={this.props.filter_educations}
                 filter_devices={this.props.filter_devices}
+                filter_tags={this.props.filter_tags}
+
                 filter_ageranges={this.props.filter_ageranges}
                 filter_date_start={this.props.filter_date_start}
                 filter_date_end={this.props.filter_date_end}
@@ -57,6 +59,8 @@ export default class MapPageData extends React.Component {
                 filter_genders={this.props.filter_genders}
                 filter_educations={this.props.filter_educations}
                 filter_devices={this.props.filter_devices}
+                filter_tags={this.props.filter_tags}
+
                 filter_ageranges={this.props.filter_ageranges}
                 filter_date_start={this.props.filter_date_start}
                 filter_date_end={this.props.filter_date_end}

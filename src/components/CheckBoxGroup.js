@@ -21,7 +21,6 @@ export default class CheckBoxGroup extends React.Component {
             ...defaultOptionsState,
         }
 
-        this.onCheckBoxChange = this.onCheckBoxChange.bind(this)
         this.resetSelections = this.resetSelections.bind(this)
     
         this.onOptionButtonClick = this.onOptionButtonClick.bind(this)
@@ -39,32 +38,12 @@ export default class CheckBoxGroup extends React.Component {
             ...defaultOptionsState,
         })
 
-        this.props.onCheckBoxChange(this.props.name, []);     
+        this.props.onOptionChange(this.props.name, []);     
 
 
 
     }
-    onCheckBoxChange(event){
 
-        
-        const target = event.target
-        this.setState({[target.value]:target.checked});
-        console.log("WOAOOOSOOS", this.state)
-
-        let stateOfOptions = {...this.state, [target.value]:target.checked};
-
-        let selected_options = []
-        this.props.options.forEach(function(obj, ind){
-
-            if(stateOfOptions[obj.value]){
-                selected_options.push(obj.value)
-            }
-
-        })   
-
-        this.props.onCheckBoxChange(this.props.name, selected_options);     
-
-    }
 
 
     onOptionButtonClick(event){
@@ -117,41 +96,19 @@ export default class CheckBoxGroup extends React.Component {
 
         })   
 
-        this.props.onCheckBoxChange(this.props.name, selected_options);     
+        this.props.onOptionChange(this.props.name, selected_options);     
 
     }
 
     render(){
-
         
-        // let self = this
-        // let inputs = this.props.options.map(function(obj, ind){
+        let disabled_class = ""
+        let disabled_prop = {}
 
-        //     let checked = obj.checked
-
-        //     if(obj.checked != self.state[obj.value]){
-        //         checked = self.state[obj.value]
-        //     }
-
-        //     return(<div className="checkbox-option-container" key={uuid.v4()}>
-        //             <div className="checkbox-option">
-        //                 <div className="checkbox-option-input-container">
-        //                 <input 
-        //                     type="checkbox" 
-        //                     name={self.props.name} 
-        //                     className="checkbox-option"
-        //                     value={obj.value}
-        //                     checked={checked}
-        //                     onChange={self.onCheckBoxChange}
-        //                 />
-        //                 </div>
-        //                 <div className="checkbox-option-label" >{obj.value}</div>
-        //             </div>
-        //         </div>)
-
-        // })
-        //console.log("WOAH", this.state)
-        
+        if(this.props.disable){
+            disabled_class = "disabled"
+            disabled_prop = {'disabled':true}
+        }
 
         let self = this
         let inputs = this.props.options.map((option, ind)=>{
@@ -169,11 +126,12 @@ export default class CheckBoxGroup extends React.Component {
             return(<div className="option-button-container"  key={uuid.v4()}>
 
                 <button
-                    className={"btn btn-sml btn-default option-button "+selectedOptionClassName+" "+self.props.name+"_option"}
+                    className={"btn btn-sml btn-default option-button "+selectedOptionClassName+" "+self.props.name+"_option "+disabled_class}
                     onClick={self.onOptionButtonClick}
                     data-value={option.value}
                     data-name={self.props.name}
                     aria-pressed={this.state[option.value]}
+                    {...disabled_prop}
                 >
                     {option.value} {count}
                 </button>
@@ -199,7 +157,7 @@ CheckBoxGroup.PropTypes = {
         checked: false,
         count: PropTypes.number
   })),
-  onCheckboxChange: PropTypes.func,
+  onOptionChange: PropTypes.func,
   type: PropTypes.string
   
 };
@@ -223,7 +181,7 @@ CheckBoxGroup.defaultProps = {
         count: 1
     },
   ],
-  onCheckboxChange: (name, selected_options)=>{
+  onOptionChange: (name, selected_options)=>{
 
     console.log(selected_options)
     
