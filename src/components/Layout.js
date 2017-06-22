@@ -98,12 +98,12 @@ export default class Layout extends React.Component {
 
             activity_title:"Title yay",
             activity_instructions:"activity instructions",
-            activity_form_inputs:["location", "age", "gender"],
+            activity_form_inputs_array:["location", "age", "gender"],
             activity_tags:[],
-
+            
             temp_activity_title:"Title yay",
             temp_activity_instructions:"activity instructions",
-            temp_activity_form_inputs:["location", "age", "gender"],
+            temp_activity_form_inputs_array:["location", "age", "gender"],
             temp_activity_tags:[]
 
         }
@@ -257,7 +257,7 @@ export default class Layout extends React.Component {
 
             activity_title={this.state.activity_title}
             activity_instructions={this.state.activity_instructions}
-            activity_form_inputs={this.state.activity_form_inputs}
+            activity_form_inputs_array={this.state.activity_form_inputs_array}
             activity_tags={this.state.activity_tags}
 
             location_name={this.state.location_name}
@@ -333,7 +333,7 @@ export default class Layout extends React.Component {
             handleEditPageItemChange={this.handleEditPageItemChange}
             temp_activity_title = {this.state.temp_activity_title}
             temp_activity_instructions = {this.state.temp_activity_instructions}
-            temp_activity_form_inputs = {this.state.temp_activity_form_inputs}
+            temp_activity_form_inputs_array = {this.state.temp_activity_form_inputs_array}
             temp_activity_tags = {this.state.temp_activity_tags}
             
         />)
@@ -350,7 +350,7 @@ export default class Layout extends React.Component {
          this.setState({
             activity_title:this.state.temp_activity_title,
             activity_instructions:this.state.temp_activity_instructions,
-            activity_form_inputs:this.state.temp_activity_form_inputs,
+            activity_form_inputs_array:this.state.temp_activity_form_inputs_array,
             activity_tags:this.state.temp_activity_tags
         })
 
@@ -360,7 +360,7 @@ export default class Layout extends React.Component {
         postData.append('app_settings', JSON.stringify({
             activity_title:this.state.temp_activity_title,
             activity_instructions:this.state.temp_activity_instructions,
-            activity_form_inputs:this.state.temp_activity_form_inputs,
+            activity_form_inputs_array:this.state.temp_activity_form_inputs_array,
             activity_tags:this.state.temp_activity_tags
         }));
         postData.append('lti_id', $LTI_resourceID);
@@ -382,7 +382,7 @@ export default class Layout extends React.Component {
 
     render(){
     
-        console.log("Layout",this.state)
+       // console.log("Layout",this.state)
 
         
 

@@ -272,7 +272,8 @@ export default class GoogleSearchUploadForm extends React.Component {
 
                 image_file={this.props.image_file}
                 onImageUploadChange={this.onImageUploadChange}
-                
+                activity_tags={this.props.activity_tags}
+
 
                 tags={this.props.tags}
                 

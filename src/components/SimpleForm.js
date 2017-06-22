@@ -234,7 +234,33 @@ export default class SimpleForm extends React.Component {
         }
 
 
+        
+
+
+
         return (<div className="simple-form-container">
+
+
+            <div className="form-horizontal">
+                <div className="form-group">
+                    <label className="col-sm-2 control-label">Activity Title</label>
+                    <div className="col-sm-10">
+                        
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label className="col-sm-2 control-label">Activity Instructions (RAW HTML)</label>
+                    <div className="col-sm-10">
+                        
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label className="col-sm-2 control-label">Activity Instructions (Preview)</label>
+                    <div className="col-sm-10">
+                        
+                    </div>
+                </div>
+            </div>
 
             <table className="form-inputs-table">
                 <tbody>
