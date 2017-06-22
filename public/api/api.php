@@ -393,15 +393,20 @@ class MyApi
 		
 		$userState = null;
 		$appSettings = null;
+		$updatedState = array();
 
-		if(!$this->checkTableExists("states")){
-			$this->reply("Table 'states' for user:".$user_id." in lti:".$lti_id." not found", 404);
+		if($this->checkTableExists("states")){
+			//$this->reply("Table 'states' for user:".$user_id." in lti:".$lti_id." not found", 404);
+			$select = $this->db->query( 'SELECT state FROM states WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id ) );
+			while ( $row = $select->fetch() ) {
+				$userState = $row;
+			}
+
+			foreach (json_decode($userState->state,true) as $stateItemKey => $stateItemValue) {
+				$updatedState[$stateItemKey] = $stateItemValue;
+			}
 		}
 
-        $select = $this->db->query( 'SELECT state FROM states WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id ) );
-		while ( $row = $select->fetch() ) {
-			$userState = $row;
-        }
 
 
 		$select_app_settings = $this->db->query( 'SELECT app_settings FROM app_settings_table WHERE lti_id = :lti_id', array( 'lti_id' => $lti_id) );
@@ -409,10 +414,6 @@ class MyApi
 			$appSettings = $row;
         }
 
-		$updatedState = array();
-		foreach (json_decode($userState->state,true) as $stateItemKey => $stateItemValue) {
-			$updatedState[$stateItemKey] = $stateItemValue;
-		}
 		if($appSettings){
 			foreach (json_decode($appSettings->app_settings,true) as $settingKey => $settingVal) {
 				$updatedState["temp_".$settingKey] = $settingVal;

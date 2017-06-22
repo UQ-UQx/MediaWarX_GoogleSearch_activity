@@ -35,18 +35,25 @@ export default class Imagetagsinput extends React.Component {
 
         console.log("props.tags", this.props.tags)
 
-        let options = [
-            { 
-                value: "World News",
-                checked: false
-            },{ 
-                value: "Sports",
-                checked: false
-            },{ 
-                value: "War",
-                checked: false
+        // let options = [
+        //     { 
+        //         value: "World News",
+        //         checked: false
+        //     },{ 
+        //         value: "Sports",
+        //         checked: false
+        //     },{ 
+        //         value: "War",
+        //         checked: false
+        //     }
+        // ]
+
+        let options = this.props.activity_tags.map((tag)=>{
+            return {
+                value:tag,
+                checked:false
             }
-        ]
+        })
 
         let disable = false;
         if(this.props.submitted){

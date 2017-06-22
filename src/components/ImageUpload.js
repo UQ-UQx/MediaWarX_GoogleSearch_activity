@@ -26,13 +26,14 @@ export default class ImageUpload extends React.Component {
                
                 handleTagInputChange={this.props.onImageUploadChange}
                 tags={this.props.tags}
-               
+                activity_tags={this.props.activity_tags}
+
                
                 submitted={this.props.submitted}
 
             />);
 
-        if(!$LTI_CUSTOM_tags){
+        if(!$LTI_CUSTOM_tags || (this.props.activity_tags.length == 0)){
             imaTagsInput = ""
         }
 

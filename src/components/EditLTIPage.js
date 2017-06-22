@@ -10,7 +10,10 @@ export default class EditLTIPage extends React.Component {
     constructor(props){
         super(props)
 
-       
+       this.state = {
+           tags_string:props.temp_activity_tags.join(", "),
+           
+       }
        this.handleItemChange = this.handleItemChange.bind(this)
     }
 
@@ -21,18 +24,39 @@ export default class EditLTIPage extends React.Component {
 
     handleItemChange(event){
 
-        console.log(event, event.target, event.target.name, event.target.value);
+        //console.log(event, event.target, event.target.name, event.target.value);
+        let value = event.target.value
+        if(event.target.name == "temp_activity_tags"){
+
+            this.setState({
+                tags_string:value
+            })
+            
+            value = event.target.value.replace(/(^[,\s]+)|([,\s]+$)/g, '')
+                        .split(",").map((item)=>item.trim())
+                        .filter((item)=>{return item != ""});
+            
+            
+        }
 
         this.props.handleEditPageItemChange({
-            [event.target.name]:event.target.value
+            [event.target.name]:value
         })
 
     }
 
 
+
     render(){
 
-        console.log(this.props.activity_title)
+        console.log(this.props)
+        let commaSeparatedTagsText = this.state.tags_string//this.props.temp_activity_tags;
+        if(this.props.temp_activity_tags){
+            console.log(this.props.temp_activity_tags)
+           // commaSeparatedTagsText = this.props.temp_activity_tags.join(", ")
+
+        }
+
 
         return (<div className="edit-lti-page-component">
 
@@ -72,7 +96,16 @@ export default class EditLTIPage extends React.Component {
                     </div>
                     <div className="form-group">
                         <label className="col-sm-2 control-label">Activity Tags</label>
-                        <div className="col-sm-10" id="rendered-instructions">
+                        <div className="col-sm-10">
+
+                            <textarea 
+                                type="text" 
+                                className="form-control" 
+                                name="temp_activity_tags" 
+                                placeholder="Enter tags using comma separation" 
+                                value={commaSeparatedTagsText}
+                                onChange={this.handleItemChange}
+                            />
                            
                         </div>
                     </div>
