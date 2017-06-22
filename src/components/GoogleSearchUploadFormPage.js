@@ -1,3 +1,4 @@
+import "../stylesheets/GoogleSearchUploadFormStyles.scss"
 import React from "react"
 import uuid from "uuid"
 
@@ -228,9 +229,9 @@ export default class GoogleSearchUploadForm extends React.Component {
 // activity_form_inputs
 // activity_tags
         return (<div className="google-search-upload-form-component">
-            <h3>{this.props.activity_title}</h3>
-            <div className="activity-instructions-container">
-                {this.props.activity_instructions}
+            <div className="title-instructions-container">
+                <h3>{this.props.activity_title}</h3>
+                <div className="activity-instructions-container"  dangerouslySetInnerHTML={{ __html: this.props.activity_instructions }}></div>
             </div>
 
 
