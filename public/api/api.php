@@ -415,20 +415,13 @@ class MyApi
 		}
 		if($appSettings){
 			foreach (json_decode($appSettings->app_settings,true) as $settingKey => $settingVal) {
-				error_log("WEWQEWWEQ".$settingKey.' *** '.$settingVal);
+				$updatedState["temp_".$settingKey] = $settingVal;
 				$updatedState[$settingKey] = $settingVal;
 			}
 		}
 
-		error_log("WOAH ".json_encode($updatedState)." --- ".json_encode($appSettings));
 
-		
-
-		//if($userState){
-			$this->reply($updatedState);
-		//}
-		//$this->reply("State in table 'states' for user:".$user_id." in lti:".$lti_id." not found",404);
-
+		$this->reply($updatedState);
     }
 
   	public function getUserEntry($lti_id, $user_id){

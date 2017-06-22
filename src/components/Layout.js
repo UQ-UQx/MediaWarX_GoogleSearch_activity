@@ -101,14 +101,12 @@ export default class Layout extends React.Component {
             activity_form_inputs:["location", "age", "gender"],
             activity_tags:[],
 
-            temp_activity_title:"",
-            temp_activity_instructions:"",
-            temp_activity_form_inputs:[],
+            temp_activity_title:"Title yay",
+            temp_activity_instructions:"activity instructions",
+            temp_activity_form_inputs:["location", "age", "gender"],
             temp_activity_tags:[]
 
         }
-        //console.log(defaultState)
-        //props.appState ? this.state = props.appState : this.state = defaultState
 
         this.state = {
             ...defaultState, 
@@ -122,7 +120,7 @@ export default class Layout extends React.Component {
         this.handlePageButtonClick = this.handlePageButtonClick.bind(this);
         this.handleFormInputOnBlur = this.handleFormInputOnBlur.bind(this);
         this.handleMapPageStateUpdate = this.handleMapPageStateUpdate.bind(this);
-        this.handleEditPageChanges = this.handleEditPageChanges.bind(this);
+        this.handleEditPageItemChange = this.handleEditPageItemChange.bind(this);
 
         this.handleEditSaveChangesClick = this.handleEditSaveChangesClick.bind(this);
 
@@ -332,7 +330,7 @@ export default class Layout extends React.Component {
 
         return(<EditLTIPage 
         
-            handleEditPageChanges={this.handleEditPageChanges}
+            handleEditPageItemChange={this.handleEditPageItemChange}
             temp_activity_title = {this.state.temp_activity_title}
             temp_activity_instructions = {this.state.temp_activity_instructions}
             temp_activity_form_inputs = {this.state.temp_activity_form_inputs}
@@ -342,12 +340,8 @@ export default class Layout extends React.Component {
 
     }
 
-    handleEditPageChanges(event){
-
-        this.setState({
-            [event.target.name]:event.target.value
-        })
-        
+    handleEditPageItemChange(item){
+        this.setState(item)   
     }
 
     handleEditSaveChangesClick(event){
@@ -372,9 +366,7 @@ export default class Layout extends React.Component {
         postData.append('lti_id', $LTI_resourceID);
         axios.post('../public/api/api.php', postData)
         .then(function(response){
-            self.setState(response.data);
             
-
         }).catch(function(error){
 
         });
@@ -449,7 +441,7 @@ export default class Layout extends React.Component {
         <div className="layout-component">
 
 
-                <div class='wrapper text-center'>
+                <div class='wrapper text-center application-buttons-container'>
                     <div class="btn-group">
                         {uploadFormPageButton}
                         {mapPageButton}
