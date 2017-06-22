@@ -283,7 +283,7 @@ export default class MapPageFilterPanel extends React.Component {
 
                 if(date_start && date_end){
 
-                    if(compareDate.isBetween(date_start, date_end, 'days', '[]')){
+                    if(compareDate.isBetween(date_start, date_end, null, '[]')){
                         if(!fitsWithDate){
                             fitsWithDate = true;
                         }
@@ -291,15 +291,15 @@ export default class MapPageFilterPanel extends React.Component {
 
                 }else if(date_start){
 
-                    if(compareDate.isSameOrAfter(date_start, 'days')){
+                    if(compareDate.isSameOrAfter(date_start)){
                         if(!fitsWithDate){
                             fitsWithDate = true;
                         }
                     }
 
                 }else if(date_end){
-                    
-                    if(compareDate.isSameOrBefore(date_end, 'days')){
+                    console.log(compareDate, date_end, compareDate.isSame(date_end))
+                    if(compareDate.isSameOrBefore(date_end)){
                         if(!fitsWithDate){
                             fitsWithDate = true;
                         }
