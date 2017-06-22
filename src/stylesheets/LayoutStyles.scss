@@ -1,0 +1,18 @@
+@import "_constants";
+@import "_mixins";
+
+
+.page-buttons-container{
+
+
+}
+
+.edit-lti-buttons-container{
+    float:right;
+    button{
+        margin-left:5px;
+    }
+}
+.center{
+    text-align: center;
+}

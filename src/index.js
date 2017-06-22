@@ -30,12 +30,12 @@ axios.get('../public/api/api.php', {
     }
 })
 .then(function (response) {
-    var serverState = JSON.parse(response.data.state)
-    //console.log("This shoudl work")
+    var serverState = response.data
+    console.log("This shoudl work", response)
     loadApp(serverState)
 })
 .catch(function (error) {
-        //console.log(error.response)
+        console.log(error)
 
     loadApp(null)
 });

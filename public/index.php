@@ -41,6 +41,7 @@
 
 			$lti_id = $lti->lti_id();
 			$user_id = $lti->user_id();
+			$lti_user_roles = $lti->user_roles();
 			$calldata = $lti->calldata();
 
 
@@ -90,6 +91,7 @@
 	<script type="text/javascript">
 		$LTI_resourceID = '<?php echo $lti_id ?>';
 		$LTI_userID = '<?php echo $user_id ?>';
+		$LTI_user_roles = '<?php echo $lti_user_roles ?>';
 		$LTI_CUSTOM_tags = JSON.parse('<?php echo json_encode($calldata_custom_tags) ?>');
 		$LTI_CUSTOM_filter_strict = JSON.parse('<?php echo json_encode($calldata_custom_filter_strict) ?>');
 

@@ -65,6 +65,21 @@ class MyApi
 			case "hello":
 				//error_log("hello has been sent through");
 				break;
+			case "getAppSettings":
+				error_log("getAppSettings has been sent through");
+
+				$data = json_decode($this->request->data);
+				//error_log($data->lti_id);
+				$this->getAppSettings($data->lti_id);
+				break;
+			case "setAppSettings":
+				error_log("setAppSettings has been sent through");
+
+				$request = $this->request;
+				$app_settings = json_decode($request->app_settings, true);
+
+				$this->setAppSettings($request->lti_id, $app_settings);
+				break;
 			case "getUserState":
 				error_log("getUserState has been sent through");
 
@@ -269,6 +284,59 @@ class MyApi
 
 	}
 
+	public function setAppSettings($lti_id, $app_settings){
+		$app_settings = json_encode($app_settings);
+        date_default_timezone_set('Australia/Brisbane');
+        $modified = date('Y-m-d H:i:s');
+		if(!$this->checkTableExists("app_settings_table")){
+				$this->db->raw("CREATE TABLE app_settings_table (
+					id INT(11) UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+					lti_id TEXT NOT NULL,
+					app_settings MEDIUMTEXT,
+					created DATETIME DEFAULT NULL,
+					updated DATETIME DEFAULT NULL
+				)");
+		}
+		$existing = $this->checkapp_settingsExists($lti_id);
+		if(!$existing) {
+			$this->db->create('app_settings_table', array('lti_id'=>$lti_id, 'app_settings'=>$app_settings,'created'=>$modified,'updated'=>$modified));
+		} else {
+			$this->db->query('UPDATE app_settings_table SET app_settings = :app_settings WHERE lti_id = :lti_id', array( 'app_settings' => $app_settings, 'lti_id' => $lti_id ) );
+		}
+    }
+
+	private function checkapp_settingsExists($lti_id){
+
+        $select = $this->db->query( 'SELECT app_settings FROM app_settings_table WHERE lti_id = :lti_id', array( 'lti_id' => $lti_id ) );
+        while ( $row = $select->fetch() ) {
+		   return true;
+        }
+		return false;
+
+	}
+
+	public function getAppSettings($lti_id){
+		
+		if(!$this->checkTableExists("app_settings_table")){
+			$this->reply("Table 'app_settings_table' for lti:".$lti_id." not found", 404);
+		}
+
+        $select = $this->db->query( 'SELECT app_settings FROM app_settings_table WHERE lti_id = :lti_id', array( 'lti_id' => $lti_id) );
+        while ( $row = $select->fetch() ) {
+           $this->reply($row);
+        }
+        $this->reply("app_settings in table 'app_settings_table' for lti:".$lti_id." not found",404);
+
+    }
+
+
+
+
+
+
+
+
+
 	public function setUserState($lti_id, $user_id, $state){
 		
 		$state = json_encode($state);
@@ -323,16 +391,43 @@ class MyApi
     
     public function getUserState($lti_id, $user_id){
 		
+		$userState = null;
+		$appSettings = null;
 
 		if(!$this->checkTableExists("states")){
 			$this->reply("Table 'states' for user:".$user_id." in lti:".$lti_id." not found", 404);
 		}
 
         $select = $this->db->query( 'SELECT state FROM states WHERE lti_id = :lti_id AND user_id = :user_id', array( 'lti_id' => $lti_id, 'user_id' => $user_id ) );
-        while ( $row = $select->fetch() ) {
-           $this->reply($row);
+		while ( $row = $select->fetch() ) {
+			$userState = $row;
         }
-        $this->reply("State in table 'states' for user:".$user_id." in lti:".$lti_id." not found",404);
+
+
+		$select_app_settings = $this->db->query( 'SELECT app_settings FROM app_settings_table WHERE lti_id = :lti_id', array( 'lti_id' => $lti_id) );
+		while ( $row = $select_app_settings->fetch() ) {
+			$appSettings = $row;
+        }
+
+		$updatedState = array();
+		foreach (json_decode($userState->state,true) as $stateItemKey => $stateItemValue) {
+			$updatedState[$stateItemKey] = $stateItemValue;
+		}
+		if($appSettings){
+			foreach (json_decode($appSettings->app_settings,true) as $settingKey => $settingVal) {
+				error_log("WEWQEWWEQ".$settingKey.' *** '.$settingVal);
+				$updatedState[$settingKey] = $settingVal;
+			}
+		}
+
+		error_log("WOAH ".json_encode($updatedState)." --- ".json_encode($appSettings));
+
+		
+
+		//if($userState){
+			$this->reply($updatedState);
+		//}
+		//$this->reply("State in table 'states' for user:".$user_id." in lti:".$lti_id." not found",404);
 
     }
 
