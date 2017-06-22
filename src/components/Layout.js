@@ -1,9 +1,12 @@
+import "../stylesheets/LayoutStyles.scss"
+
 import React from "react"
 
 import axios from "axios"
 
 import GoogleSearchUploadFormPage from "./GoogleSearchUploadFormPage"
 import GoogleSearchMapPage from "./GoogleSearchMapPage"
+import EditLTIPage from "./EditLTIPage"
 
 import each from "lodash/each"
 
@@ -28,8 +31,14 @@ export default class Layout extends React.Component {
             "image_file"
         ]
 
+// Country of the newspaper
+// Name of the newspaper
+// Name of the photographer and/or agency that provided the picture (if neither, write ‘not available’)
+// Caption that accompanies the photo
+
         var defaultState = {
             selected_page:"form_page", // options: form_page | map_page
+            editing_lti:false,
 
             location_name:'',
             location_lat:null,
@@ -37,6 +46,11 @@ export default class Layout extends React.Component {
             location_suggestion_fetching:false,
             location_suggestion:null,
             location_error:null,
+
+            country_of_newspaper:"",
+            name_of_newspaper:"",
+            name_of_photo_origin:"",
+            caption_of_photo:"",
 
             age:"",
             agerange:null,
@@ -79,11 +93,27 @@ export default class Layout extends React.Component {
             filter_age_max:null,
             filter_tags:[],
             filter_date_start:null,
-            filter_date_end:null
+            filter_date_end:null,
+
+
+            activity_title:"Title yay",
+            activity_instructions:"activity instructions",
+            activity_form_inputs:["location", "age", "gender"],
+            activity_tags:[],
+
+            temp_activity_title:"",
+            temp_activity_instructions:"",
+            temp_activity_form_inputs:[],
+            temp_activity_tags:[]
 
         }
         //console.log(defaultState)
-        props.appState ? this.state = props.appState : this.state = defaultState
+        //props.appState ? this.state = props.appState : this.state = defaultState
+
+        this.state = {
+            ...defaultState, 
+            ...props.appState
+        }
 
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.handleUploadFormItemUpdate = this.handleUploadFormItemUpdate.bind(this);
@@ -92,8 +122,10 @@ export default class Layout extends React.Component {
         this.handlePageButtonClick = this.handlePageButtonClick.bind(this);
         this.handleFormInputOnBlur = this.handleFormInputOnBlur.bind(this);
         this.handleMapPageStateUpdate = this.handleMapPageStateUpdate.bind(this);
-        // this.handleUploadFormPageButtonClick = this.handleUploadFormPageButtonClick.bind(this); 
-        // this.handleMapPageButtonClick = this.handleMapPageButtonClick.bind(this);
+        this.handleEditPageChanges = this.handleEditPageChanges.bind(this);
+
+        this.handleEditSaveChangesClick = this.handleEditSaveChangesClick.bind(this);
+
     }
     componentWillMount(){
         //console.log("Layout component will mount")
@@ -203,7 +235,16 @@ export default class Layout extends React.Component {
 
         //console.log("Page button clicked", page);
 
-        this.setState({"selected_page":page})
+        let editing_status = false;
+        if(page == "edit_page"){
+            editing_status = true;
+        }
+
+        this.setState({
+            "selected_page":page,
+            "editing_lti":editing_status,
+        })
+
 
     }
 
@@ -215,6 +256,11 @@ export default class Layout extends React.Component {
 
     renderGoogleSearchUploadFormPage(){
         return (<GoogleSearchUploadFormPage
+
+            activity_title={this.state.activity_title}
+            activity_instructions={this.state.activity_instructions}
+            activity_form_inputs={this.state.activity_form_inputs}
+            activity_tags={this.state.activity_tags}
 
             location_name={this.state.location_name}
             location_lat={this.state.location_lat}
@@ -230,6 +276,12 @@ export default class Layout extends React.Component {
             education={this.state.education}
             dateOfCapture={this.state.dateOfCapture}
             device={this.state.device}
+
+
+            country_of_newspaper={this.state.country_of_newspaper}
+            name_of_newspaper={this.state.name_of_newspaper}
+            name_of_photo_origin={this.state.name_of_photo_origin}
+            caption_of_photo={this.state.caption_of_photo}
 
             image_file={this.state.image_file}
 
@@ -276,8 +328,71 @@ export default class Layout extends React.Component {
         />)
     }
 
+    renderEditPage(){
+
+        return(<EditLTIPage 
+        
+            handleEditPageChanges={this.handleEditPageChanges}
+            temp_activity_title = {this.state.temp_activity_title}
+            temp_activity_instructions = {this.state.temp_activity_instructions}
+            temp_activity_form_inputs = {this.state.temp_activity_form_inputs}
+            temp_activity_tags = {this.state.temp_activity_tags}
+            
+        />)
+
+    }
+
+    handleEditPageChanges(event){
+
+        this.setState({
+            [event.target.name]:event.target.value
+        })
+        
+    }
+
+    handleEditSaveChangesClick(event){
+
+
+         this.setState({
+            activity_title:this.state.temp_activity_title,
+            activity_instructions:this.state.temp_activity_instructions,
+            activity_form_inputs:this.state.temp_activity_form_inputs,
+            activity_tags:this.state.temp_activity_tags
+        })
+
+        var self = this;
+        const postData = new FormData();
+        postData.append('action', "setAppSettings");
+        postData.append('app_settings', JSON.stringify({
+            activity_title:this.state.temp_activity_title,
+            activity_instructions:this.state.temp_activity_instructions,
+            activity_form_inputs:this.state.temp_activity_form_inputs,
+            activity_tags:this.state.temp_activity_tags
+        }));
+        postData.append('lti_id', $LTI_resourceID);
+        axios.post('../public/api/api.php', postData)
+        .then(function(response){
+            self.setState(response.data);
+            
+
+        }).catch(function(error){
+
+        });
+
+
+        
+
+        this.handlePageButtonClick("form_page")
+
+    }
+
+
+
     render(){
-                //console.log("Layout",this.state)
+    
+        console.log("Layout",this.state)
+
+        
 
 
         var page = this.renderGoogleSearchUploadFormPage();
@@ -289,7 +404,43 @@ export default class Layout extends React.Component {
             case "map_page":
                 page = this.renderGoogleSearchMapPage()
                 break;
+            case "edit_page":
+                page = this.renderEditPage()
+                break;
             default:
+        }
+
+        let uploadPageActiveClass = "";
+        let mapPageActiveClass = "";
+
+        this.state.selected_page == "form_page" ? uploadPageActiveClass = "active":null
+        this.state.selected_page == "map_page" ? mapPageActiveClass = "active":null
+
+
+        let uploadFormPageButton = <button  type="button" className={"btn btn-default btn-med page-button "+uploadPageActiveClass} 
+                                onClick={()=>this.handlePageButtonClick("form_page")}>Upload Form</button>
+
+        let mapPageButton = <button  type="button" className={"btn btn-default btn-med page-button "+mapPageActiveClass}
+                                onClick={()=>this.handlePageButtonClick("map_page")}>Map Page</button>
+        
+        let edit_lti_button = ""
+        let cancel_button = ""
+        
+        if($LTI_user_roles == "Instructor"){
+            if(this.state.editing_lti){
+                uploadFormPageButton = ""
+                mapPageButton = ""
+
+                edit_lti_button = <button className="btn btn-warning btn-med edit-lti-button" 
+                                        onClick={this.handleEditSaveChangesClick}>Save Changes</button>
+
+                cancel_button = <button className="btn btn-default btn-med edit-lti-button" 
+                                        onClick={()=>{this.handlePageButtonClick("form_page")}}>Cancel</button>
+
+            }else{
+                edit_lti_button = <button className="btn btn-danger btn-med edit-lti-button" 
+                                        onClick={()=>this.handlePageButtonClick("edit_page")}>Edit LTI</button>
+            }
         }
 
 
@@ -297,10 +448,18 @@ export default class Layout extends React.Component {
         return (
         <div className="layout-component">
 
-            <button className="btn btn-default btn-med page-button" onClick={()=>this.handlePageButtonClick("form_page")}>Upload Form</button>
-            <button className="btn btn-default btn-med page-button" onClick={()=>this.handlePageButtonClick("map_page")}>Map Page</button>
 
-            {page}
+                <div class='wrapper text-center'>
+                    <div class="btn-group">
+                        {uploadFormPageButton}
+                        {mapPageButton}
+                        {cancel_button}
+                        {edit_lti_button}
+                    </div>
+                </div>
+
+          
+            <div className="page-content-containers page-container clearfix">{page}</div>
 
         </div>);
     }

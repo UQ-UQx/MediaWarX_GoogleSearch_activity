@@ -32,7 +32,38 @@ export default class SimpleForm extends React.Component {
         this.onDateChange = this.onDateChange.bind(this)
         this.onDeviceChange = this.onDeviceChange.bind(this)
         this.onAgeRangeChange = this.onAgeRangeChange.bind(this)
+
+        this.onCountry_of_newspaperChange = this.onCountry_of_newspaperChange.bind(this) 
+        this.onName_of_newspaperChange = this.onName_of_newspaperChange.bind(this) 
+        this.onName_of_photo_originChange = this.onName_of_photo_originChange.bind(this) 
+        this.onCaption_of_photoChange = this.onCaption_of_photoChange.bind(this) 
     }
+
+    onCountry_of_newspaperChange(event){
+        this.props.onSimpleFormChange({
+            type:"country_of_newspaper",
+            value:event.target.value
+        })
+    }
+    onName_of_newspaperChange(event){
+        this.props.onSimpleFormChange({
+            type:"name_of_newspaper",
+            value:event.target.value
+        })
+    }
+    onName_of_photo_originChange(event){
+        this.props.onSimpleFormChange({
+            type:"name_of_photo_origin",
+            value:event.target.value
+        })
+    }
+    onCaption_of_photoChange(event){
+        this.props.onSimpleFormChange({
+            type:"caption_of_photo",
+            value:event.target.value
+        })
+    }
+
 
     onLocationInputChange(data){
         this.props.onSimpleFormChange(data)
@@ -118,14 +149,17 @@ export default class SimpleForm extends React.Component {
 
 
        
-        console.log(this.props)
         let locationInput = this.props.location_name, 
             ageInput = this.props.age, 
             genderInput = this.props.gender, 
             educationInput = this.props.education, 
             agerange = this.props.agerange,
             dateOfCaptureInput = moment(this.props.dateOfCapture).format("Do MMM YYYY"),
-            deviceInput = this.props.device;
+            deviceInput = this.props.device,
+            country_of_newspaperInput = this.props.country_of_newspaper,
+            name_of_newspaperInput = this.props.name_of_newspaper,
+            name_of_photo_originInput = this.props.name_of_photo_origin,
+            caption_of_photoInput = this.props.caption_of_photo;
 
 
         if(!this.props.submitted){
@@ -137,16 +171,6 @@ export default class SimpleForm extends React.Component {
                             location_error={this.props.location_error}
                             onLocationInputChange={this.onLocationInputChange}
                         />)
-            // ageInput = (<input
-            //                     type="number"
-            //                     class="age-input"
-            //                     id="age-input"
-            //                     placeholder="Enter Age"
-            //                     min="1"
-            //                     max="122"
-            //                     value={this.props.age}
-            //                     onChange={this.onAgeInputChange}
-            //                 />)
             agerange = (<Select
                             	name="agerange-dropdown"
                                 value={this.props.agerange}
@@ -182,6 +206,31 @@ export default class SimpleForm extends React.Component {
                             	options={devices}
                             	onChange={this.onDeviceChange}
                             />)
+
+            country_of_newspaperInput = (<input className="default-input country_of_newspaper-input"
+                                name="country_of_newspaper-input"
+                                value={this.props.country_of_newspaper}
+                                placeholder="Country of newspaper name"
+                                onChange={this.onCountry_of_newspaperChange}
+                            />)
+            name_of_newspaperInput = (<input className="default-input name_of_newspaper-input"
+                                name="name_of_newspaper-input"
+                                value={this.props.name_of_newspaper}
+                                placeholder="Newspaper name"
+                                onChange={this.onName_of_newspaperChange}
+                            />)
+            name_of_photo_originInput = (<input className="default-input name_of_photo_origin-input"
+                                name="name_of_photo_origin-input"
+                                value={this.props.name_of_photo_origin}
+                                placeholder="Photographer/Agency name"
+                                onChange={this.onName_of_photo_originChange}
+                            />)
+            caption_of_photoInput = (<input className="default-input caption_of_photo-input"
+                                name="caption_of_photo-input"
+                                value={this.props.caption_of_photo}
+                                placeholder="Photo caption"
+                                onChange={this.onCaption_of_photoChange}
+                            />)
         }
 
 
@@ -212,21 +261,6 @@ export default class SimpleForm extends React.Component {
                     </td>
                 </tr>
                 <tr>
-
-                    {
-                        // <td><span className="form-input-label-span">Ethnicity:</span></td>
-                        // <td>
-                        //     <div className="nationality-dropdown-container">
-                        //         <Select
-                        //             name="gender-dropdown"
-                        //             value={this.props.nationality}
-                        //             placeholder="Please Select You Nationality"
-                        //             options={nationalities}
-                        //             onChange={this.onNationalityChange}
-                        //         />
-                        //     </div>
-                        // </td>
-                    }    
                  
                     <td><span className="form-input-label-span">Education:</span></td>
                     <td>
@@ -260,6 +294,56 @@ export default class SimpleForm extends React.Component {
 
                
                 </tr>
+
+                <tr>
+                   
+                <td><span className="form-input-label-span">Country of news orginisation:</span></td>
+                    <td>
+                        <div className="country_of_newspaper-container">
+                             {country_of_newspaperInput}
+                        </div>
+                    </td>
+
+               
+                </tr>
+
+                <tr>
+                   
+                <td><span className="form-input-label-span">Name of newspaper:</span></td>
+                    <td>
+                        <div className="name_of_newspaper-container">
+                             {name_of_newspaperInput}
+                        </div>
+                    </td>
+
+               
+                </tr>
+
+                <tr>
+                   
+                <td><span className="form-input-label-span">Photographer/Agency of photo:</span></td>
+                    <td>
+                        <div className="name_of_photo_origin-container">
+                             {name_of_photo_originInput}
+                        </div>
+                    </td>
+
+               
+                </tr>
+
+                <tr>
+                   
+                <td><span className="form-input-label-span">Photo's caption:</span></td>
+                    <td>
+                        <div className="caption_of_photo-container">
+                             {caption_of_photoInput}
+                        </div>
+                    </td>
+
+               
+                </tr>
+
+
                 </tbody>
             </table>
 
@@ -290,3 +374,9 @@ export default class SimpleForm extends React.Component {
         </div>);
     })
 } */
+
+
+// Country of the newspaper
+// Name of the newspaper
+// Name of the photographer and/or agency that provided the picture (if neither, write ‘not available’)
+// Caption that accompanies the photo

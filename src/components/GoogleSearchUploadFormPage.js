@@ -93,12 +93,23 @@ export default class GoogleSearchUploadForm extends React.Component {
             case "agerange":
                 this.props.handleUploadFormItemUpdate({agerange:formChange.value})
                 break;
+            case "country_of_newspaper":
+                this.props.handleUploadFormItemUpdate({country_of_newspaper:formChange.value})
+                break;
+            case "name_of_newspaper":
+                this.props.handleUploadFormItemUpdate({name_of_newspaper:formChange.value})
+                break;
+            case "name_of_photo_origin":
+                this.props.handleUploadFormItemUpdate({name_of_photo_origin:formChange.value})
+                break;
+            case "caption_of_photo":
+                this.props.handleUploadFormItemUpdate({caption_of_photo:formChange.value})
+                break;
 
             default:
 
         }
     }
-
 
 
     toDataURL(src, callback, outputFormat){
@@ -211,15 +222,16 @@ export default class GoogleSearchUploadForm extends React.Component {
         if(this.props.submitted){
             submitButton = ""
         }
-
+        console.log("FORM PAGE",this.props)
+// activity_title
+// activity_instructions
+// activity_form_inputs
+// activity_tags
         return (<div className="google-search-upload-form-component">
-            <h3>Google Search Upload</h3>
-            <p><b>Instructions:</b> Cupcake ipsum dolor sit amet cookie. Cake lollipop muffin sugar plum.
-                Chupa chups sugar plum powder. Toffee tart carrot cake chocolate cake gummi bears cheesecake.
-Cotton candy pastry cake cotton candy pudding. Pastry powder dragée marshmallow macaroon
-wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
- Candy jelly gummi bears tiramisu dragée chocolate cake biscuit.</p>
-            <p><b>Step 1: Complete Form</b></p>
+            <h3>{this.props.activity_title}</h3>
+            <div className="activity-instructions-container">
+                {this.props.activity_instructions}
+            </div>
 
 
             <SimpleForm
@@ -236,6 +248,12 @@ wafer caramels caramels. Jelly-o soufflé macaroon gingerbread candy soufflé.
                 dateOfCapture={this.props.dateOfCapture}
                 device={this.props.device}
                 agerange={this.props.agerange}
+
+                country_of_newspaper={this.props.country_of_newspaper}
+                name_of_newspaper={this.props.name_of_newspaper}
+                name_of_photo_origin={this.props.name_of_photo_origin}
+                caption_of_photo={this.props.caption_of_photo}
+
 
 
                  onSimpleFormChange={this.onSimpleFormChange}
