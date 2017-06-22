@@ -61,6 +61,10 @@ border-radius: 5px;
 
     background-color:darkorange !important;
     color:white !important;
+    .count_badge{
+        background-color: white;
+        color:black;
+    }
 
 }
 
@@ -72,4 +76,16 @@ border-radius: 5px;
 .option-button{
     margin:3px;
     float:left;
+}
+
+.count_badge{
+    background-color:black;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    padding:2px;
+    padding-left:6px;
+    padding-right:6px;
+    color:white;
+    pointer-events: none !important;
 }
