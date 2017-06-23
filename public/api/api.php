@@ -271,6 +271,10 @@ class MyApi
 			"image_size"=>$size,
 			"device"=>$state->device,
 			"date_of_capture"=>$state->dateOfCapture,
+			"country_of_newspaper"=>$state->country_of_newspaper,
+			"name_of_newspaper"=>$state->name_of_newspaper,
+			"name_of_photo_origin"=>$state->name_of_photo_origin,
+			"caption_of_photo"=>$state->caption_of_photo
 		);
 
 		//error_log("ENTRY: ".json_encode($state));
@@ -402,9 +406,13 @@ class MyApi
 				$userState = $row;
 			}
 
-			foreach (json_decode($userState->state,true) as $stateItemKey => $stateItemValue) {
-				$updatedState[$stateItemKey] = $stateItemValue;
+			if($userState){
+				foreach (json_decode($userState->state,true) as $stateItemKey => $stateItemValue) {
+					$updatedState[$stateItemKey] = $stateItemValue;
+				}
 			}
+
+			
 		}
 
 

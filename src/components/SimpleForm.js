@@ -203,6 +203,7 @@ export default class SimpleForm extends React.Component {
                             onLocationInputChange={this.onLocationInputChange}
                             className="form-control"
                         />)
+
             agerange = (<Select
                             	name="agerange-dropdown"
                                 value={this.props.agerange}
@@ -239,12 +240,6 @@ export default class SimpleForm extends React.Component {
                             	onChange={this.onDeviceChange}
                             />)
 
-            // country_of_newspaperInput = (<input className="default-input country_of_newspaper-input form-control"
-            //                     name="country_of_newspaper-input"
-            //                     value={this.props.country_of_newspaper}
-            //                     placeholder="Country of newspaper name"
-            //                     onChange={this.onCountry_of_newspaperChange}
-            //                 />)
              country_of_newspaperInput = (<Select
                             	name="country-dropdown"
                                 value={this.props.country_of_newspaper}
@@ -274,7 +269,6 @@ export default class SimpleForm extends React.Component {
         }
 
 
-        console.log(this.props.activity_form_inputs_array)
 
         let suggestionContent = ""
         if(this.props.location_suggestion){
@@ -284,76 +278,139 @@ export default class SimpleForm extends React.Component {
         }
 
 
+        let locationInputContainer = ""
+
+        let agerangeContainer = ""
+
+        let genderInputContainer = ""
+
+        let educationInputContainer = ""
+
+        let dateOfCaptureInputContainer = ""
+
+        let deviceInputContainer = ""
+
+        let country_of_newspaperInputContainer = ""
+
+        let name_of_newspaperInputContainer = ""
+
+        let name_of_photo_originInputContainer = ""
+
+        let caption_of_photoInputContainer = ""
+
+        console.log(this.props.activity_form_inputs_array)
+
+        this.props.activity_form_inputs_array.forEach((item)=>{
+
+            switch (item) {
+                case "location":
+                    locationInputContainer = (<div><div className="form-group">
+                        <label className="col-sm-2 control-label">Location</label>
+                        <div className="col-sm-10">
+                            {locationInput}
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="col-sm-2 control-label"></label>
+                        <div className="col-sm-10">
+                            {suggestionContent}
+                        </div>
+                    </div></div>)
+                    break;
+                case "age":
+                    agerangeContainer = (<div className="form-group">
+                        <label className="col-sm-2 control-label">Age</label>
+                        <div className="col-sm-10">
+                            {agerange}
+                        </div>
+                    </div>)
+                    break;
+                case "gender":
+                    genderInputContainer = (<div className="form-group">
+                        <label className="col-sm-2 control-label">Gender</label>
+                        <div className="col-sm-10">
+                            {genderInput}
+                        </div>
+                    </div>)
+                    break;
+                case "education":
+                    educationInputContainer = (<div className="form-group">
+                        <label className="col-sm-2 control-label">Education</label>
+                        <div className="col-sm-10">
+                            {educationInput}
+                        </div>
+                    </div>)
+                    break;
+                case "date_of_capture":
+                    dateOfCaptureInputContainer = (<div className="form-group">
+                        <label className="col-sm-2 control-label">Date of Screencapture</label>
+                        <div className="col-sm-10">
+                            {dateOfCaptureInput}
+                        </div>
+                    </div>)
+                    break;
+                case "device":
+                    deviceInputContainer = (<div className="form-group">
+                        <label className="col-sm-2 control-label">Device</label>
+                        <div className="col-sm-10">
+                            {deviceInput}
+                        </div>
+                    </div>)
+                    break;
+                case "country_of_newspaper":
+                    country_of_newspaperInputContainer = (<div className="form-group">
+                        <label className="col-sm-2 control-label">Country of news orginisation</label>
+                        <div className="col-sm-10">
+                            {country_of_newspaperInput}
+                        </div>
+                    </div>)
+                    break;
+                case "name_of_newspaper":
+                    name_of_newspaperInputContainer = (<div className="form-group">
+                        <label className="col-sm-2 control-label">Name of newspaper</label>
+                        <div className="col-sm-10">
+                            {name_of_newspaperInput}
+                        </div>
+                    </div>)
+                    break;
+                case "name_of_photo_origin":
+                    name_of_photo_originInputContainer = (<div className="form-group">
+                        <label className="col-sm-2 control-label">Photographer/Agency of photo</label>
+                        <div className="col-sm-10">
+                            {name_of_photo_originInput}
+                        </div>
+                    </div>)
+                    break;
+                case "caption_of_photo":
+                    caption_of_photoInputContainer = (<div className="form-group">
+                        <label className="col-sm-2 control-label">Photo's caption</label>
+                        <div className="col-sm-10">
+                            {caption_of_photoInput}
+                        </div>
+                    </div>)
+                    break;
+                default:
+                    break;
+            }
+
+
+        })
+
+
         return (<div className="simple-form-container">
 
-
             <div className="form-horizontal">
-                <div className="form-group">
-                    <label className="col-sm-2 control-label">Location</label>
-                    <div className="col-sm-10">
-                        {locationInput}
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label className="col-sm-2 control-label"></label>
-                    <div className="col-sm-10">
-                       {suggestionContent}
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label className="col-sm-2 control-label">Age</label>
-                    <div className="col-sm-10">
-                        {agerange}
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label className="col-sm-2 control-label">Gender</label>
-                    <div className="col-sm-10">
-                        {genderInput}
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label className="col-sm-2 control-label">Education</label>
-                    <div className="col-sm-10">
-                        {educationInput}
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label className="col-sm-2 control-label">Date of Screencapture</label>
-                    <div className="col-sm-10">
-                        {dateOfCaptureInput}
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label className="col-sm-2 control-label">Device</label>
-                    <div className="col-sm-10">
-                        {deviceInput}
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label className="col-sm-2 control-label">Country of news orginisation</label>
-                    <div className="col-sm-10">
-                        {country_of_newspaperInput}
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label className="col-sm-2 control-label">Name of newspaper</label>
-                    <div className="col-sm-10">
-                        {name_of_newspaperInput}
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label className="col-sm-2 control-label">Photographer/Agency of photo</label>
-                    <div className="col-sm-10">
-                        {name_of_photo_originInput}
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label className="col-sm-2 control-label">Photo's caption</label>
-                    <div className="col-sm-10">
-                        {caption_of_photoInput}
-                    </div>
-                </div>
+
+                            {locationInputContainer}
+                            {agerangeContainer}
+                            {genderInputContainer}
+                            {educationInputContainer}
+                            {dateOfCaptureInputContainer}
+                            {deviceInputContainer}
+                            {country_of_newspaperInputContainer}
+                            {name_of_newspaperInputContainer}
+                            {name_of_photo_originInputContainer}
+                            {caption_of_photoInputContainer}
             </div>
 
 

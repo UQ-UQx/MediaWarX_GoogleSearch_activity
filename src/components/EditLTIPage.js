@@ -56,6 +56,8 @@ var list_items_options = [
                     value:"Caption of photo"                            
                 },
     ]
+
+
         
 export default class EditLTIPage extends React.Component {
     constructor(props){
