@@ -14,14 +14,14 @@ export default class MapPageData extends React.Component {
 
     componentDidMount(){
 
-        //console.log("Data container did mount");
+        ////console.log("Data container did mount");
 
     }
 
     render(){
 
 
-        //console.log("Map Page Data", this.props)
+        ////console.log("Map Page Data", this.props)
         
         return (<div className="map-page-data-container">
 

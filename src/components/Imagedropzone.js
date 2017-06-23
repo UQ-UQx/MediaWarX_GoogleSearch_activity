@@ -25,7 +25,7 @@ export default class Imagedropzone extends React.Component{
 
 
     onDrop(acceptedFiles, rejectedFiles){
-        //console.log(acceptedFiles);
+        ////console.log(acceptedFiles);
       this.props.onImageUploadChange({
           type:"image_file",
           value:acceptedFiles[0]

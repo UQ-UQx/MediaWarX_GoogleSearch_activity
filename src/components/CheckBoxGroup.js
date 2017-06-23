@@ -88,10 +88,20 @@ export default class CheckBoxGroup extends React.Component {
 
 
         let selected_options = []
+        let self = this
         this.props.options.forEach(function(obj, ind){
 
             if(stateOfOptions[obj.value]){
-                selected_options.push(obj.value)
+                switch (self.props.returnVal) {
+                    case "value":
+                        selected_options.push(obj.value)
+                        break;
+                    case "all":
+                        selected_options.push(obj)
+                        break;
+                    default:
+                        break;
+                }
             }
 
         })   
@@ -158,7 +168,8 @@ CheckBoxGroup.PropTypes = {
         count: PropTypes.number
   })),
   onOptionChange: PropTypes.func,
-  type: PropTypes.string
+  type: PropTypes.string,
+  returnVal: PropTypes.string
   
 };
 
@@ -183,9 +194,10 @@ CheckBoxGroup.defaultProps = {
   ],
   onOptionChange: (name, selected_options)=>{
 
-    console.log(selected_options)
+    //console.log(selected_options)
     
   },
   type: "checkbox",
-  counts: false
+  counts: false,
+  returnVal: "value"
 }

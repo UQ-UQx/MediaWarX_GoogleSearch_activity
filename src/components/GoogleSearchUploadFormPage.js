@@ -41,7 +41,7 @@ export default class GoogleSearchUploadForm extends React.Component {
                 this.props.handleFormInputOnBlur();
                 break;
             case "location_name":
-                //console.log(input.type,": ",input.value)
+                ////console.log(input.type,": ",input.value)
                 this.props.handleUploadFormItemUpdate({location_name:formChange.value})
                 break;
             case "location_coordinates":
@@ -56,7 +56,7 @@ export default class GoogleSearchUploadForm extends React.Component {
                     this.toDataURL(
                     "https://maps.googleapis.com/maps/api/staticmap?center="+locationString+"&zoom=5&scale=false&size=600x300&maptype=roadmap&format=jpg&visual_refresh=true&markers=size:mid%7C"+locationString+"&key=AIzaSyBQ7RQL3LDtmQ4ccxW_uBZLflfETkaKE6U"
                     ,(url)=>{
-                        console.log("stop");
+                        //console.log("stop");
                         this.props.handleUploadFormItemUpdate({location_static_map:url})
                     },
                     "jpg")
@@ -134,9 +134,9 @@ export default class GoogleSearchUploadForm extends React.Component {
     }
 
     handleSavePDF(){
-        console.log("saving")
+        //console.log("saving")
 
-      console.log("handleSavePDF ", this.props)
+      //console.log("handleSavePDF ", this.props)
       this.toDataURL(this.props.image_file.preview, (search_image_data)=>{
 
 
@@ -184,7 +184,7 @@ export default class GoogleSearchUploadForm extends React.Component {
 
 
           doc.save('Test.pdf', (opt)=>{
-              console.log("saved", opt)
+              //console.log("saved", opt)
           })
 
 
@@ -200,7 +200,7 @@ export default class GoogleSearchUploadForm extends React.Component {
     }
 
     handleSubmit(){
-        console.log("handleSubmit ",this.props);
+        //console.log("handleSubmit ",this.props);
 
         this.props.handleFormSubmit();
     }
@@ -223,19 +223,14 @@ export default class GoogleSearchUploadForm extends React.Component {
         if(this.props.submitted){
             submitButton = ""
         }
-        console.log("FORM PAGE",this.props)
-// activity_title
-// activity_instructions
-// activity_form_inputs
-// activity_tags
-        return (<div className="google-search-upload-form-component">
-            <div className="title-instructions-container">
-                <h3>{this.props.activity_title}</h3>
-                <div className="activity-instructions-container"  dangerouslySetInnerHTML={{ __html: this.props.activity_instructions }}></div>
-            </div>
+        //console.log("FORM PAGE",this.props)
 
 
-            <SimpleForm
+
+        let simpleFormComponent = ( <SimpleForm
+
+                activity_form_inputs_array={this.props.activity_form_inputs_array}
+
 
                  location_name={this.props.location_name}
                  location_suggestion={this.props.location_suggestion}
@@ -262,7 +257,22 @@ export default class GoogleSearchUploadForm extends React.Component {
                 submitted={this.props.submitted}
 
 
-             />
+             />)
+        //console.log("ROAR",this.props.activity_form_inputs_array)
+        if(this.props.activity_form_inputs_array.length == 0){
+            simpleFormComponent = ""
+        }
+
+
+
+
+        return (<div className="google-search-upload-form-component">
+            <div className="title-instructions-container">
+                <h3>{this.props.activity_title}</h3>
+                <div className="activity-instructions-container"  dangerouslySetInnerHTML={{ __html: this.props.activity_instructions }}></div>
+            </div>
+
+            {simpleFormComponent}
 
             <br/>
             <p><b>Step 2: Upload Google Search Screenshot</b></p>

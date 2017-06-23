@@ -15,7 +15,7 @@ export default class GoogleSearchMapPage extends React.Component {
     render(){
 
 
-        //console.log("GoogleSearchMapPage",this.props)
+        ////console.log("GoogleSearchMapPage",this.props)
 
 
         return (<div className="google-search-map-page-component">
