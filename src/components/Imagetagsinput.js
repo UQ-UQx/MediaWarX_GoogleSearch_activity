@@ -33,7 +33,7 @@ export default class Imagetagsinput extends React.Component {
 
     render(){
 
-        console.log("props.tags", this.props.tags)
+        //console.log("props.tags", this.props.tags)
 
         // let options = [
         //     { 
@@ -132,7 +132,7 @@ export default class Imagetagsinput extends React.Component {
 //     }
 //     handleKeyUp(event){
 
-//         console.log(event.keyCode);
+//         //console.log(event.keyCode);
 
 
 //         switch (event.keyCode) {

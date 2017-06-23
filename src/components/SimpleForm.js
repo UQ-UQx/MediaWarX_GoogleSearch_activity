@@ -5,6 +5,7 @@ import educationlevels from "../data/educationlevels.json";
 import genders from "../data/genders.json"
 import devices from "../data/devices.json"
 import ageranges from "../data/ageranges.json"
+import countries from "../data/countries.json"
 
 import Select from 'react-select';
 
@@ -32,11 +33,30 @@ export default class SimpleForm extends React.Component {
         this.onDateChange = this.onDateChange.bind(this)
         this.onDeviceChange = this.onDeviceChange.bind(this)
         this.onAgeRangeChange = this.onAgeRangeChange.bind(this)
+        this.onCountryChange = this.onCountryChange.bind(this)
 
         this.onCountry_of_newspaperChange = this.onCountry_of_newspaperChange.bind(this) 
         this.onName_of_newspaperChange = this.onName_of_newspaperChange.bind(this) 
         this.onName_of_photo_originChange = this.onName_of_photo_originChange.bind(this) 
         this.onCaption_of_photoChange = this.onCaption_of_photoChange.bind(this) 
+
+        this.handleSuggestedTextClick = this.handleSuggestedTextClick.bind(this)
+
+    }
+
+    handleSuggestedTextClick(event){
+        event.preventDefault();
+
+        this.onLocationInputChange({
+            type:"location_name",
+            value:this.props.location_suggestion,
+        })
+
+        this.onLocationInputChange({
+            type:"location_suggestion",
+            value:null,
+        })
+
     }
 
     onCountry_of_newspaperChange(event){
@@ -131,6 +151,17 @@ export default class SimpleForm extends React.Component {
             value:device
         });
     }
+    onCountryChange(data){
+        var country = null;
+        if(data){
+            country = data.value
+        }
+
+        this.props.onSimpleFormChange({
+            type:"country_of_newspaper",
+            value:country
+        });
+    }
 
     onAgeRangeChange(data) {
         var ageRange = null;
@@ -170,6 +201,7 @@ export default class SimpleForm extends React.Component {
                             location_suggestion_fetching={this.props.location_suggestion_fetching}
                             location_error={this.props.location_error}
                             onLocationInputChange={this.onLocationInputChange}
+                            className="form-control"
                         />)
             agerange = (<Select
                             	name="agerange-dropdown"
@@ -196,7 +228,7 @@ export default class SimpleForm extends React.Component {
                                 selected={this.props.dateOfCapture}
                                 onChange={this.onDateChange}
                                 isClearable={true}
-                               // className="date-picker-custom-styles"
+                                className="form-control"
                                 calendarClassName="date-picker-calendar-custom-styles"
                             />)
             deviceInput = (<Select
@@ -207,25 +239,33 @@ export default class SimpleForm extends React.Component {
                             	onChange={this.onDeviceChange}
                             />)
 
-            country_of_newspaperInput = (<input className="default-input country_of_newspaper-input"
-                                name="country_of_newspaper-input"
+            // country_of_newspaperInput = (<input className="default-input country_of_newspaper-input form-control"
+            //                     name="country_of_newspaper-input"
+            //                     value={this.props.country_of_newspaper}
+            //                     placeholder="Country of newspaper name"
+            //                     onChange={this.onCountry_of_newspaperChange}
+            //                 />)
+             country_of_newspaperInput = (<Select
+                            	name="country-dropdown"
                                 value={this.props.country_of_newspaper}
-                                placeholder="Country of newspaper name"
-                                onChange={this.onCountry_of_newspaperChange}
+                            	placeholder="Please Select The Country of Newspaper Origin"
+                            	options={countries}
+                            	onChange={this.onCountryChange}
                             />)
-            name_of_newspaperInput = (<input className="default-input name_of_newspaper-input"
+            
+            name_of_newspaperInput = (<input className="default-input name_of_newspaper-input form-control"
                                 name="name_of_newspaper-input"
                                 value={this.props.name_of_newspaper}
                                 placeholder="Newspaper name"
                                 onChange={this.onName_of_newspaperChange}
                             />)
-            name_of_photo_originInput = (<input className="default-input name_of_photo_origin-input"
+            name_of_photo_originInput = (<input className="default-input name_of_photo_origin-input form-control"
                                 name="name_of_photo_origin-input"
                                 value={this.props.name_of_photo_origin}
                                 placeholder="Photographer/Agency name"
                                 onChange={this.onName_of_photo_originChange}
                             />)
-            caption_of_photoInput = (<input className="default-input caption_of_photo-input"
+            caption_of_photoInput = (<input className="default-input caption_of_photo-input form-control"
                                 name="caption_of_photo-input"
                                 value={this.props.caption_of_photo}
                                 placeholder="Photo caption"
@@ -234,8 +274,14 @@ export default class SimpleForm extends React.Component {
         }
 
 
-        
+        console.log(this.props.activity_form_inputs_array)
 
+        let suggestionContent = ""
+        if(this.props.location_suggestion){
+            suggestionContent = (<span className="suggested-location-span">Do you mean?
+                            <a href="#" onClick={this.handleSuggestedTextClick}> {this.props.location_suggestion} </a>
+                        </span>)
+        }
 
 
         return (<div className="simple-form-container">
@@ -243,135 +289,72 @@ export default class SimpleForm extends React.Component {
 
             <div className="form-horizontal">
                 <div className="form-group">
-                    <label className="col-sm-2 control-label">Activity Title</label>
+                    <label className="col-sm-2 control-label">Location</label>
                     <div className="col-sm-10">
-                        
+                        {locationInput}
                     </div>
                 </div>
                 <div className="form-group">
-                    <label className="col-sm-2 control-label">Activity Instructions (RAW HTML)</label>
+                    <label className="col-sm-2 control-label"></label>
                     <div className="col-sm-10">
-                        
+                       {suggestionContent}
                     </div>
                 </div>
                 <div className="form-group">
-                    <label className="col-sm-2 control-label">Activity Instructions (Preview)</label>
+                    <label className="col-sm-2 control-label">Age</label>
                     <div className="col-sm-10">
-                        
+                        {agerange}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label className="col-sm-2 control-label">Gender</label>
+                    <div className="col-sm-10">
+                        {genderInput}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label className="col-sm-2 control-label">Education</label>
+                    <div className="col-sm-10">
+                        {educationInput}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label className="col-sm-2 control-label">Date of Screencapture</label>
+                    <div className="col-sm-10">
+                        {dateOfCaptureInput}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label className="col-sm-2 control-label">Device</label>
+                    <div className="col-sm-10">
+                        {deviceInput}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label className="col-sm-2 control-label">Country of news orginisation</label>
+                    <div className="col-sm-10">
+                        {country_of_newspaperInput}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label className="col-sm-2 control-label">Name of newspaper</label>
+                    <div className="col-sm-10">
+                        {name_of_newspaperInput}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label className="col-sm-2 control-label">Photographer/Agency of photo</label>
+                    <div className="col-sm-10">
+                        {name_of_photo_originInput}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label className="col-sm-2 control-label">Photo's caption</label>
+                    <div className="col-sm-10">
+                        {caption_of_photoInput}
                     </div>
                 </div>
             </div>
-
-            <table className="form-inputs-table">
-                <tbody>
-                <tr>
-                    <td><span className="form-input-label-span">Location:</span></td>
-                    <td>
-                        {locationInput}
-                    </td>
-                </tr>
-                <tr>
-                    <td><span className="form-input-label-span">Age:</span></td>
-                    <td>
-                        <div className="age-input-container">
-                            {agerange}
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><span className="form-input-label-span">Gender:</span></td>
-                    <td>
-                        <div className="gender-dropdown-container">
-                            {genderInput}
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                 
-                    <td><span className="form-input-label-span">Education:</span></td>
-                    <td>
-                        <div className="education-dropdown-container">
-                            {educationInput}
-                        </div>
-                    </td>
-                
-                
-                </tr>
-                <tr>
-                   
-                    <td><span className="form-input-label-span">Date of Screencapture:</span></td>
-                    <td>
-                        <div className="date-of-capture-container">
-                             {dateOfCaptureInput}
-                        </div>
-                    </td>
-
-               
-                </tr>
-
-                <tr>
-                   
-                <td><span className="form-input-label-span">Device:</span></td>
-                    <td>
-                        <div className="device-container">
-                             {deviceInput}
-                        </div>
-                    </td>
-
-               
-                </tr>
-
-                <tr>
-                   
-                <td><span className="form-input-label-span">Country of news orginisation:</span></td>
-                    <td>
-                        <div className="country_of_newspaper-container">
-                             {country_of_newspaperInput}
-                        </div>
-                    </td>
-
-               
-                </tr>
-
-                <tr>
-                   
-                <td><span className="form-input-label-span">Name of newspaper:</span></td>
-                    <td>
-                        <div className="name_of_newspaper-container">
-                             {name_of_newspaperInput}
-                        </div>
-                    </td>
-
-               
-                </tr>
-
-                <tr>
-                   
-                <td><span className="form-input-label-span">Photographer/Agency of photo:</span></td>
-                    <td>
-                        <div className="name_of_photo_origin-container">
-                             {name_of_photo_originInput}
-                        </div>
-                    </td>
-
-               
-                </tr>
-
-                <tr>
-                   
-                <td><span className="form-input-label-span">Photo's caption:</span></td>
-                    <td>
-                        <div className="caption_of_photo-container">
-                             {caption_of_photoInput}
-                        </div>
-                    </td>
-
-               
-                </tr>
-
-
-                </tbody>
-            </table>
 
 
 
@@ -389,20 +372,3 @@ export default class SimpleForm extends React.Component {
     }
 }
 
-/*
-{
-    structure.map((obj, ind) => {
-        return (<div key={obj.id} className="formItem">
-            <pre>{JSON.stringify(obj, null, 2)}</pre>
-
-
-
-        </div>);
-    })
-} */
-
-
-// Country of the newspaper
-// Name of the newspaper
-// Name of the photographer and/or agency that provided the picture (if neither, write ‘not available’)
-// Caption that accompanies the photo

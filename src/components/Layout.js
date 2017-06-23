@@ -47,7 +47,7 @@ export default class Layout extends React.Component {
             location_suggestion:null,
             location_error:null,
 
-            country_of_newspaper:"",
+            country_of_newspaper:null,
             name_of_newspaper:"",
             name_of_photo_origin:"",
             caption_of_photo:"",
@@ -98,12 +98,12 @@ export default class Layout extends React.Component {
 
             activity_title:"Title yay",
             activity_instructions:"activity instructions",
-            activity_form_inputs_array:["location", "age", "gender"],
             activity_tags:[],
+            activity_form_inputs_array:["location"],
             
             temp_activity_title:"Title yay",
             temp_activity_instructions:"activity instructions",
-            temp_activity_form_inputs_array:["location", "age", "gender"],
+            temp_activity_form_inputs_array:["location"],
             temp_activity_tags:[]
 
         }
@@ -126,15 +126,19 @@ export default class Layout extends React.Component {
 
     }
     componentWillMount(){
-        //console.log("Layout component will mount")
+        ////console.log("Layout component will mount")
         
     }
     componentDidMount(){
-        //console.log("Layout component did mount");
+        ////console.log("Layout component did mount");
+
+        this.setState({
+            temp_activity_form_inputs_array:this.state.activity_form_inputs_array
+        })
 
     }
     componentWillUnmount(){
-        //console.log("Layout component will unmount")
+        ////console.log("Layout component will unmount")
     }
 
     updateStateWithServerValues(serverState){
@@ -150,7 +154,7 @@ export default class Layout extends React.Component {
 
     handleFormInputOnBlur(){
 
-        //console.log("Bluredd");
+        ////console.log("Bluredd");
 
     }
 
@@ -180,8 +184,8 @@ export default class Layout extends React.Component {
     //     })
     // }
     handleFormSubmit(){
-        //console.log("form submit clicked");
-        console.log(this.state);
+        ////console.log("form submit clicked");
+        //console.log(this.state);
         var app = this;
         const postData = new FormData();
         postData.append('file', this.state.image_file);
@@ -192,14 +196,14 @@ export default class Layout extends React.Component {
         axios.post('../public/api/api.php', postData)
         .then(function(response){
 
-            //console.log("Single Post Success: 😃",response)
+            ////console.log("Single Post Success: 😃",response)
                     //this.setState({"selected_page":"map_page"})
             app.setState(response.data);
             
 
         }).catch(function(error){
 
-            //console.log("Single Post Fail: 😡",error.response);
+            ////console.log("Single Post Fail: 😡",error.response);
 
         });
 
@@ -209,17 +213,17 @@ export default class Layout extends React.Component {
     checkFormRequirementsMet(){
        
         var metRequirements = true;
-        ////console.log("--------------");
+        //////console.log("--------------");
 
         each(this.required, (val, key)=>{
             if(!this.state[val]){
-                ////console.log(val);
+                //////console.log(val);
                 metRequirements = false;
             }
 
             if(val == "tags"){
                 if(this.state[val].length == 0){
-                    ////console.log(val);
+                    //////console.log(val);
                     metRequirements = false;
                 }
             }
@@ -231,7 +235,7 @@ export default class Layout extends React.Component {
     }
     handlePageButtonClick(page){
 
-        //console.log("Page button clicked", page);
+        ////console.log("Page button clicked", page);
 
         let editing_status = false;
         if(page == "edit_page"){
@@ -247,7 +251,7 @@ export default class Layout extends React.Component {
     }
 
     handleMapPageStateUpdate(item){
-        ////console.log(item);
+        //////console.log(item);
         this.setState(item)
     }
     
@@ -382,7 +386,7 @@ export default class Layout extends React.Component {
 
     render(){
     
-       // console.log("Layout",this.state)
+       //console.log("Layout",this.state)
 
         
 

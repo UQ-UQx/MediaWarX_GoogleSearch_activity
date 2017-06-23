@@ -15,8 +15,8 @@ import Layout from "./components/Layout"
 
 const app = document.getElementById('app');
 
-//console.log($LTI_resourceID);
-//console.log($LTI_userID);
+////console.log($LTI_resourceID);
+////console.log($LTI_userID);
 
 // var self = this;
 axios.get('../public/api/api.php', {
@@ -31,11 +31,11 @@ axios.get('../public/api/api.php', {
 })
 .then(function (response) {
     var serverState = response.data
-    console.log("This shoudl work", response)
+    //console.log("This shoudl work", response)
     loadApp(serverState)
 })
 .catch(function (error) {
-        console.log(error)
+        //console.log(error)
 
     loadApp(null)
 });

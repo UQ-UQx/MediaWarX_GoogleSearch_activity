@@ -95,7 +95,7 @@ export default class LocationInput extends React.Component {
 
                 axios.get('https://maps.googleapis.com/maps/api/geocode/json?address='+newInputValue+'&key='+this.googleAPIKEY)
                    .then((response)=>{
-                       //console.log(response.data);
+                       ////console.log(response.data);
                        if(response.data.status != "ZERO_RESULTS"){
 
 
@@ -188,9 +188,9 @@ export default class LocationInput extends React.Component {
 
         var suggested = ""
         if(this.props.location_suggestion){
-            suggested = (<span className="suggested-location-span">Do you mean?
-                <a href="#" onClick={this.handleSuggestedTextClick}> {this.props.location_suggestion} </a>
-            </span>)
+            // suggested = (<span className="suggested-location-span">Do you mean?
+            //     <a href="#" onClick={this.handleSuggestedTextClick}> {this.props.location_suggestion} </a>
+            // </span>)
         }
 
         var error_text = ""
@@ -206,7 +206,7 @@ export default class LocationInput extends React.Component {
 
             <input
                 type="text"
-                class="location-input"
+                class={"location-input "+this.props.className}
                 id="location-input"
                 placeholder="Enter Location"
                 value={this.props.value}

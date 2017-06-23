@@ -5,7 +5,58 @@ import React from "react"
 import axios from "axios"
 import CheckBoxGroup from "./CheckBoxGroup"
 
-
+var list_items_options = [
+        
+                {
+                    id:"location",
+                    value:"Location"                            
+                },
+        
+                {
+                    id:"age",
+                    value:"Age"                            
+                },
+        
+                {
+                    id:"gender",
+                    value:"Gender"                            
+                },
+        
+                {
+                    id:"education",
+                    value:"Education"                            
+                },
+        
+                {
+                    id:"date_of_capture",
+                    value:"Date of screencapture"                            
+                },
+        
+                {
+                    id:"device",
+                    value:"Device"                            
+                },
+        
+                {
+                    id:"country_of_newspaper",
+                    value:"Country of newspaper"                            
+                },
+        
+                {
+                    id:"name_of_newspaper",
+                    value:"Name of newspaper"                            
+                },
+        
+                {
+                    id:"name_of_photo_origin",
+                    value:"Name of photo origin"                            
+                },
+                {
+                    id:"caption_of_photo",
+                    value:"Caption of photo"                            
+                },
+    ]
+        
 export default class EditLTIPage extends React.Component {
     constructor(props){
         super(props)
@@ -15,16 +66,25 @@ export default class EditLTIPage extends React.Component {
            
        }
        this.handleItemChange = this.handleItemChange.bind(this)
+       this.handleFormItemListChange = this.handleFormItemListChange.bind(this)
     }
 
-    // temp_activity_title:"",
-    // temp_activity_instructions:"",
-    // temp_activity_form_inputs:[],
-    // temp_activity_tags:[]
+    handleFormItemListChange(name, selected_items){
+
+        let selected_form_items = selected_items.map((item)=>{
+            return item.id
+        })
+
+        //console.log(name,selected_items, selected_form_items)
+
+        this.props.handleEditPageItemChange({
+            [name]:selected_form_items
+        })
+    }
 
     handleItemChange(event){
 
-        //console.log(event, event.target, event.target.name, event.target.value);
+        ////console.log(event, event.target, event.target.name, event.target.value);
         let value = event.target.value
         if(event.target.name == "temp_activity_tags"){
 
@@ -49,13 +109,31 @@ export default class EditLTIPage extends React.Component {
 
     render(){
 
-        console.log(this.props)
+        //console.log(this.props)
         let commaSeparatedTagsText = this.state.tags_string//this.props.temp_activity_tags;
         if(this.props.temp_activity_tags){
-            console.log(this.props.temp_activity_tags)
+            //console.log(this.props.temp_activity_tags)
            // commaSeparatedTagsText = this.props.temp_activity_tags.join(", ")
 
         }
+
+        var ls = list_items_options.map((item)=>{
+            let checked = false;
+            if(_.indexOf(this.props.temp_activity_form_inputs_array,item.id) != -1){
+                checked = true;
+            }
+            //console.log(checked)
+            return (
+                {
+                    id:item.id,
+                    value:item.value,
+                    checked:checked
+                }
+            )
+        })
+
+ 
+
 
 
         return (<div className="edit-lti-page-component">
@@ -105,6 +183,20 @@ export default class EditLTIPage extends React.Component {
                                 placeholder="Enter tags using comma separation" 
                                 value={commaSeparatedTagsText}
                                 onChange={this.handleItemChange}
+                            />
+                           
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="col-sm-2 control-label">Form Items</label>
+                        <div className="col-sm-10">
+
+                            <CheckBoxGroup 
+                            
+                                name="temp_activity_form_inputs_array"
+                                options={ls}
+                                onOptionChange={this.handleFormItemListChange}
+                                returnVal="all"
                             />
                            
                         </div>

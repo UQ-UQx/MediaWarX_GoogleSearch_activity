@@ -61,7 +61,7 @@ export default class MapPageFilterPanel extends React.Component {
 
 
     handleDatePickerStartChange(date){
-        console.log("HANDLE CHAMHE", date)
+        //console.log("HANDLE CHAMHE", date)
         
         this.handleCheckBoxChange("date_start_changed", date);
     }
@@ -79,7 +79,7 @@ export default class MapPageFilterPanel extends React.Component {
 
     onResetClicked(event){
 
-        //console.log("clicked reset")
+        ////console.log("clicked reset")
         //remove all filter selections
         this.refs.gender_checkboxgroup.resetSelections();
         this.refs.education_checkboxgroup.resetSelections();
@@ -103,7 +103,7 @@ export default class MapPageFilterPanel extends React.Component {
     }
 
     handleCheckBoxChange(name, selected_options){
-        console.log(name, selected_options)
+        //console.log(name, selected_options)
         let filter_genders = []
         let filter_educations = []
         let filter_devices = []
@@ -196,7 +196,7 @@ export default class MapPageFilterPanel extends React.Component {
             ...filter_tags
         ]
 
-        console.log("filers",filters);
+        //console.log("filers",filters);
 
         let checkDetails = [
             "gender",
@@ -271,15 +271,15 @@ export default class MapPageFilterPanel extends React.Component {
         this.props.markers.forEach((marker, ind)=>{
 
             checkDetails.forEach((detailKey, ind)=>{
-                //console.log("CHECK!!!")
+                ////console.log("CHECK!!!")
                 let compareDate = moment(marker.entry.date_of_capture)
                 let start_date = moment(date_start)
                 let end_date = moment(date_end)
                 let fitsWithDate = false
 
-                 //console.log("start date", date_start)
-                // console.log("end date", date_end)
-                // console.log("compare: ", compareDate, compareDate.isBetween(date_start, date_end, 'days', '[]'))
+                 ////console.log("start date", date_start)
+                // //console.log("end date", date_end)
+                // //console.log("compare: ", compareDate, compareDate.isBetween(date_start, date_end, 'days', '[]'))
 
                 if(date_start && date_end){
 
@@ -298,7 +298,7 @@ export default class MapPageFilterPanel extends React.Component {
                     }
 
                 }else if(date_end){
-                    console.log(compareDate, date_end, compareDate.isSame(date_end))
+                    //console.log(compareDate, date_end, compareDate.isSame(date_end))
                     if(compareDate.isSameOrBefore(date_end)){
                         if(!fitsWithDate){
                             fitsWithDate = true;
@@ -306,7 +306,7 @@ export default class MapPageFilterPanel extends React.Component {
                     }
 
                 }else{
-                    console.log("No date provided for filerting")
+                    //console.log("No date provided for filerting")
                 }
 
 
@@ -339,7 +339,7 @@ export default class MapPageFilterPanel extends React.Component {
     }
 
     componentWillReceiveProps(){
-        //console.log(this.props.filter_date_start)
+        ////console.log(this.props.filter_date_start)
     }
 
     componentDidMount(){
@@ -368,7 +368,7 @@ export default class MapPageFilterPanel extends React.Component {
             })
         }
 
-        //console.log(cHeight, sHeight, scrollTop, sHeight-cHeight)
+        ////console.log(cHeight, sHeight, scrollTop, sHeight-cHeight)
 
     }
 
@@ -380,7 +380,7 @@ export default class MapPageFilterPanel extends React.Component {
 
 
 
-        //console.log("should not be rendering")
+        ////console.log("should not be rendering")
 
 
         
@@ -420,7 +420,7 @@ export default class MapPageFilterPanel extends React.Component {
         });
 
         let tagOptions = [];
-        //console.log(this.props)
+        ////console.log(this.props)
         let counts = _.countBy(this.props.allTags);
 
         for (var tag in counts) {

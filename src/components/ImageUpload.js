@@ -19,7 +19,7 @@ export default class ImageUpload extends React.Component {
     render(){
 
 
-        console.log("custom tags", $LTI_CUSTOM_tags)
+        //console.log("custom tags", $LTI_CUSTOM_tags)
 
         let imaTagsInput = (<Imagetagsinput
 

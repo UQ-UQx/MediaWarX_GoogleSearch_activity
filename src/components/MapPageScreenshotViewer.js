@@ -18,7 +18,7 @@ export default class MapPageScreenshotViewer extends React.Component {
 
     expandScreenShot(event){
 
-        //console.log("Clicked", event, this.props.markersInBounds[event].entry);
+        ////console.log("Clicked", event, this.props.markersInBounds[event].entry);
 
         this.props.markersInBounds[event].setAnimation(null);
         this.props.handleMapPageStateUpdate({mousedOverMarkers:[]})
@@ -40,12 +40,12 @@ export default class MapPageScreenshotViewer extends React.Component {
     onScreenshotPreviewMouseOver(screenshotMarkerIndex, event){
         
 
-        //console.log(this.props.mousedOverMarkers)
+        ////console.log(this.props.mousedOverMarkers)
         this.props.markersInBounds[screenshotMarkerIndex].setAnimation(google.maps.Animation.BOUNCE);
         //this.props.handleMapPageStateUpdate({"mousedOverMarkers":[...this.props.mousedOverMarkers, this.props.markersInBounds[screenshotMarkerIndex]]})
       
 
-       console.log("moused over marker", this.props.markersInBounds[screenshotMarkerIndex])
+       //console.log("moused over marker", this.props.markersInBounds[screenshotMarkerIndex])
         
         if(this.props.mousedOverMarkers.length > 0){
             this.props.handleMapPageStateUpdate({"mousedOverMarkers":[...this.props.mousedOverMarkers, this.props.markersInBounds[screenshotMarkerIndex]]})
@@ -56,8 +56,8 @@ export default class MapPageScreenshotViewer extends React.Component {
         var clusterToFocus = null;
             
         if(this.props.clusterer){
-           // //console.log(this.props.clusterer.getClusters())
-            ////console.log(this.props)
+           // ////console.log(this.props.clusterer.getClusters())
+            //////console.log(this.props)
             let allClusters = this.props.clusterer.getClusters();
             
             let self = this;
@@ -97,9 +97,9 @@ export default class MapPageScreenshotViewer extends React.Component {
     }
 
     componentWillReceiveProps(){
-        ////console.log("SCREENSHOT PREVIEW VIEW DID MOUNT", this.props)
+        //////console.log("SCREENSHOT PREVIEW VIEW DID MOUNT", this.props)
        
-       //  //console.log("moused over marker in screenshot viewer",this.props.mousedOverMarkers)
+       //  ////console.log("moused over marker in screenshot viewer",this.props.mousedOverMarkers)
 
 
     }
