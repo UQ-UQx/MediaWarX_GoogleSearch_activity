@@ -2,7 +2,9 @@ import "../stylesheets/MapPageScreenshotViewerStyles.scss"
 
 
 import React from "react"
+import CheckBoxGroup from "./CheckBoxGroup"
 import Gallery from '../libs/react-photo-gallery';
+import moment from "moment";
 import ReactModal from 'react-modal';
 
 export default class MapPageScreenshotViewer extends React.Component {
@@ -10,7 +12,8 @@ export default class MapPageScreenshotViewer extends React.Component {
         super(props)
 
         this.state={
-            PHOTO_SET:[]
+            PHOTO_SET:[],
+            modal_marker:null
         }
         this.expandScreenShot = this.expandScreenShot.bind(this)
         this.onScreenshotPreviewMouseOver = this.onScreenshotPreviewMouseOver.bind(this)
@@ -106,12 +109,13 @@ export default class MapPageScreenshotViewer extends React.Component {
 
     }
 
-    handleGalleryImageDetailsButton(event){
+    handleGalleryImageDetailsButton(markerIndex,event){
 
 
-        console.log("details Pressed",event.target, this.props.image_modal_open)
 
-        //console.log(this.props.markersInBounds[event]);
+        this.setState({
+            modal_marker:!this.props.image_modal_open ? this.props.markersInBounds[markerIndex]:null
+        })
 
         this.props.handleMapPageStateUpdate({
             image_modal_open:!this.props.image_modal_open
@@ -149,7 +153,7 @@ export default class MapPageScreenshotViewer extends React.Component {
                 }
                
             
-                console.log(mark);
+                //console.log(mark);
 
 
                 var img = {
@@ -185,6 +189,155 @@ export default class MapPageScreenshotViewer extends React.Component {
         }
        
 
+
+        var modalContent = ""
+
+        if(this.state.modal_marker){
+            console.log("DA", this.props)
+            let image_filename = this.state.modal_marker.entry.image_filename
+            let modal_marker = this.state.modal_marker
+
+            let keys = [
+                "tags",
+                "country_of_newspaper",
+                "name_of_newspaper",
+                "name_of_photo_origin",
+                "caption_of_photo",
+                "agerange",
+                "gender",
+                "education",
+                "dateOfCapture",
+                "device"
+            ]
+
+            let details = keys.map((item) => {
+                
+                switch (item) {
+                    case "tags":
+                        if(modal_marker.entry[item].length > 0){
+
+                            let tagOptions = modal_marker.entry[item].map((tag) => {
+                                return {
+                                    value:tag,
+                                }
+                            })
+
+                            return (<div className="modal-details-item form-group" key={"details_"+item}>
+                                <label className="col-sm-2 control-label">Tags</label>
+                                <div className="col-sm-10">
+                                    <CheckBoxGroup
+                                        options={tagOptions}
+                                        disable={true}
+                                    />
+                                </div>
+                            </div>)
+                        }
+                        break;
+                    case "country_of_newspaper":
+                        if(modal_marker.entry[item]){
+                            return (<div className="modal-details-item form-group" key={"details_"+item}>
+                                <label className="col-sm-2 control-label">Country of news orginisation</label>
+                                <div className="col-sm-10">{modal_marker.entry[item]}</div>
+                            </div>)
+                        }
+                        break;
+                    case "name_of_newspaper":
+                        if(modal_marker.entry[item]){
+                            return (<div className="modal-details-item form-group" key={"details_"+item}>
+                                <label className="col-sm-2 control-label">Name of newspaper</label>
+                                <div className="col-sm-10">{modal_marker.entry[item]}</div>
+                            </div>)
+                        }
+                        break;
+                    case "name_of_photo_origin":
+                        if(modal_marker.entry[item]){
+                            return (<div className="modal-details-item form-group" key={"details_"+item}>
+                                <label className="col-sm-2 control-label">Photographer/Agency of photo</label>
+                                <div className="col-sm-10">{modal_marker.entry[item]}</div>
+                            </div>)
+                        }
+                        break;
+                    case "caption_of_photo":
+                        if(modal_marker.entry[item]){
+                            return (<div className="modal-details-item form-group" key={"details_"+item}>
+                                <label className="col-sm-2 control-label">Photo's caption</label>
+                                <div className="col-sm-10">{modal_marker.entry[item]}</div>
+                            </div>)
+                        }
+                        break;
+                    case "agerange":
+                        if(modal_marker.entry[item]){
+                            return (<div className="modal-details-item form-group" key={"details_"+item}>
+                                <label className="col-sm-2 control-label">Age Range</label>
+                                <div className="col-sm-10">{modal_marker.entry[item]}</div>
+                            </div>)
+                        }
+                        break;
+                    case "gender":
+                        if(modal_marker.entry[item]){
+                            return (<div className="modal-details-item form-group" key={"details_"+item}>
+                                <label className="col-sm-2 control-label">Gender</label>
+                                <div className="col-sm-10">{modal_marker.entry[item]}</div>
+                            </div>)
+                        }
+                        break;
+                    case "education":
+                        if(modal_marker.entry[item]){
+                            return (<div className="modal-details-item form-group" key={"details_"+item}>
+                                <label className="col-sm-2 control-label">Education</label>
+                                <div className="col-sm-10">{modal_marker.entry[item]}</div>
+                            </div>)
+                        }
+                        break;
+                    case "dateOfCapture":
+                        if(modal_marker.entry["date_of_capture"]){
+                            return (<div className="modal-details-item form-group" key={"details_"+item}>
+                                <label className="col-sm-2 control-label">Date of Screencapture</label>
+                                <div className="col-sm-10">{moment(modal_marker.entry["date_of_capture"]).format("Do MMM YYYY")}</div>
+                            </div>)
+                        }
+                        break;
+                    case "device":
+                        if(modal_marker.entry[item]){
+                            return (<div className="modal-details-item form-group"  key={"details_"+item}>
+                                <label className="col-sm-2 control-label">Device</label>
+                                <div className="col-sm-10">{modal_marker.entry[item]}</div>
+                            </div>)
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+
+            })
+
+
+
+
+
+            
+
+            modalContent = (<div className="image-modal-content">
+
+                <div className="form-horizontal">
+
+                    {details}     
+                </div>
+
+                <img src={"data/"+modal_marker.lti_id+"/"+modal_marker.user_id+"/"+image_filename}
+                
+                    width={modal_marker.entry.image_size.width}
+                    height={modal_marker.entry.image_size.height}
+                ></img>
+        
+            </div>)
+
+        }
+
+
+
+
         
         return(<div className="map-page-screenshot-viewer-container">
             
@@ -197,21 +350,20 @@ export default class MapPageScreenshotViewer extends React.Component {
                 onPhotoMouseOver={this.onScreenshotPreviewMouseOver}
                 onPhotoMouseOut={this.onScreenshotPreviewMouseOut}
             />
-<ReactModal
-  /*
-    Boolean describing if the modal should be shown or not.
-  */
-    isOpen={this.props.image_modal_open}
-    contentLabel="Minimal Modal Example"
-    onRequestClose={this.handleGalleryImageDetailsButton}
-    //className="image-modal"
+            <ReactModal
+            /*
+                Boolean describing if the modal should be shown or not.
+            */
+                isOpen={this.props.image_modal_open}
+                contentLabel="Minimal Modal Example"
+                onRequestClose={this.handleGalleryImageDetailsButton}
+                //className="image-modal"
+            >
 
+            <button className="btn btn-danger image-modal-close-button" onClick={this.handleGalleryImageDetailsButton}>Close</button>
+            {modalContent}
 
->
-
-   <button className="btn btn-danger" onClick={this.handleGalleryImageDetailsButton}>Close</button>
-
-</ReactModal>
+            </ReactModal>
         
         </div>)
     }
