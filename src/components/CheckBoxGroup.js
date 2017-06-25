@@ -100,6 +100,7 @@ export default class CheckBoxGroup extends React.Component {
                         selected_options.push(obj)
                         break;
                     default:
+                        selected_options.push(obj[self.props.returnVal])
                         break;
                 }
             }
@@ -133,7 +134,7 @@ export default class CheckBoxGroup extends React.Component {
                 selectedOptionClassName = ""
             }
 
-            return(<div className="option-button-container"  key={uuid.v4()}>
+            return(<div className={"option-button-container "+this.props.itemClassName}  key={uuid.v4()}>
 
                 <button
                     className={"btn btn-sml btn-default option-button "+selectedOptionClassName+" "+self.props.name+"_option "+disabled_class}
@@ -151,7 +152,7 @@ export default class CheckBoxGroup extends React.Component {
         })
 
 
-        return(<div className="check-box-group-component clearfix" >
+        return(<div className={"check-box-group-component clearfix"+this.props.className} >
         {inputs}
         </div>)
 
@@ -161,6 +162,7 @@ export default class CheckBoxGroup extends React.Component {
 
 
 CheckBoxGroup.PropTypes = {
+
   name: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.shape({
         value: PropTypes.string,
@@ -169,7 +171,9 @@ CheckBoxGroup.PropTypes = {
   })),
   onOptionChange: PropTypes.func,
   type: PropTypes.string,
-  returnVal: PropTypes.string
+  returnVal: PropTypes.string,
+  className: PropTypes.string,
+  itemClassName: PropTypes.string
   
 };
 
@@ -177,6 +181,8 @@ CheckBoxGroup.PropTypes = {
 CheckBoxGroup.defaultProps = {
   
   name: "defaultOption",
+  className: "",
+  itemClassName: "",
   options:[
     { 
         value: "Option 1",
@@ -199,5 +205,5 @@ CheckBoxGroup.defaultProps = {
   },
   type: "checkbox",
   counts: false,
-  returnVal: "value"
+  returnVal: "value",
 }

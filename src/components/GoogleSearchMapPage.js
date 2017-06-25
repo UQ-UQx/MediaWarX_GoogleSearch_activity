@@ -47,8 +47,11 @@ export default class GoogleSearchMapPage extends React.Component {
             <div className="map-page-data-container">
 
                 <MapPageData
-                    
+                    activity_form_inputs_array = {this.props.activity_form_inputs_array}
+                activity_tags = {this.props.activity_tags}
+
                     map={this.props.map}
+                     default_image_url={this.props.default_image_url}
 
                     markersInBounds={this.props.markersInBounds}
                     markers={this.props.markers}
@@ -68,6 +71,8 @@ export default class GoogleSearchMapPage extends React.Component {
                     filter_date_start={this.props.filter_date_start}
                     filter_date_end={this.props.filter_date_end}
                     allTags={this.props.allTags}
+                    image_modal_open = {this.props.image_modal_open}
+
                 />
             
             </div>

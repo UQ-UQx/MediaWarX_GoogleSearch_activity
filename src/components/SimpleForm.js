@@ -298,7 +298,7 @@ export default class SimpleForm extends React.Component {
 
         let caption_of_photoInputContainer = ""
 
-        console.log(this.props.activity_form_inputs_array)
+        //console.log(this.props.activity_form_inputs_array)
 
         this.props.activity_form_inputs_array.forEach((item)=>{
 

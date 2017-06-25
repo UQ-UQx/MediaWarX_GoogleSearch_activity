@@ -34,6 +34,7 @@ export default class MapPageData extends React.Component {
                 mousedOverMarkers={this.props.mousedOverMarkers}
                 handleMapPageStateUpdate={this.props.handleMapPageStateUpdate}
                 clusterToFocus={this.props.clusterToFocus}
+                default_image_url={this.props.default_image_url}
 
                 filter_genders={this.props.filter_genders}
                 filter_educations={this.props.filter_educations}
@@ -43,7 +44,10 @@ export default class MapPageData extends React.Component {
                 filter_ageranges={this.props.filter_ageranges}
                 filter_date_start={this.props.filter_date_start}
                 filter_date_end={this.props.filter_date_end}
+                image_modal_open = {this.props.image_modal_open}
+
             />
+            
             <MapPageFilterPanel 
                 markersInBounds={this.props.markersInBounds}
                 markers={this.props.markers}
@@ -66,7 +70,11 @@ export default class MapPageData extends React.Component {
                 filter_date_end={this.props.filter_date_end}
                 allTags={this.props.allTags}
 
-            />         
+                activity_form_inputs_array = {this.props.activity_form_inputs_array}
+                activity_tags = {this.props.activity_tags}
+
+            /> 
+                
 
             
            {

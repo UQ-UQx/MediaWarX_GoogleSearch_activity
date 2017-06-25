@@ -251,10 +251,14 @@ class MyApi
 		$lti_id = $data->lti_id;
 		$ltiCallData = json_decode(file_get_contents("../data/".$data->lti_id."/".$data->user_id."/calldata.json"));
 
-		$fileDetails = $this->uploadImage($lti_id, $user_id, $files);
+		$image_url = null;
+
+		$fileDetails = $this->uploadImage($lti_id, $user_id, $files, $state);
 		error_log("FILESSS:".json_encode($fileDetails));
 		$image_url = $fileDetails["filename"];
 		$size = $fileDetails["size"];
+		
+		
 
 		$entry = array(
 			"location_name"=>$state->location_name,
@@ -268,6 +272,7 @@ class MyApi
             "tags"=>$state->tags,
             "location_static_map"=>$state->location_static_map,
             "image_filename"=>$image_url,
+			"default_image_url"=>$state->default_image_url,
 			"image_size"=>$size,
 			"device"=>$state->device,
 			"date_of_capture"=>$state->dateOfCapture,
@@ -411,24 +416,23 @@ class MyApi
 					$updatedState[$stateItemKey] = $stateItemValue;
 				}
 			}
-
-			
 		}
 
 
+		if($this->checkTableExists("app_settings_table")){
 
-		$select_app_settings = $this->db->query( 'SELECT app_settings FROM app_settings_table WHERE lti_id = :lti_id', array( 'lti_id' => $lti_id) );
-		while ( $row = $select_app_settings->fetch() ) {
-			$appSettings = $row;
-        }
+			$select_app_settings = $this->db->query( 'SELECT app_settings FROM app_settings_table WHERE lti_id = :lti_id', array( 'lti_id' => $lti_id) );
+			while ( $row = $select_app_settings->fetch() ) {
+				$appSettings = $row;
+			}
 
-		if($appSettings){
-			foreach (json_decode($appSettings->app_settings,true) as $settingKey => $settingVal) {
-				$updatedState["temp_".$settingKey] = $settingVal;
-				$updatedState[$settingKey] = $settingVal;
+			if($appSettings){
+				foreach (json_decode($appSettings->app_settings,true) as $settingKey => $settingVal) {
+					$updatedState["temp_".$settingKey] = $settingVal;
+					$updatedState[$settingKey] = $settingVal;
+				}
 			}
 		}
-
 
 		$this->reply($updatedState);
     }
@@ -499,13 +503,23 @@ class MyApi
 		return false;
 	}   
 
-	private function uploadImage($lti_id, $user_id, $files){
-		//error_log(json_encode($files));
+	private function uploadImage($lti_id, $user_id, $files, $state){
+
+		
 		$fileName = $user_id."_screencapture.jpg";
 		$path = getcwd();
 		$path_to_dir = dirname($path).'/data/'.$lti_id."/".$user_id;//."/".$files['file']['name'];
-		list($width, $height) = getimagesize($files['file']['tmp_name']);
-		move_uploaded_file($files['file']['tmp_name'], $path_to_dir."/".$fileName);
+
+		if(count($files) > 0){
+			
+			list($width, $height) = getimagesize($files['file']['tmp_name']);
+			move_uploaded_file($files['file']['tmp_name'], $path_to_dir."/".$fileName);
+		}else{
+
+			list($width, $height) = getimagesize(dirname($path)."/".$state->default_image_url);
+			copy(dirname($path)."/".$state->default_image_url, $path_to_dir."/".$fileName);
+
+		}
 
 
 		return array("filename"=>$fileName,"size"=>array("width"=>$width,"height"=>$height));

@@ -21,14 +21,15 @@ export default class Layout extends React.Component {
             "location_name",
             "location_lat",
             "location_lng",
-            "age",
+            "country_of_newspaper",
+            "name_of_newspaper",
+            "name_of_photo_origin",
+            "caption_of_photo",
+            "agerange",
             "gender",
-            "dateOfCapture",
-            "device",
             "education",
-            "tags",
-            "location_static_map",
-            "image_file"
+            "dateOfCapture",
+            "device"
         ]
 
 // Country of the newspaper
@@ -61,6 +62,7 @@ export default class Layout extends React.Component {
             device:null,
             
             image_file:null,
+            default_image_url:null,
 
             allTags:[
                 
@@ -104,8 +106,11 @@ export default class Layout extends React.Component {
             temp_activity_title:"Title yay",
             temp_activity_instructions:"activity instructions",
             temp_activity_form_inputs_array:["location"],
-            temp_activity_tags:[]
+            temp_activity_tags:[],
 
+            submitRequirementsMet:true,
+
+            image_modal_open:false
         }
 
         this.state = {
@@ -211,23 +216,46 @@ export default class Layout extends React.Component {
     }
 
     checkFormRequirementsMet(){
+
+
+
+        this.required.forEach((item, ind)=>{
+
+
+            
+
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
        
-        var metRequirements = true;
-        //////console.log("--------------");
+        // var metRequirements = true;
+        // //////console.log("--------------");
 
-        each(this.required, (val, key)=>{
-            if(!this.state[val]){
-                //////console.log(val);
-                metRequirements = false;
-            }
+        // each(this.required, (val, key)=>{
+        //     if(!this.state[val]){
+        //         //////console.log(val);
+        //         metRequirements = false;
+        //     }
 
-            if(val == "tags"){
-                if(this.state[val].length == 0){
-                    //////console.log(val);
-                    metRequirements = false;
-                }
-            }
-        })
+        //     if(val == "tags"){
+        //         if(this.state[val].length == 0){
+        //             //////console.log(val);
+        //             metRequirements = false;
+        //         }
+        //     }
+        // })
 
 
        // return metRequirements
@@ -291,10 +319,11 @@ export default class Layout extends React.Component {
 
             tags={this.state.tags}
 
+            default_image_url={this.state.default_image_url}
 
             location_static_map={this.state.location_static_map}
 
-            checkFormRequirementsMet={this.checkFormRequirementsMet}
+            submitRequirementsMet={this.state.submitRequirementsMet}
             handleUploadFormItemUpdate={this.handleUploadFormItemUpdate}
             handleFormSubmit={this.handleFormSubmit}
             handleFormInputOnBlur={this.handleFormInputOnBlur}
@@ -304,6 +333,7 @@ export default class Layout extends React.Component {
         />)
     }
     renderGoogleSearchMapPage(){
+        //console.log(this.state.activity_form_inputs_array)
         return(<GoogleSearchMapPage
 
             location={{lat:this.state.location_lat,lng:this.state.location_lng}}
@@ -311,6 +341,7 @@ export default class Layout extends React.Component {
             markers={this.state.markers}
             markersInBounds={this.state.markersInBounds}
             hiddenMarkers={this.state.hiddenMarkers}
+             default_image_url={this.state.default_image_url}
 
             clusterer={this.state.clusterer}
             mousedOverMarkers={this.state.mousedOverMarkers}
@@ -327,6 +358,9 @@ export default class Layout extends React.Component {
             filter_date_end={this.state.filter_date_end}
             allTags={this.state.allTags}
 
+            activity_form_inputs_array = {this.state.activity_form_inputs_array}
+            activity_tags = {this.state.activity_tags}
+            image_modal_open = {this.state.image_modal_open}
         />)
     }
 

@@ -3,6 +3,7 @@ import "../stylesheets/MapPageScreenshotViewerStyles.scss"
 
 import React from "react"
 import Gallery from '../libs/react-photo-gallery';
+import ReactModal from 'react-modal';
 
 export default class MapPageScreenshotViewer extends React.Component {
     constructor(props){
@@ -14,6 +15,7 @@ export default class MapPageScreenshotViewer extends React.Component {
         this.expandScreenShot = this.expandScreenShot.bind(this)
         this.onScreenshotPreviewMouseOver = this.onScreenshotPreviewMouseOver.bind(this)
         this.onScreenshotPreviewMouseOut = this.onScreenshotPreviewMouseOut.bind(this)
+        this.handleGalleryImageDetailsButton = this.handleGalleryImageDetailsButton.bind(this)
     }
 
     expandScreenShot(event){
@@ -104,6 +106,19 @@ export default class MapPageScreenshotViewer extends React.Component {
 
     }
 
+    handleGalleryImageDetailsButton(event){
+
+
+        console.log("details Pressed",event.target, this.props.image_modal_open)
+
+        //console.log(this.props.markersInBounds[event]);
+
+        this.props.handleMapPageStateUpdate({
+            image_modal_open:!this.props.image_modal_open
+        })
+
+    }
+
 
     render(){
 
@@ -111,19 +126,19 @@ export default class MapPageScreenshotViewer extends React.Component {
         var tags = [];
         var tagslis = [];
         var PHOTO_SET = [];
-        var componentThis = this;
+        var self = this;
         if(this.props.markersInBounds){
             markers = this.props.markersInBounds.map(function(mark, ind){
                 return <div className="col-xs-6 col-md-4 screenshot-preview-container" key={mark.user_id}><img src={"data/"+$LTI_resourceID+"/"+mark.user_id+"/"+mark.entry.image_filename}></img></div>
             });
             this.props.markersInBounds.forEach(function(mark, ind){
 
-               var activeClassName = "";
+                var activeClassName = "";
 
 
-               if(componentThis.props.mousedOverMarkers){
+                if(self.props.mousedOverMarkers){
 
-                   componentThis.props.mousedOverMarkers.forEach(function(mousedOverMarker, ind){
+                   self.props.mousedOverMarkers.forEach(function(mousedOverMarker, ind){
 
                         if(mousedOverMarker.id == mark.id){
                             activeClassName = "hovered_marker_screenshot";
@@ -131,17 +146,22 @@ export default class MapPageScreenshotViewer extends React.Component {
 
                    })
                     
-               }
+                }
                
+            
+                console.log(mark);
 
-               var img = {
+
+                var img = {
                         src: "data/"+$LTI_resourceID+"/"+mark.user_id+"/"+mark.entry.image_filename,
                         width: mark.entry.image_size.width,
                         height: mark.entry.image_size.height,
                         alt: 'image 1',
-                        activeClassName:activeClassName
-
+                        activeClassName:activeClassName,
+                        expandButton:true
                 }
+
+
 
                 if(mark.getVisible()){
                     PHOTO_SET.push(img);
@@ -172,11 +192,26 @@ export default class MapPageScreenshotViewer extends React.Component {
                 photos={PHOTO_SET} 
                 onClickPhoto={this.expandScreenShot} 
                 cols={colNum}
+                handleDetails={this.handleGalleryImageDetailsButton}
             
                 onPhotoMouseOver={this.onScreenshotPreviewMouseOver}
                 onPhotoMouseOut={this.onScreenshotPreviewMouseOut}
             />
+<ReactModal
+  /*
+    Boolean describing if the modal should be shown or not.
+  */
+    isOpen={this.props.image_modal_open}
+    contentLabel="Minimal Modal Example"
+    onRequestClose={this.handleGalleryImageDetailsButton}
+    //className="image-modal"
 
+
+>
+
+   <button className="btn btn-danger" onClick={this.handleGalleryImageDetailsButton}>Close</button>
+
+</ReactModal>
         
         </div>)
     }

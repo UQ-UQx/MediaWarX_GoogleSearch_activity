@@ -40,6 +40,7 @@ export default class ImageUpload extends React.Component {
         return(<div className="image-upload-component">
 
             <Imagedropzone
+                default_image_url={this.props.default_image_url}
 
 
                 image_file={this.props.image_file}
