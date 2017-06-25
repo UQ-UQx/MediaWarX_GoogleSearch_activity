@@ -37,6 +37,8 @@ module.exports = {
         //new BundleAnalyzerPlugin()
 
     ],
+    //target: 'node',
+    //node: {fs: "empty"},
     module:{
         loaders:[
             {

@@ -307,6 +307,8 @@ export default class Layout extends React.Component {
             dateOfCapture={this.state.dateOfCapture}
             device={this.state.device}
 
+            
+
 
             country_of_newspaper={this.state.country_of_newspaper}
             name_of_newspaper={this.state.name_of_newspaper}
