@@ -63,7 +63,7 @@ export default class Imagedropzone extends React.Component{
 
         var dropzoneContent = null
         if(this.props.image_file || this.props.submitted || this.props.default_image_url){
-            var url = "data/"+$LTI_resourceID+"/"+$LTI_userID+"/"+$LTI_userID+"_screencapture.jpg";
+            var url = "";
             
             
 
@@ -73,7 +73,6 @@ export default class Imagedropzone extends React.Component{
                 url = this.props.image_file.preview
             }
 
-            var imgEL = <img src={url}/>
 
 
             var removeImage = (<button className="btn btn-danger btn-sm image-remove-button"
@@ -82,7 +81,11 @@ export default class Imagedropzone extends React.Component{
 
             if(this.props.submitted){
                 removeImage = ""
+                url = "data/"+$LTI_resourceID+"/"+$LTI_userID+"/"+$LTI_userID+"_screencapture.jpg";
             }
+
+            var imgEL = <img src={url}/>
+
 
             dropzoneContent = (
 

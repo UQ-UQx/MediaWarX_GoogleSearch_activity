@@ -26,7 +26,7 @@
 
 .dropzone-content{
     @include centerer(true,true);
-    z-index: 1;
+    z-index: 0;
    // background-color:red;
     width:80%;
     text-align: center;

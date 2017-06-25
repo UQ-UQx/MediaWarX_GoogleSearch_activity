@@ -325,7 +325,7 @@ export default class MapPageScreenshotViewer extends React.Component {
                     {details}     
                 </div>
 
-                <img src={"data/"+modal_marker.lti_id+"/"+modal_marker.user_id+"/"+image_filename}
+                <img className="marker-modal-image" src={"data/"+modal_marker.lti_id+"/"+modal_marker.user_id+"/"+image_filename}
                 
                     width={modal_marker.entry.image_size.width}
                     height={modal_marker.entry.image_size.height}
