@@ -5,8 +5,9 @@ import uuid from "uuid"
 import SimpleForm from "./SimpleForm"
 import ImageUpload from "./ImageUpload"
 
-
 import jsPDF from "../libs/jsPDF"
+
+import moment from "moment";
 
 export default class GoogleSearchUploadForm extends React.Component {
     constructor(props){
@@ -135,65 +136,213 @@ export default class GoogleSearchUploadForm extends React.Component {
           }
     }
 
-    handleSavePDF(){
+    // toDataUrl(file,callback) {
+    //        var xhr = new XMLHttpRequest();
+    //           xhr.responseType = 'blob';
+    //           xhr.onload = function() {
+    //          var reader = new FileReader();
+    //          reader.onloadend = function() {
+    //           callback(reader.result);
+    //        }
+    //          reader.readAsDataURL(xhr.response);
+    //       };
+    //        xhr.open('GET', file);
+    //        xhr.send();
+    // }
+
+    handleSavePDF(event){
+
+        let url = "data/"+$LTI_resourceID+"/"+$LTI_userID+"/"+$LTI_userID+"_screencapture.jpg"
+        //let url = "data/courses.edx.org-aa766098b5a94a738b54e89caf3a8973/f770caedc6d860f087297810891526d7user/f770caedc6d860f087297810891526d7user_screencapture.jpg"
+        console.log(url)
+
+        let keys = [
+            {
+                id:"tags",
+                label:"Tags"
+            },
+            {
+                id:"location_name",
+                label:"Location"
+            },
+            {
+                id:"country_of_newspaper",
+                label:"Country of news orginisation"
+            },
+            {
+                id:"name_of_newspaper",
+                label:"Name of newspaper"
+            },
+            {
+                id:"name_of_photo_origin",
+                label:"Photographer/Agency of photo"
+            },
+            {
+                id:"caption_of_photo",
+                label:"Photo's caption"
+            },
+            {
+                id:"agerange",
+                label:"Age Range"
+            },
+            {
+                id:"gender",
+                label:"Gender"
+            },
+            {
+                id:"education",
+                label:"Education"
+            },
+            {
+                id:"dateOfCapture",
+                label:"Date of screencapture"
+            },
+            {
+                id:"device",
+                label:"Device"
+            }
+        ]
+
+
+
+
+
+
+
+        this.toDataURL(url,imageData=>{
+            
+            let info = keys.map(item=>{
+                if(this.props[item.id]){
+
+                    let val = this.props[item.id]
+
+                    if(item.id == "dateOfCapture"){
+                        console.log(val)
+                        val = moment(this.props[item.id]).format("Do MMM YYYY")
+                    }
+
+                    if(item.id == "tags"){
+                        if(this.props[item.id].length == 0){
+                            return []
+                        }
+                    }
+                
+                    return [
+                        {   text: item.label+"\n", style: 'subheader'},
+                        {
+                            text: val+"\n\n"
+                        }
+                    ]
+
+                }
+                return {};
+
+            })
+
+            var docDefinition = { 
+            content:[
+                {
+                    text:this.props.activity_title+"\n\n\n",
+                    style:"header"
+                },
+                ...info,
+
+                {
+                    image: imageData,
+                    width:500
+                }
+
+
+            ],
+            styles: {
+                header: {
+                    fontSize: 18,
+                    bold: true
+                    
+                },
+                subheader: {
+                    fontSize: 15,
+                    bold: true
+                },
+                quote: {
+                    italics: true
+                },
+                small: {
+                    fontSize: 8
+                }
+            }};
+
+            pdfMake.createPdf(docDefinition).download('optionalName.pdf');
+    
+        
+        })
+
+    
+        
+        
+        
+        
+        
+
+
         //console.log("saving")
 
-      //console.log("handleSavePDF ", this.props)
-      this.toDataURL(this.props.image_file.preview, (search_image_data)=>{
+    //   console.log("handleSavePDF ", this.props)
+    //   this.toDataURL(this.props.image_file.preview, (search_image_data)=>{
 
 
-          const position = {
-              left: 10,
-              top:15,
-              center:105
-          }
+    //       const position = {
+    //           left: 10,
+    //           top:15,
+    //           center:105
+    //       }
 
-          let doc = new jsPDF("p", "mm", "a4")
+    //       let doc = new jsPDF("p", "mm", "a4")
 
-          doc.setFont("Arial")
-          doc.setFontSize(20)
-          doc.setFontType("bold")
-          doc.text('MediaWarX: Google Search Activity', position.center, position.top, null, null, 'center')
+    //       doc.setFont("Arial")
+    //       doc.setFontSize(20)
+    //       doc.setFontType("bold")
+    //       doc.text('MediaWarX: Google Search Activity', position.center, position.top, null, null, 'center')
 
-          doc.setFontSize(13)
-          doc.setFontType("normal")
-          doc.text('Unit 2: Name of the block', position.center, position.top+8, null, null, 'center')
+    //       doc.setFontSize(13)
+    //       doc.setFontType("normal")
+    //       doc.text('Unit 2: Name of the block', position.center, position.top+8, null, null, 'center')
 
-          doc.addImage(this.props.location_static_map, position.left, position.top+30, 190,95)
+    //       doc.addImage(this.props.location_static_map, position.left, position.top+30, 190,95)
 
-          doc.setFont("Arial")
-          doc.setFontSize(10)
-          doc.setFontType("bold")
-          doc.text('Location: '+this.props.location_name, position.center, position.top+150, null, null, 'center')
+    //       doc.setFont("Arial")
+    //       doc.setFontSize(10)
+    //       doc.setFontType("bold")
+    //       doc.text('Location: '+this.props.location_name, position.center, position.top+150, null, null, 'center')
           
-          doc.setFont("Arial")
-          doc.setFontSize(10)
-          doc.setFontType("bold")
-          doc.text('Age: '+this.props.age, position.center, position.top+155, null, null, 'center')
+    //       doc.setFont("Arial")
+    //       doc.setFontSize(10)
+    //       doc.setFontType("bold")
+    //       doc.text('Age: '+this.props.age, position.center, position.top+155, null, null, 'center')
             
-          doc.setFont("Arial")
-          doc.setFontSize(10)
-          doc.setFontType("bold")
-          doc.text('Education: '+this.props.education, position.center, position.top+160, null, null, 'center')
+    //       doc.setFont("Arial")
+    //       doc.setFontSize(10)
+    //       doc.setFontType("bold")
+    //       doc.text('Education: '+this.props.education, position.center, position.top+160, null, null, 'center')
 
 
 
-          doc.addPage("a4", "p")
+    //       doc.addPage("a4", "p")
 
-          doc.addImage(search_image_data, position.left, position.top+30, 190,95)
-
-
-
-
-          doc.save('Test.pdf', (opt)=>{
-              //console.log("saved", opt)
-          })
+    //       doc.addImage(search_image_data, position.left, position.top+30, 190,95)
 
 
 
 
+    //       doc.save('Test.pdf', (opt)=>{
+    //           //console.log("saved", opt)
+    //       })
 
-      }, "jpeg")
+
+
+
+
+    //   }, "jpeg")
 
 
 
@@ -212,6 +361,8 @@ export default class GoogleSearchUploadForm extends React.Component {
     render(){
 
 
+
+
         var requirementsMet = this.props.submitRequirementsMet
 
         var disabled_class = "disabled"
@@ -226,15 +377,17 @@ export default class GoogleSearchUploadForm extends React.Component {
             type="submit" 
             onClick={this.handleSubmit} {...disabled_prop}>Submit</button>);
 
-        var pdfButton = (<button className={"btn btn-info "} 
-        type="button" onClick={this.handleSavePDF}>Save as PDF</button>)
+        var pdfButton = ""
 
         if(this.props.submitted){
             submitButton = ""
+            pdfButton = (<button className={"btn btn-info "} 
+                            type="button" onClick={this.handleSavePDF}>Save as PDF</button>)
         }
         //console.log("FORM PAGE",this.props)
 
-
+ pdfButton = (<button className={"btn btn-info "} 
+                            type="button" onClick={this.handleSavePDF}>Save as PDF</button>)
 
         let simpleFormComponent = ( <SimpleForm
 

@@ -100,7 +100,8 @@
     <div id="app"></div>
     <script type="text/javascript" src="./build/bundle.js"></script>
 	
-	
+	<script src='../src/libs/pdfmake.min.js'></script>
+ 	<script src='../src/libs/vfs_fonts.js'></script>
 
     </body>
 </html>
