@@ -42,3 +42,19 @@ html {font-size: 16px !important;}
 .control-label{
     padding-top:0 !important;
 }
+
+//React Photo Gallery - 
+.image-buttons-container{
+    text-align: center
+}
+.image-buttons{
+    margin-left:5px;
+    margin-right:5px;
+}
+.react-photo-gallery-photo-container {
+    background-color:white !important;
+}
+
+.btn.active{
+    z-index:0 !important;
+}

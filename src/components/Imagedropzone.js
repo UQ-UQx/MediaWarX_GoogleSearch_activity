@@ -1,6 +1,8 @@
 import "../stylesheets/ImageDropZoneStyles.scss"
 
 import React from "react"
+import axios from "axios"
+import CheckBoxGroup from "./CheckBoxGroup"
 import Dropzone from "react-dropzone"
 
 import { Icon } from "react-fa"
@@ -12,6 +14,7 @@ export default class Imagedropzone extends React.Component{
 
         this.onDrop = this.onDrop.bind(this)
         this.handleRemoveImageClick = this.handleRemoveImageClick.bind(this)
+        this.handleDefaultImageClick = this.handleDefaultImageClick.bind(this)
     }
 
     handleRemoveImageClick(event){
@@ -20,12 +23,33 @@ export default class Imagedropzone extends React.Component{
             type:"image_file",
             value:null
         })
+        this.props.onImageUploadChange({
+            type:"default_image_url",
+            value:null
+        })
+    }
+
+    handleDefaultImageClick(name, option){
+        console.log(name, option)
+        let value = "lib/images/unabletoaccess.png"
+
+        if(option[0] == "uncomfortable"){
+            value = "lib/images/uncomfortable.png"
+        }
+        
+        this.props.onImageUploadChange({
+            type:"default_image_url",
+            value:value
+        })
 
     }
 
 
     onDrop(acceptedFiles, rejectedFiles){
-        ////console.log(acceptedFiles);
+       console.log(acceptedFiles);
+
+       
+    
       this.props.onImageUploadChange({
           type:"image_file",
           value:acceptedFiles[0]
@@ -36,14 +60,21 @@ export default class Imagedropzone extends React.Component{
 
     render(){
 
+
         var dropzoneContent = null
-        if(this.props.image_file || this.props.submitted){
+        if(this.props.image_file || this.props.submitted || this.props.default_image_url){
             var url = "data/"+$LTI_resourceID+"/"+$LTI_userID+"/"+$LTI_userID+"_screencapture.jpg";
-            var imgEL = <img src={url}/>
             
-            if(!this.props.submitted){
-                imgEL = <img src={this.props.image_file.preview}/>
+            
+
+            if(this.props.default_image_url){
+                url = this.props.default_image_url
+            }else{
+                url = this.props.image_file.preview
             }
+
+            var imgEL = <img src={url}/>
+
 
             var removeImage = (<button className="btn btn-danger btn-sm image-remove-button"
                         onClick={this.handleRemoveImageClick}><Icon name="times"/> Remove Image
@@ -70,7 +101,23 @@ export default class Imagedropzone extends React.Component{
                     <div className="dropzone-content">
                         <div className="dropzone-content-item"> <Icon size="3x" name="cloud-upload"/></div>
                         <div className="dropzone-content-item">Drag and drop your screenshot image here or use the button below</div>
-                        <div className="dropzone-content-item"><button className="btn btn-default">Browse</button></div>
+                        <div className="dropzone-content-item"><button className="btn btn-default" onClick={(event)=>{this.refs.image_dropzone.open()}}>Browse</button>
+                        <hr/>
+                        Other Options
+                        <CheckBoxGroup 
+                            name="default_image_url_buttons"
+                            className="clearfix image-dropzone-default-options-group"
+                            itemClassName="image-dropzone-default-options-item"
+                            type="radio"
+                            options={
+                                [
+                                    {id:"google",value:"Unable to access Google"},
+                                    {id:"uncomfortable",value:"Uncomfortable uploading online"}
+                                ]
+                            }
+                            onOptionChange={this.handleDefaultImageClick}
+                            returnVal="id"
+                        /></div>
                     </div>
                 </div>
             )
@@ -87,9 +134,10 @@ export default class Imagedropzone extends React.Component{
             <Dropzone
                 onDrop={this.onDrop}
                 multiple={false}
-                disableClick={this.props.image_file ? true : false}
+                disableClick={true}//{this.props.image_file ? true : false}
                 className="dropzone-normal"
                 activeClassName="dropzone-active"
+                ref="image_dropzone"
             >
 
                 {dropzoneContent}

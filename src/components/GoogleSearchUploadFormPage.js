@@ -27,6 +27,8 @@ export default class GoogleSearchUploadForm extends React.Component {
             case "update_tags":
                 this.props.handleUploadFormItemUpdate({tags:imageUpload.value})
                 break;
+            case "default_image_url":
+                this.props.handleUploadFormItemUpdate({default_image_url:imageUpload.value})
             default:
         }
 
@@ -210,15 +212,22 @@ export default class GoogleSearchUploadForm extends React.Component {
     render(){
 
 
-        var requirementsMet = this.props.checkFormRequirementsMet()
+        var requirementsMet = this.props.submitRequirementsMet
 
         var disabled_class = "disabled"
+        var disabled_prop = {disabled:false}
         if(requirementsMet){
             disabled_class = ""
+            disabled_prop["disabled"] = false
         }
 
         
-        var submitButton = (<button className={"btn btn-primary "+disabled_class} type="submit" onClick={requirementsMet ? this.handleSubmit:null}>Submit</button>);
+        var submitButton = (<button className={"btn btn-primary "+disabled_class} 
+            type="submit" 
+            onClick={this.handleSubmit} {...disabled_prop}>Submit</button>);
+
+        var pdfButton = (<button className={"btn btn-info "} 
+        type="button" onClick={this.handleSavePDF}>Save as PDF</button>)
 
         if(this.props.submitted){
             submitButton = ""
@@ -283,7 +292,7 @@ export default class GoogleSearchUploadForm extends React.Component {
                 image_file={this.props.image_file}
                 onImageUploadChange={this.onImageUploadChange}
                 activity_tags={this.props.activity_tags}
-
+                default_image_url={this.props.default_image_url}
 
                 tags={this.props.tags}
                 
@@ -293,8 +302,7 @@ export default class GoogleSearchUploadForm extends React.Component {
             <br/>
             {/* <button className={"btn btn-info "+disabled_class} type="button" onClick={requirementsMet ? this.handleSavePDF:null}>Save as PDF</button> */}
             {submitButton}
-            <button className={"btn btn-info "} type="button" onClick={this.handleSavePDF}>Save as PDF</button>
-
+            {pdfButton}
         </div>)
     }
 

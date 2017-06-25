@@ -26,8 +26,10 @@
 
 .dropzone-content{
     @include centerer(true,true);
-    z-index: -10;
-
+    z-index: 10;
+   // background-color:red;
+    width:80%;
+    text-align: center;
 }
 
 .dropzone-content-item{
@@ -53,4 +55,24 @@
     right:0;
     top:($image-upload-continer-height - $image-upload-dropzone-border-width*4 - 35);
 
+}
+
+// .image-dropzone-default-options-group{
+//     background:blue;
+//     text-align:center;
+//     float:left;
+// }
+
+.image-dropzone-default-options-group{
+    margin-top:10px;
+    //background-color: blue !important;
+}
+
+.image-dropzone-default-options-item{
+
+    float:none;
+    text-align: center;
+    button{
+        float:none;
+    }
 }

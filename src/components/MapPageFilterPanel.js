@@ -450,16 +450,11 @@ export default class MapPageFilterPanel extends React.Component {
             groupType = "radio"
         }
 
-        return(<div className="map-page-filter-panel-container">
 
-            <div className="filter-panel-title-container clearfix">
-                Filter Options <button className="resetFilterButton btn btn-sm btn-danger" onClick={this.onResetClicked}>Clear</button>
 
-            </div>
-            
+        //console.log(this.props)
 
-            <div className="filter-options" ref="filterOptionsContainer" onScroll={this.handleFilterOptionsOnScroll}>
-                <div className="filter-container tag-filter">
+        let tagsFilter = (<div className="filter-container tag-filter">
                     <div className="filter-container-title">Tags</div>
                     <div className="tag-filter-container clearfix">
                     {
@@ -480,7 +475,27 @@ export default class MapPageFilterPanel extends React.Component {
                         />
                     }                    
                     </div>
-                </div>
+                </div>)
+
+        //console.log(this.props.activity_tags.length, this.props.allTags.length)
+
+        if((this.props.activity_tags.length == 0) || (this.props.allTags.length == 0)){
+            tagsFilter = ""
+        }
+
+
+
+        return(<div className="map-page-filter-panel-container">
+
+            <div className="filter-panel-title-container clearfix">
+                Filter Options <button className="resetFilterButton btn btn-sm btn-danger" onClick={this.onResetClicked}>
+                <Icon name="repeat"/>  Reset</button>
+
+            </div>
+            
+
+            <div className="filter-options" ref="filterOptionsContainer" onScroll={this.handleFilterOptionsOnScroll}>
+                {tagsFilter}
                  <div className="filter-container dater-filter">
                     <div className="filter-container-title">Date Range</div>
                     <div className="date-filter-container clearfix">

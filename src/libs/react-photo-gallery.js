@@ -24,6 +24,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Icon } from "react-fa"
 
 class Gallery extends React.Component{
     constructor(){
@@ -49,6 +50,7 @@ class Gallery extends React.Component{
         this.setState({containerWidth: Math.floor(this._gallery.clientWidth)});
     }
     render(){
+        let self = this
         let cols = this.props.cols,
             photoPreviewNodes = [],
 	    contWidth = this.state.containerWidth - (cols * (this.props.margin * 2)); 
@@ -70,8 +72,8 @@ class Gallery extends React.Component{
                 if (j == this.props.photos.length){
                     break;
                 }
-		this.props.photos[j].aspectRatio = this.props.photos[j].width / this.props.photos[j].height;	
-		totalAr += this.props.photos[j].aspectRatio;
+		        this.props.photos[j].aspectRatio = this.props.photos[j].width / this.props.photos[j].height;	
+		        totalAr += this.props.photos[j].aspectRatio;
             }
             if (i === lastRowIndex) {
               commonHeight = lastRowWidth / totalAr;
@@ -84,50 +86,73 @@ class Gallery extends React.Component{
                     break;
                 }
 
-		let src = this.props.photos[k].src, srcset, sizes;
-        let activeClassName = "";
-		if (this.props.photos[k].srcset){
-		    srcset = this.props.photos[k].srcset.join();
-		}
-		if (this.props.photos[k].sizes){
-		    sizes = this.props.photos[k].sizes.join();
-		}
-        if (this.props.photos[k].activeClassName){
-		    activeClassName = this.props.photos[k].activeClassName;
-		}
+                let src = this.props.photos[k].src, srcset, sizes;
+                let activeClassName = "";
+                let expandButton = "";
+                if (this.props.photos[k].srcset){
+                    srcset = this.props.photos[k].srcset.join();
+                }
+                if (this.props.photos[k].sizes){
+                    sizes = this.props.photos[k].sizes.join();
+                }
+                if (this.props.photos[k].activeClassName){
+                    activeClassName = this.props.photos[k].activeClassName;
+                }
+                if (this.props.photos[k].expandButton){
+                    expandButton = (<div className="image-buttons-container">
+                            <button className="btn btn-sm btn-primary image-buttons"
+                                onClick={this.props.handleEnlarge}
+                            ><Icon name="arrows-alt"/> Enlarge</button>
+                            <button className="btn btn-sm btn-primary image-buttons"
+                                onClick={self.props.handleDetails}
+                                
+                            ><Icon name="info"/> Details</button>
 
-		style.margin = this.props.margin;
-		photoPreviewNodes.push(
-		    <div className={"react-photo-gallery-photo-container "+activeClassName} key={k} style={style} 
-                onMouseOver={(e) => this.props.onPhotoMouseOver(k,e)}
-                onMouseOut={(e) => this.props.onPhotoMouseOut(k,e)}
-                onFocus={(e) => this.props.onPhotoMouseOver(k,e)}
-                onBlur={(e) => this.props.onPhotoMouseOut(k,e)}
-                height={commonHeight} width={commonHeight * this.props.photos[k].aspectRatio}
-                
-                >
-			<a href="#" className={k} 
-            
-                onClick={(e) => this.props.onClickPhoto(k, e)}
-                
-            >
-			    <img src={src} srcSet={srcset} sizes={sizes} style={{display:'block', border:0}} height={commonHeight} width={commonHeight * this.props.photos[k].aspectRatio} alt={this.props.photos[k].alt} />
-			</a>
+                    </div>);
+                }
+                console.log(expandButton)
 
-		    </div>
-		);
+                style.margin = this.props.margin;
+                photoPreviewNodes.push(
+                    (<div className={"react-photo-gallery-photo-container "+activeClassName} key={k} style={style} 
+                        onMouseOver={(e) => this.props.onPhotoMouseOver(k,e)}
+                        onMouseOut={(e) => this.props.onPhotoMouseOut(k,e)}
+                        onFocus={(e) => this.props.onPhotoMouseOver(k,e)}
+                        onBlur={(e) => this.props.onPhotoMouseOut(k,e)}
+                        height={commonHeight} width={commonHeight * this.props.photos[k].aspectRatio}
+                        
+                        >
+                        {expandButton}
+
+                    <a href="#" className={k} 
+                    
+                        onClick={(e) => this.props.onClickPhoto(k, e)}
+                        
+                    >
+
+                        <img src={src} srcSet={srcset} sizes={sizes} style={{display:'block', border:0}} 
+                            height={commonHeight} 
+                            width={commonHeight * this.props.photos[k].aspectRatio} 
+                            alt={this.props.photos[k].alt} />
+                    </a>
+                    </div>)
+                );
             }
         }
 	return(
-	    this.renderGallery(photoPreviewNodes)
+        
+            <div id="Gallery" className="clearfix" ref={(c) => this._gallery = c}>
+
+                {photoPreviewNodes}
+            </div>
+
         );
     }
+
     renderGallery(photoPreviewNodes){
-	return(
-	    <div id="Gallery" className="clearfix" ref={(c) => this._gallery = c}>
-		{photoPreviewNodes}
-	    </div>
-	);
+	// return(
+	// 	{photoPreviewNodes}
+	// );
     }
 };
 Gallery.displayName = 'Gallery';
