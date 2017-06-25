@@ -237,10 +237,13 @@ export default class MapPageMap extends React.Component {
 
         if(this.props.clusterToFocus){
 
-            if(!this.props.clusterToFocus.clusterIcon_.div_.classList.contains("cluster-to-highlight")){
-                this.props.clusterToFocus.clusterIcon_.div_.classList.add("cluster-to-highlight")
-            }
+            if(this.props.clusterToFocus.clusterIcon_.div_){
+                if(!this.props.clusterToFocus.clusterIcon_.div_.classList.contains("cluster-to-highlight")){
+                    this.props.clusterToFocus.clusterIcon_.div_.classList.add("cluster-to-highlight")
+                }
 
+            }
+           
             
         }else{
             if(this.props.clusterer){

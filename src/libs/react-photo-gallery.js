@@ -100,17 +100,15 @@ class Gallery extends React.Component{
                 }
                 if (this.props.photos[k].expandButton){
                     expandButton = (<div className="image-buttons-container">
+                           
                             <button className="btn btn-sm btn-primary image-buttons"
-                                onClick={this.props.handleEnlarge}
-                            ><Icon name="arrows-alt"/> Enlarge</button>
-                            <button className="btn btn-sm btn-primary image-buttons"
-                                onClick={self.props.handleDetails}
+                                onClick={(e)=>{self.props.handleDetails(k,e)}}
                                 
                             ><Icon name="info"/> Details</button>
 
                     </div>);
                 }
-                console.log(expandButton)
+                //console.log(expandButton)
 
                 style.margin = this.props.margin;
                 photoPreviewNodes.push(
