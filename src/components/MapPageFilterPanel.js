@@ -85,7 +85,9 @@ export default class MapPageFilterPanel extends React.Component {
         this.refs.education_checkboxgroup.resetSelections();
         this.refs.device_checkboxgroup.resetSelections();
         this.refs.ageranges_checkboxgroup.resetSelections();
-        this.refs.tags_checkboxgroup.resetSelections();
+        if(this.refs.tags_checkboxgroup){
+            this.refs.tags_checkboxgroup.resetSelections();
+        }
 
         //enable all markers as nothing is being filtered
         let bounds = new google.maps.LatLngBounds();
