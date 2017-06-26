@@ -198,6 +198,12 @@ export default class Layout extends React.Component {
         postData.append('app_state', JSON.stringify({...this.state, "location_static_map":""}));
         postData.append('user_id', $LTI_userID);
         postData.append('lti_id', $LTI_resourceID);
+
+        postData.append('lti_grade_url', $LTI_grade_url);
+        postData.append('lti_consumer_key', $LTI_consumer_key);
+        postData.append('result_sourcedid', $LTI_result_sourcedid);
+
+
         axios.post('../public/api/api.php', postData)
         .then(function(response){
 
