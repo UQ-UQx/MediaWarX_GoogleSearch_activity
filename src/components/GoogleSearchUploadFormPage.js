@@ -384,7 +384,8 @@ export default class GoogleSearchUploadForm extends React.Component {
                 default_image_url={this.props.default_image_url}
 
                 tags={this.props.tags}
-                
+                            image_dropzone_options = {this.props.image_dropzone_options}
+
                 submitted={this.props.submitted}
             />
 
