@@ -236,7 +236,7 @@ export default class MapPageScreenshotViewer extends React.Component {
                     case "country_of_newspaper":
                         if(modal_marker.entry[item]){
                             return (<div className="modal-details-item form-group" key={"details_"+item}>
-                                <label className="col-sm-2 control-label">Country of news orginisation</label>
+                                <label className="col-sm-2 control-label">Country of news organisation</label>
                                 <div className="col-sm-10">{modal_marker.entry[item]}</div>
                             </div>)
                         }
