@@ -42,6 +42,7 @@ export default class ImageUpload extends React.Component {
             <Imagedropzone
                 default_image_url={this.props.default_image_url}
 
+                image_dropzone_options = {this.props.image_dropzone_options}
 
                 image_file={this.props.image_file}
                 onImageUploadChange={this.props.onImageUploadChange}

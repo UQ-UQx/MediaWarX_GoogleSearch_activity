@@ -57,6 +57,16 @@ var list_items_options = [
                 },
     ]
 
+var dropzone_options = [
+                                    {
+                                        id:"google",
+                                        value:"No Access To Google"
+                                    },
+                                    {
+                                        id:"uncomfortable",
+                                        value:"Not Comfortable to upload"
+                                    }
+                                ]
 
         
 export default class EditLTIPage extends React.Component {
@@ -69,6 +79,7 @@ export default class EditLTIPage extends React.Component {
        }
        this.handleItemChange = this.handleItemChange.bind(this)
        this.handleFormItemListChange = this.handleFormItemListChange.bind(this)
+       this.handleImageDropzoneOptionsChange = this.handleImageDropzoneOptionsChange.bind(this)
     }
 
     handleFormItemListChange(name, selected_items){
@@ -107,6 +118,16 @@ export default class EditLTIPage extends React.Component {
 
     }
 
+    handleImageDropzoneOptionsChange(name, selected_options){
+
+        let selected_form_items = selected_options.map((item)=>{
+            return item.id
+        })
+
+        this.props.handleEditPageItemChange({
+            [name]:selected_form_items
+        })
+    }
 
 
     render(){
@@ -125,6 +146,21 @@ export default class EditLTIPage extends React.Component {
                 checked = true;
             }
             //console.log(checked)
+            return (
+                {
+                    id:item.id,
+                    value:item.value,
+                    checked:checked
+                }
+            )
+        })
+
+        var dropzone_options_checkbox = dropzone_options.map((item)=>{
+            let checked = false;
+            if(_.indexOf(this.props.image_dropzone_options,item.id) != -1){
+                checked = true;
+            }
+
             return (
                 {
                     id:item.id,
@@ -198,6 +234,20 @@ export default class EditLTIPage extends React.Component {
                                 name="temp_activity_form_inputs_array"
                                 options={ls}
                                 onOptionChange={this.handleFormItemListChange}
+                                returnVal="all"
+                            />
+                           
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="col-sm-2 control-label">Image Upload Options</label>
+                        <div className="col-sm-10">
+
+                            <CheckBoxGroup 
+                            
+                                name="image_dropzone_options"
+                                options={dropzone_options_checkbox}
+                                onOptionChange={this.handleImageDropzoneOptionsChange}
                                 returnVal="all"
                             />
                            

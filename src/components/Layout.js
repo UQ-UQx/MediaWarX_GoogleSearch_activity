@@ -110,7 +110,8 @@ export default class Layout extends React.Component {
 
             submitRequirementsMet:true,
 
-            image_modal_open:false
+            image_modal_open:false,
+            image_dropzone_options:[]
         }
 
         this.state = {
@@ -336,6 +337,8 @@ export default class Layout extends React.Component {
             handleFormSubmit={this.handleFormSubmit}
             handleFormInputOnBlur={this.handleFormInputOnBlur}
 
+            image_dropzone_options = {this.state.image_dropzone_options}
+
             submitted={this.state.submitted}
 
         />)
@@ -381,6 +384,7 @@ export default class Layout extends React.Component {
             temp_activity_instructions = {this.state.temp_activity_instructions}
             temp_activity_form_inputs_array = {this.state.temp_activity_form_inputs_array}
             temp_activity_tags = {this.state.temp_activity_tags}
+            image_dropzone_options = {this.state.image_dropzone_options}
             
         />)
 
