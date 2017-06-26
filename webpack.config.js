@@ -5,7 +5,7 @@ var path = require('path');
 var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
-    devtool: "#cheap-module-eval-source-map",
+    //devtool: "#cheap-module-eval-source-map",
     entry: "./src/index.js",
     output: {
         path: path.join(__dirname,"public/build"),
@@ -14,9 +14,11 @@ module.exports = {
     },
     plugins: [
 
+/*
         new webpack.LoaderOptionsPlugin({
             debug:true,
         }),
+*/
         // reloads browser when the watched files change
         new BrowserSyncPlugin({
             // use existing Apache virtual host

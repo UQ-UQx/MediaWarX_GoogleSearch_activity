@@ -30,12 +30,12 @@
 
         	$invalid_message = '<div class="lti_invalid_message">LTI Invalid - Please Contact UQx</div>';
 
-        	echo $dev_message;
+        	//echo $dev_message;
         	if($lti->is_valid()) {
-        		echo $valid_message;
+        		//echo $valid_message;
         	} else {
         		echo $invalid_message;
-        		//die();
+        		die();
         	}
 
 

@@ -3,16 +3,16 @@
     //key=>secret
     $config = array(
         'lti_keys'=>array(
-            'YOUR_CLIENT_KEY'=>'YOUR_CLIENT_SECRET'
+            'uqxmediawarx'=>'uqx123456'
 
         ),
         'use_db'=>true,
         'db'=>array(
             'driver'=>'mysql',
             'hostname'=>'localhost',
-            'username'=>'root',
-            'password'=>'root',
-            'dbname'=>'mediawarx_googlesearch_activity',
+            'username'=>'mediawar',
+            'password'=>'mediawarx2017!',
+            'dbname'=>'mediawarx_upload_activity',
         )
     );
 ?>
