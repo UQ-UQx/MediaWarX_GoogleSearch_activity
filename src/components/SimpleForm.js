@@ -359,7 +359,7 @@ export default class SimpleForm extends React.Component {
                     break;
                 case "country_of_newspaper":
                     country_of_newspaperInputContainer = (<div className="form-group">
-                        <label className="col-sm-2 control-label">Country of news orginisation</label>
+                        <label className="col-sm-2 control-label">Country of news organisation</label>
                         <div className="col-sm-10">
                             {country_of_newspaperInput}
                         </div>

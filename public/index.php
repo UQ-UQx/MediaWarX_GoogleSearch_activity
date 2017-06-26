@@ -44,6 +44,10 @@
 			$lti_user_roles = $lti->user_roles();
 			$calldata = $lti->calldata();
 
+			$lti_grade_url = $lti->grade_url();
+			$lti_consumer_key = $lti->lti_consumer_key();
+			$result_sourcedid = $lti->result_sourcedid();
+
 
 		
 			$oldmask = umask(0);
@@ -94,7 +98,10 @@
 		$LTI_user_roles = '<?php echo $lti_user_roles ?>';
 		$LTI_CUSTOM_tags = JSON.parse('<?php echo json_encode($calldata_custom_tags) ?>');
 		$LTI_CUSTOM_filter_strict = JSON.parse('<?php echo json_encode($calldata_custom_filter_strict) ?>');
-
+		
+		$LTI_grade_url = '<?php echo $lti_grade_url ?>';
+		$LTI_consumer_key = '<?php echo $lti_consumer_key ?>';
+		$LTI_result_sourcedid = '<?php echo $result_sourcedid ?>';
 
 	</script>
     <div id="app"></div>

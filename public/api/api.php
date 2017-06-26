@@ -105,76 +105,6 @@ class MyApi
 		}
 
 
-
-		
-
-		// //error_log("REQUEST".json_encode($_REQUEST));
-
-		// //error_log("FILE".json_encode($_FILES));
-		// //$this->reply("yay", 200);
-		// $path = getcwd();
-
-		// $path_to_dir = dirname($path).'/images';//.'/data/'.$_POST["lti_id"]."/".$_POST["user_id"]."/".$_FILES['upl']['name'];
-
-		// //error_log("path: ".$path_to_dir);
-
-
-		// move_uploaded_file($_FILES['file']['tmp_name'], $path_to_dir."/test.jpg");
-		
-
-		// // get the request
-		// if (!empty($_REQUEST)) {
-		// 	// convert to object for consistency
-		// 	$this->request = json_decode(json_encode($_REQUEST));
-		// } else {
-		// 	// already object
-		// 	$this->request = json_decode(file_get_contents('php://input'));
-		// }
-
-		// if($this->request->action == "hello"){
-		// 	$this->reply("YES I SHOULD FAIL!!", 400);
-		// 	//error_log("This line should never show up");
-		// }else{
-		// 	//$this->reply($this->request->action);
-		// 	//error_log("This line should never show up");
-		// }
-
-		// if (!isset($this->request->action)) {
-		// 	$message = array('error' => 'No action given.');
-		// 	$this->reply($message, 400);
-		// } else {
-
-		// 	$action = $this->request->action;
-		// 	// call the corresponding method
-		// 	if (method_exists($this, $action)) {
-		// 		// $this->$action();
-		// 		$requestData = $this->request->data;
-		// 		switch ($action) {
-		// 			case 'hello':
-		// 				$this->hello();
-		// 				break;
-		// 			case 'setUserState':
-		// 				$this->setUserState($requestData);
-		// 				break;
-		// 			case 'setUserEntry':
-		// 				$this->setUserEntry($requestData);
-		// 				break;
-		// 			case 'getUserState':
-		// 				$this->getUserState($requestData);
-		// 				break;
-		// 			case 'getUserEntry':
-		// 				$this->getUserEntry($requestData);
-		// 				break;
-		// 			default:
-		// 				break;
-		// 		}
-
-
-		// 	} else {
-		// 		$message = array('error' => 'Method not found.');
-		// 		$this->reply($message, 400);
-		// 	}
-		// }
 	}
 
 	/**
@@ -289,6 +219,7 @@ class MyApi
 
 		$this->setUserState($lti_id, $user_id, $state);
 		$this->setUserEntry($lti_id, $user_id, $entry);
+		send_grade(1, $this->config, $data->lti_grade_url, $data->result_sourcedid, $data->lti_consumer_key);
 		$this->reply($state, 200);
 
 	}
@@ -529,6 +460,8 @@ class MyApi
 
 require_once('../lib/db.php');
 require_once('../config.php');
+require_once('../lib/OAuth.php');
+require_once('../lib/grade.php');
 
 if(isset($config['use_db']) && $config['use_db']) {
 	Db::config( 'driver',   'mysql' );

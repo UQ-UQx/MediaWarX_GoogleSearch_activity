@@ -167,7 +167,7 @@ export default class GoogleSearchUploadForm extends React.Component {
             },
             {
                 id:"country_of_newspaper",
-                label:"Country of news orginisation"
+                label:"Country of news organisation"
             },
             {
                 id:"name_of_newspaper",
