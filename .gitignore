@@ -1,8 +1,8 @@
 node_modules/*
 .DS_Store
 dist
+public/config.php
 public/build
 npm-debug.log
 .vscode/*
 public/data
-public/config.php

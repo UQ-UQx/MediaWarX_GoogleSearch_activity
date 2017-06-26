@@ -99,6 +99,27 @@ export default class Imagedropzone extends React.Component{
 
         }else{
 
+           
+           var dropzone_options = [
+                                    {id:"google",value:"Unable to access Google"},
+                                    {id:"uncomfortable",value:"Uncomfortable uploading online"}
+                                ]
+
+            console.log(this.props)
+
+            let other_options_title = "Other Options"
+
+            var options = dropzone_options.filter(item=>{
+                //console.log(item.id)
+                if(_.indexOf(this.props.image_dropzone_options, item.id) != -1){
+                    return item;
+                }
+            })
+
+            if(options.length == 0){
+                other_options_title = ""
+            }
+
             dropzoneContent = (
                 <div className="dropzone-content-container">
                     <div className="dropzone-content">
@@ -106,17 +127,14 @@ export default class Imagedropzone extends React.Component{
                         <div className="dropzone-content-item">Drag and drop your screenshot image here or use the button below</div>
                         <div className="dropzone-content-item"><button className="btn btn-default" onClick={(event)=>{this.refs.image_dropzone.open()}}>Browse</button>
                         <hr/>
-                        Other Options
+                        {other_options_title}
                         <CheckBoxGroup 
                             name="default_image_url_buttons"
                             className="clearfix image-dropzone-default-options-group"
                             itemClassName="image-dropzone-default-options-item"
                             type="radio"
                             options={
-                                [
-                                    {id:"google",value:"Unable to access Google"},
-                                    {id:"uncomfortable",value:"Uncomfortable uploading online"}
-                                ]
+                                options
                             }
                             onOptionChange={this.handleDefaultImageClick}
                             returnVal="id"
