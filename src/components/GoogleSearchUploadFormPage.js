@@ -277,73 +277,6 @@ export default class GoogleSearchUploadForm extends React.Component {
         
         })
 
-    
-        
-        
-        
-        
-        
-
-
-        //console.log("saving")
-
-    //   console.log("handleSavePDF ", this.props)
-    //   this.toDataURL(this.props.image_file.preview, (search_image_data)=>{
-
-
-    //       const position = {
-    //           left: 10,
-    //           top:15,
-    //           center:105
-    //       }
-
-    //       let doc = new jsPDF("p", "mm", "a4")
-
-    //       doc.setFont("Arial")
-    //       doc.setFontSize(20)
-    //       doc.setFontType("bold")
-    //       doc.text('MediaWarX: Google Search Activity', position.center, position.top, null, null, 'center')
-
-    //       doc.setFontSize(13)
-    //       doc.setFontType("normal")
-    //       doc.text('Unit 2: Name of the block', position.center, position.top+8, null, null, 'center')
-
-    //       doc.addImage(this.props.location_static_map, position.left, position.top+30, 190,95)
-
-    //       doc.setFont("Arial")
-    //       doc.setFontSize(10)
-    //       doc.setFontType("bold")
-    //       doc.text('Location: '+this.props.location_name, position.center, position.top+150, null, null, 'center')
-          
-    //       doc.setFont("Arial")
-    //       doc.setFontSize(10)
-    //       doc.setFontType("bold")
-    //       doc.text('Age: '+this.props.age, position.center, position.top+155, null, null, 'center')
-            
-    //       doc.setFont("Arial")
-    //       doc.setFontSize(10)
-    //       doc.setFontType("bold")
-    //       doc.text('Education: '+this.props.education, position.center, position.top+160, null, null, 'center')
-
-
-
-    //       doc.addPage("a4", "p")
-
-    //       doc.addImage(search_image_data, position.left, position.top+30, 190,95)
-
-
-
-
-    //       doc.save('Test.pdf', (opt)=>{
-    //           //console.log("saved", opt)
-    //       })
-
-
-
-
-
-    //   }, "jpeg")
-
 
 
 
@@ -351,9 +284,12 @@ export default class GoogleSearchUploadForm extends React.Component {
     }
 
     handleSubmit(){
-        //console.log("handleSubmit ",this.props);
 
-        this.props.handleFormSubmit();
+        if((this.props.location_lat && this.props.location_lng) && (this.props.default_image_url || this.props.image_file)){
+            
+                this.props.handleFormSubmit()
+            
+        }
     }
 
 
@@ -361,15 +297,16 @@ export default class GoogleSearchUploadForm extends React.Component {
     render(){
 
 
-
-
         var requirementsMet = this.props.submitRequirementsMet
 
         var disabled_class = "disabled"
-        var disabled_prop = {disabled:false}
-        if(requirementsMet){
-            disabled_class = ""
-            disabled_prop["disabled"] = false
+        var disabled_prop = {disabled:true}
+        console.log(this.props)
+        if((this.props.location_lat && this.props.location_lng) && (this.props.default_image_url || this.props.image_file)){
+            //if((this.props.activity_tags.length > 0) && (this.props.tags.length > 0)){
+                disabled_class = ""
+                disabled_prop["disabled"] = false
+            //}
         }
 
         
@@ -386,8 +323,7 @@ export default class GoogleSearchUploadForm extends React.Component {
         }
         //console.log("FORM PAGE",this.props)
 
- pdfButton = (<button className={"btn btn-info "} 
-                            type="button" onClick={this.handleSavePDF}>Save as PDF</button>)
+ 
 
         let simpleFormComponent = ( <SimpleForm
 
