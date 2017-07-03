@@ -396,12 +396,13 @@ export default class Layout extends React.Component {
 
     handleEditSaveChangesClick(event){
 
+        console.log("save click", this.state);
 
          this.setState({
             activity_title:this.state.temp_activity_title,
             activity_instructions:this.state.temp_activity_instructions,
             activity_form_inputs_array:this.state.temp_activity_form_inputs_array,
-            activity_tags:this.state.temp_activity_tags
+            activity_tags:[...this.state.temp_activity_tags]
         })
 
         var self = this;
@@ -411,7 +412,8 @@ export default class Layout extends React.Component {
             activity_title:this.state.temp_activity_title,
             activity_instructions:this.state.temp_activity_instructions,
             activity_form_inputs_array:this.state.temp_activity_form_inputs_array,
-            activity_tags:this.state.temp_activity_tags
+            activity_tags:this.state.temp_activity_tags,
+            image_dropzone_options:this.state.image_dropzone_options
         }));
         postData.append('lti_id', $LTI_resourceID);
         axios.post('../public/api/api.php', postData)

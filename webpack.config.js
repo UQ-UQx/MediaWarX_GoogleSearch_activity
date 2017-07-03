@@ -14,11 +14,11 @@ module.exports = {
     },
     plugins: [
 
-/*
-        new webpack.LoaderOptionsPlugin({
-            debug:true,
-        }),
-*/
+
+        // new webpack.LoaderOptionsPlugin({
+        //     debug:true,
+        // }),
+
         // reloads browser when the watched files change
         new BrowserSyncPlugin({
             // use existing Apache virtual host

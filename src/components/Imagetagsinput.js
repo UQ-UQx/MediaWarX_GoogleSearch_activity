@@ -48,6 +48,8 @@ export default class Imagetagsinput extends React.Component {
         //     }
         // ]
 
+        console.log(this.props)
+
         let options = this.props.activity_tags.map((tag)=>{
             return {
                 value:tag,

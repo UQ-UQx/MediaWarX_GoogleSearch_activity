@@ -162,7 +162,7 @@ class Lti {
 			'launch_presentation_return_url' => '',
 			'user_id' => 'f770caedc6d860f087297810891526d7user4',
 			'roles' => 'Instructor',
-			'oauth_consumer_key' => 'uqx',
+			'oauth_consumer_key' => 'uqxmediawarx',
 			'lis_result_sourcedid' => 'course-v1%3AUQx%2BCOURSECODEx%2B2T2017:courses.edx.org-aa766098b5a94a738b54e89caf3a8973:f770caedc6d860f087297810891526d7',
 			'launch_presentation_locale' => 'en',
 			'oauth_timestamp' => '1495495665',

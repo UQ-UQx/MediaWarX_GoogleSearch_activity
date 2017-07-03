@@ -33,7 +33,7 @@ export default class ImageUpload extends React.Component {
 
             />);
 
-        if(!$LTI_CUSTOM_tags || (this.props.activity_tags.length == 0)){
+        if(this.props.activity_tags.length == 0){
             imaTagsInput = ""
         }
 
