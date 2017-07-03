@@ -462,7 +462,7 @@ export default class Layout extends React.Component {
 
 
         let uploadFormPageButton = <button  type="button" className={"btn btn-default btn-med page-button "+uploadPageActiveClass} 
-                                onClick={()=>this.handlePageButtonClick("form_page")}>Upload Form</button>
+                                onClick={()=>this.handlePageButtonClick("form_page")}>Form</button>
 
         let mapPageDisabledClass = "disabled"
         let mapPageDisabledProp = {disabled:true}
@@ -472,7 +472,7 @@ export default class Layout extends React.Component {
             mapPageDisabledProp = ""
         }
         let mapPageButton = <button  type="button" className={"btn btn-default btn-med page-button "+mapPageActiveClass+" "+mapPageDisabledClass}
-                                onClick={()=>this.handlePageButtonClick("map_page")} {...mapPageDisabledProp}>Map Page</button>
+                                onClick={()=>this.handlePageButtonClick("map_page")} {...mapPageDisabledProp}>Map</button>
         
         let edit_lti_button = ""
         let cancel_button = ""

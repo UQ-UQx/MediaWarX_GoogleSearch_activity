@@ -373,7 +373,6 @@ export default class GoogleSearchUploadForm extends React.Component {
             {simpleFormComponent}
 
             <br/>
-            <p><b>Step 2: Upload Google Search Screenshot</b></p>
 
             <ImageUpload
 
