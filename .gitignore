@@ -8,3 +8,4 @@ public/build
 npm-debug.log
 .vscode/*
 public/data
+admin/build
